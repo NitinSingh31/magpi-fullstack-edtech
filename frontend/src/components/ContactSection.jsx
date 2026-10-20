@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import './ContactSection.css';
+import api from '../services/api.js';
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -27,17 +28,16 @@ export default function ContactSection() {
     setIsSubmitting(true);
 
     try {
-      await fetch('http://localhost:5001/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email,
-          type: 'contact',
-          message: `From: ${formData.name} | Phone: ${formData.phone} | Subject: ${formData.subject} | Message: ${formData.message}`
-        })
+      await api.createInquiry({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        type: 'contact',
+        course: formData.subject,
+        message: `Subject: ${formData.subject} | ${formData.message}`
       });
     } catch (err) {
-      console.warn('Backend offline, simulated send');
+      console.warn('Backend offline or simulated send', err);
     } finally {
       setIsSubmitting(false);
       setIsSent(true);

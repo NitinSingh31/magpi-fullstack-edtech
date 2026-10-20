@@ -32,34 +32,73 @@ A modern, production-grade EdTech platform providing personalized 1-on-1 online 
 
 ---
 
-## 📁 Project Architecture
+## 📁 Enterprise Folder Architecture
 
-The codebase is cleanly separated into frontend and backend directories:
+The project strictly follows professional industry-standard architectural principles: **Layered MVC Architecture** on the backend (Separation of Concerns: Routes ➔ Middleware ➔ Controllers ➔ Services ➔ Models/Persistence) and a **Modular Domain Structure** with an abstracted API client layer on the frontend.
 
 ```text
 Magπ/
-├── frontend/                   # React 18 + Vite Frontend Application
+├── frontend/                          # React 18 + Vite Frontend Application
 │   ├── src/
-│   │   ├── components/         # Reusable UI components (Navbar, Footer, Hero, DemoModal, AdminPanel...)
-│   │   ├── pages/              # Dedicated route pages (HomePage, AboutPage, OnlineTuitionPage, SkillPages...)
-│   │   ├── data/               # Course catalogs, board syllabuses, upcoming events data
-│   │   ├── App.jsx             # Main router configuration
-│   │   ├── index.css           # Global design system tokens and utilities
-│   │   └── main.jsx            # React root mount
-│   ├── public/                 # Static assets and brand logos
-│   ├── vite.config.js          # Vite config with API proxy to port 5001
-│   └── package.json            # Frontend dependencies
+│   │   ├── services/                  # 🌐 Centralized HTTP API client (api.js)
+│   │   ├── components/                # 🧩 Reusable UI Components
+│   │   │   ├── Navbar.jsx & .css      # Dynamic header with navigation
+│   │   │   ├── Footer.jsx & .css      # Global footer with newsletter
+│   │   │   ├── DemoModal.jsx & .css   # Interactive trial booking modal
+│   │   │   ├── AdminPanel.jsx & .css  # Lead management & DB status monitor
+│   │   │   └── ...                    # Section components (Hero, StatsBar, etc.)
+│   │   ├── pages/                     # 📄 Dedicated Multi-Page Routes
+│   │   │   ├── HomePage.jsx           # Landing page
+│   │   │   ├── AboutPage.jsx          # African Grey & Magpie philosophy
+│   │   │   ├── OnlineTuitionPage.jsx  # Cambridge, IB, AP, CBSE details
+│   │   │   ├── CodingPage.jsx         # Coding & AI sandbox
+│   │   │   ├── CommunicationPage.jsx  # Public speaking & MUN
+│   │   │   ├── LanguagesPage.jsx      # French, Spanish, German, Mandarin
+│   │   │   ├── AptitudePage.jsx       # Vedic Math & Olympiad
+│   │   │   ├── EventsPage.jsx         # Masterclasses & Webinars
+│   │   │   ├── CareersPage.jsx        # Educator recruitment
+│   │   │   └── ContactPage.jsx        # Global nodes & admissions form
+│   │   ├── data/                      # 📦 Structured catalog & static fixtures
+│   │   ├── assets/                    # 🖼️ Brand assets and vector graphics
+│   │   ├── App.jsx                    # 🧭 React Router DOM configuration
+│   │   ├── index.css                  # 🎨 Design tokens & CSS theme variables
+│   │   └── main.jsx                   # ⚛️ Application root entrypoint
+│   ├── public/                        # Static public files & favicon
+│   ├── vite.config.js                 # Dev server proxy configuration
+│   └── package.json                   # Frontend dependencies & scripts
 │
-├── backend/                    # Node.js + Express Backend Server
-│   ├── models/                 # Mongoose schemas (Booking.js, Inquiry.js)
-│   ├── data/                   # Local persistent fallback data storage (bookings.json)
-│   ├── index.js                # Express REST API server, CORS, and MongoDB connection
-│   ├── .env.example            # Environment variables template
-│   └── package.json            # Backend dependencies
+├── backend/                           # Node.js + Express REST API Server
+│   ├── config/                        # ⚙️ Configuration & Database connections
+│   │   └── db.js                      # Mongoose connection manager & health checks
+│   ├── controllers/                   # 🎮 Route request & response handlers
+│   │   ├── bookingController.js       # Booking creation, retrieval, status updates
+│   │   ├── inquiryController.js       # Contact form submissions & newsletter
+│   │   └── healthController.js        # Health check & uptime telemetry
+│   ├── middleware/                    # 🛡️ Express Middleware
+│   │   ├── security.js                # Helmet headers, CORS policy, Rate limiting
+│   │   └── errorHandler.js            # 404 handler & centralized error logging
+│   ├── models/                        # 🗄️ Database Schemas (Mongoose ODM)
+│   │   ├── Booking.js                 # Student booking document schema
+│   │   └── Inquiry.js                 # Contact / newsletter document schema
+│   ├── routes/                        # 🛣️ Express Routers (API Endpoints)
+│   │   ├── index.js                   # Master router aggregator (/api)
+│   │   ├── bookingRoutes.js           # /api/bookings endpoints
+│   │   ├── inquiryRoutes.js           # /api/inquiries endpoints
+│   │   └── healthRoutes.js            # /api/health endpoint
+│   ├── services/                      # 💼 Business Logic & Storage Abstraction
+│   │   └── storageService.js          # Resilient storage (MongoDB + Local JSON fallback)
+│   ├── data/                          # 📁 Local persistent JSON backup store
+│   │   ├── bookings.json              # Local fallback bookings storage
+│   │   └── inquiries.json             # Local fallback inquiries storage
+│   ├── app.js                         # 📦 Express application setup & middleware assembly
+│   ├── server.js                      # 🚀 Server lifecycle, port binding & graceful shutdown
+│   ├── index.js                       # 🚪 Entrypoint wrapper (npm start / node index.js)
+│   ├── .env.example                   # Environment variable template
+│   └── package.json                   # Backend dependencies & npm scripts
 │
-├── .gitignore                  # Comprehensive git ignore rules
-├── package.json                # Root workspace orchestrator
-└── README.md                   # Project documentation
+├── .gitignore                         # Git exclusion rules
+├── package.json                       # Root workspace orchestration scripts
+└── README.md                          # Platform documentation & deployment guide
 ```
 
 ---

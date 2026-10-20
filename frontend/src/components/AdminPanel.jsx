@@ -13,6 +13,7 @@ import {
   Search
 } from 'lucide-react';
 import './AdminPanel.css';
+import api from '../services/api.js';
 
 export default function AdminPanel({ isOpen, onClose }) {
   const [bookings, setBookings] = useState([]);
@@ -23,14 +24,12 @@ export default function AdminPanel({ isOpen, onClose }) {
   const fetchBookings = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/bookings');
-      const data = await res.json();
+      const data = await api.getBookings();
       if (data.success) {
         setBookings(data.data || []);
       }
 
-      const healthRes = await fetch('http://localhost:5001/api/health');
-      const healthData = await healthRes.json();
+      const healthData = await api.checkHealth();
       setDbStatus(healthData);
     } catch (err) {
       console.warn('Backend not reachable:', err);
@@ -48,11 +47,7 @@ export default function AdminPanel({ isOpen, onClose }) {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await fetch(`http://localhost:5001/api/bookings/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
-      });
+      await api.updateBookingStatus(id, { status: newStatus });
       setBookings(prev => prev.map(b => b._id === id ? { ...b, status: newStatus } : b));
     } catch (err) {
       console.error('Failed to update status', err);

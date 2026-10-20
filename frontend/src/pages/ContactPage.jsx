@@ -14,6 +14,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import FAQ from '../components/FAQ';
+import api from '../services/api.js';
 import './PagesCommon.css';
 import './ContactPage.css';
 
@@ -33,15 +34,7 @@ export default function ContactPage({ onOpenDemo }) {
     setStatus({ loading: true, success: false, error: '' });
 
     try {
-      const response = await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Network error. Saving to backup database...');
-      }
+      await api.createInquiry(formData);
 
       setStatus({ loading: false, success: true, error: '' });
       setFormData({

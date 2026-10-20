@@ -14,6 +14,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import './DemoModal.css';
+import api from '../services/api.js';
 
 export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
   const [formData, setFormData] = useState({
@@ -45,12 +46,7 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
     setIsSubmitting(true);
 
     try {
-      // Send to backend API
-      await fetch('http://localhost:5001/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      await api.createBooking(formData);
     } catch (err) {
       console.warn('Backend server offline or unreachable; using local client state', err);
     } finally {
