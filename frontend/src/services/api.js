@@ -3,7 +3,15 @@
  * Centralized HTTP service for backend communication with resilience fallbacks.
  */
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+const isDev = Boolean(
+  typeof window !== 'undefined' && 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+);
+
+const RAW_API_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = RAW_API_URL 
+  ? RAW_API_URL.replace(/\/$/, '') 
+  : (isDev ? 'http://localhost:5001/api' : '/api');
 
 /**
  * Standard fetch wrapper with JSON parsing and error handling

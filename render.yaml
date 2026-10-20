@@ -1,0 +1,16 @@
+services:
+  # Magπ Backend API Web Service
+  - type: web
+    name: magpi-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 5001
+      - key: MONGODB_URI
+        sync: false # Set securely in Render dashboard
+      - key: CLIENT_URL
+        value: "*"

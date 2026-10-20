@@ -1,7 +1,14 @@
 import express from 'express';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { helmetMiddleware, corsMiddleware, apiRateLimiter } from './middleware/security.js';
 import { notFoundHandler, errorHandler } from './middleware/errorHandler.js';
 import apiRoutes from './routes/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.resolve(__dirname, '../frontend/dist');
 
 const app = express();
 
@@ -19,14 +26,24 @@ app.use('/api', apiRateLimiter);
 // Mount Application Routes
 app.use('/api', apiRoutes);
 
-// Root Fallback Route
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to Magπ EdTech API',
-    docs: '/api/health',
-    status: 'active'
+// If frontend dist exists (unified single-service deployment), serve SPA
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(distPath, 'index.html'));
   });
-});
+} else {
+  // Standalone API deployment fallback
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'Welcome to Magπ EdTech API',
+      docs: '/api/health',
+      databaseStatus: '/api/health',
+      status: 'active'
+    });
+  });
+}
 
 // Error Handling Middleware
 app.use(notFoundHandler);
