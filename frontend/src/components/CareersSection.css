@@ -1,0 +1,156 @@
+/* ==========================================================================
+   Careers Section Styles
+   ========================================================================== */
+
+.careers-section {
+  background: #FAF8F5;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.careers-card-banner {
+  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 100%);
+  border-radius: 28px;
+  padding: 4rem 3.5rem;
+  color: #FFFFFF;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .careers-card-banner {
+    padding: 2.5rem 1.75rem;
+  }
+}
+
+.careers-content {
+  max-width: 720px;
+}
+
+.careers-title {
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.25;
+  margin: 0.75rem 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .careers-title {
+    font-size: 1.8rem;
+  }
+}
+
+.careers-description {
+  font-size: 1.05rem;
+  color: var(--slate-300);
+  line-height: 1.65;
+  margin-bottom: 2rem;
+}
+
+.careers-perks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 2.5rem;
+}
+
+.perk-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--slate-200);
+}
+
+.perk-icon {
+  color: var(--accent-green);
+  flex-shrink: 0;
+}
+
+.careers-btn {
+  box-shadow: 0 8px 24px rgba(0, 114, 206, 0.45);
+}
+
+/* Careers Modal */
+.careers-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 17, 32, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.careers-modal-dialog {
+  background: #FFFFFF;
+  border-radius: 24px;
+  max-width: 600px;
+  width: 100%;
+  padding: 2.5rem 2rem;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+
+.careers-modal-header {
+  margin-bottom: 1.5rem;
+}
+
+.careers-modal-header h3 {
+  font-size: 1.5rem;
+  margin: 0.4rem 0 0.2rem;
+}
+
+.careers-modal-header p {
+  font-size: 0.875rem;
+  color: var(--slate-500);
+  margin: 0;
+}
+
+.careers-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.careers-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--slate-200);
+  background: var(--slate-50);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.careers-form textarea:focus {
+  border-color: var(--primary);
+  background: #FFFFFF;
+}
+
+.careers-success-view {
+  text-align: center;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.careers-success-view h3 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.careers-success-view p {
+  color: var(--slate-500);
+  line-height: 1.6;
+  margin: 0;
+}

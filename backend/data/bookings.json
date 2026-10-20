@@ -1,0 +1,28 @@
+[
+  {
+    "_id": "local_1792328157420",
+    "parentName": "Alexander Wright",
+    "email": "alex.wright@example.com",
+    "phone": "+1 415 555 2671",
+    "curriculum": "Math Olympiad",
+    "grade": "Grade 9 - 10",
+    "subject": "Python & AI Machine Learning",
+    "preferredTime": "Evening (5:00 PM - 8:00 PM)",
+    "whatsappUpdates": true,
+    "status": "Pending",
+    "createdAt": "2026-10-18T12:55:57.412Z"
+  },
+  {
+    "_id": "local_1792327881462",
+    "parentName": "Mrs. Claire Bennett",
+    "email": "claire.bennett@example.com",
+    "phone": "+44 7911 123456",
+    "curriculum": "Cambridge IGCSE",
+    "grade": "Grade 9 - 10",
+    "subject": "Mathematics & Physics",
+    "preferredTime": "Evening (5:00 PM - 8:00 PM)",
+    "whatsappUpdates": true,
+    "status": "Pending",
+    "createdAt": "2026-10-18T12:51:21.462Z"
+  }
+]

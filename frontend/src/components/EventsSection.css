@@ -1,0 +1,221 @@
+/* ==========================================================================
+   Events Section Styles
+   ========================================================================== */
+
+.events-section {
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.event-card {
+  background: #FAF8F5;
+  border-radius: 22px;
+  border: 1px solid var(--slate-200);
+  padding: 1.85rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  background: #FFFFFF;
+  border-color: rgba(0, 114, 206, 0.4);
+  box-shadow: var(--shadow-xl);
+}
+
+.event-top-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.event-type-badge {
+  background: var(--accent-gold-light);
+  color: #B45309;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.event-board-pill {
+  background: var(--slate-200);
+  color: var(--navy-800);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
+
+.event-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  line-height: 1.35;
+  margin-bottom: 0.75rem;
+}
+
+.event-desc {
+  font-size: 0.85rem;
+  color: var(--slate-500);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+.event-meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid var(--slate-200);
+}
+
+.event-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8125rem;
+  color: var(--navy-700);
+}
+
+.meta-icon {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.event-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid var(--slate-200);
+}
+
+.seats-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.seats-dot {
+  width: 7px;
+  height: 7px;
+  background: #EF4444;
+  border-radius: 50%;
+  animation: pulseGlow 1.8s infinite ease-in-out;
+}
+
+.seats-indicator small {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #DC2626;
+}
+
+/* Event Modal */
+.event-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 17, 32, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.event-modal-dialog {
+  background: #FFFFFF;
+  border-radius: 24px;
+  max-width: 500px;
+  width: 100%;
+  padding: 2.25rem;
+  position: relative;
+  box-shadow: var(--shadow-xl);
+}
+
+.event-modal-dialog.success-box {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.event-modal-dialog.success-box h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.event-modal-dialog.success-box p {
+  color: var(--slate-500);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.event-modal-header {
+  margin-bottom: 1.5rem;
+}
+
+.event-modal-header h3 {
+  font-size: 1.35rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.event-modal-time {
+  font-size: 0.8125rem;
+  color: var(--slate-400);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.event-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--slate-100);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

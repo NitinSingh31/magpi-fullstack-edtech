@@ -1,0 +1,330 @@
+/* ==========================================================================
+   AboutPage.css - Magπ About Us Styles
+   ========================================================================== */
+
+.inspiration-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+@media (max-width: 992px) {
+  .inspiration-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+.inspiration-text {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--navy-700);
+  margin-bottom: 1.25rem;
+}
+
+.inspiration-stats-row {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--slate-200);
+  flex-wrap: wrap;
+}
+
+.inspire-stat strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  line-height: 1.1;
+}
+
+.inspire-stat span {
+  font-size: 0.875rem;
+  color: var(--slate-500);
+  font-weight: 500;
+}
+
+.inspiration-card-visual {
+  position: relative;
+  background: radial-gradient(circle at 50% 50%, #EBF5FF 0%, #FFFFFF 100%);
+  border: 1px solid var(--slate-200);
+  border-radius: 28px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.inspiration-mascot-img {
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 15px 25px rgba(6, 25, 56, 0.15));
+  margin-bottom: 1.5rem;
+}
+
+.mascot-tag-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 114, 206, 0.25);
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0A3678;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Mission & Vision */
+.mission-vision-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.mission-card {
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  border-radius: 22px;
+  padding: 2.5rem 2rem;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.mission-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 114, 206, 0.35);
+  box-shadow: var(--shadow-lg);
+}
+
+.mission-icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.mission-card h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 1rem;
+}
+
+.mission-card p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--navy-600);
+  flex-grow: 1;
+}
+
+/* Core Values */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.value-item-card {
+  background: #FAF8F5;
+  border: 1px solid var(--slate-200);
+  border-radius: 20px;
+  padding: 2.25rem 1.75rem;
+  transition: all var(--transition-normal);
+}
+
+.value-item-card:hover {
+  background: #FFFFFF;
+  transform: translateY(-5px);
+  border-color: rgba(0, 114, 206, 0.35);
+  box-shadow: var(--shadow-md);
+}
+
+.value-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.value-item-card h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 0.75rem;
+}
+
+.value-item-card p {
+  font-size: 0.925rem;
+  line-height: 1.65;
+  color: var(--navy-600);
+}
+
+/* Why Parents Trust */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.trust-card {
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  gap: 1.25rem;
+  transition: all var(--transition-normal);
+}
+
+.trust-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 114, 206, 0.35);
+  box-shadow: var(--shadow-md);
+}
+
+.trust-emoji {
+  font-size: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.trust-content h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 0.5rem;
+}
+
+.trust-content p {
+  font-size: 0.925rem;
+  line-height: 1.6;
+  color: var(--navy-600);
+}
+
+/* Faculty Grid */
+.faculty-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.faculty-card {
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  border-radius: 22px;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+}
+
+.faculty-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 114, 206, 0.35);
+  box-shadow: var(--shadow-xl);
+}
+
+.faculty-img-wrapper {
+  height: 240px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.faculty-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-smooth);
+}
+
+.faculty-card:hover .faculty-img {
+  transform: scale(1.05);
+}
+
+.faculty-info {
+  padding: 1.5rem;
+}
+
+.faculty-info h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 0.35rem;
+}
+
+.faculty-role {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.faculty-creds {
+  font-size: 0.8125rem;
+  color: var(--slate-500);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.faculty-subjects {
+  font-size: 0.825rem;
+  color: var(--navy-700);
+}
+
+.faculty-subjects strong {
+  color: var(--navy-900);
+}
+
+/* CTA Banner */
+.page-cta-banner {
+  background: linear-gradient(135deg, #061938 0%, #0A3678 100%);
+  color: #FFFFFF;
+  padding: 5rem 0;
+  text-align: center;
+}
+
+.cta-content-wrapper {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.cta-content-wrapper h2 {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 1rem;
+}
+
+.cta-content-wrapper p {
+  font-size: 1.15rem;
+  color: #E2E8F0;
+  line-height: 1.7;
+  margin-bottom: 2.25rem;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,169 @@
+/* ==========================================================================
+   ContactPage.css - Magπ Contact Us Styles
+   ========================================================================== */
+
+.contact-main-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 3.5rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 992px) {
+  .contact-main-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+.contact-form-card {
+  background: #FFFFFF;
+  border: 1px solid var(--slate-200);
+  border-radius: 28px;
+  padding: 3rem 2.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 600px) {
+  .contact-form-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+.contact-form-card h3 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  margin-bottom: 0.5rem;
+}
+
+.contact-form-card p {
+  font-size: 0.95rem;
+  color: var(--navy-600);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.contact-page-form .form-group {
+  margin-bottom: 1.35rem;
+}
+
+.contact-page-form label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--navy-900);
+  margin-bottom: 0.4rem;
+}
+
+.contact-page-form input,
+.contact-page-form select,
+.contact-page-form textarea {
+  width: 100%;
+  padding: 0.85rem 1.15rem;
+  border: 1px solid var(--slate-200);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--navy-900);
+  background: #FAF8F5;
+  transition: all var(--transition-fast);
+}
+
+.contact-page-form input:focus,
+.contact-page-form select:focus,
+.contact-page-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.contact-success-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.contact-success-state h4 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  margin: 1.25rem 0 0.5rem;
+}
+
+.contact-success-state p {
+  font-size: 1rem;
+  color: var(--navy-600);
+  margin-bottom: 1.75rem;
+}
+
+/* Offices List */
+.contact-info-column h3 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  margin-bottom: 0.5rem;
+}
+
+.contact-info-column p {
+  font-size: 0.95rem;
+  color: var(--navy-600);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.offices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.office-card {
+  background: #FAF8F5;
+  border: 1px solid var(--slate-200);
+  border-radius: 18px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.25rem;
+  transition: all var(--transition-normal);
+}
+
+.office-card:hover {
+  background: #FFFFFF;
+  border-color: rgba(0, 114, 206, 0.35);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.office-pin-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.office-details h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 0.35rem;
+}
+
+.office-address {
+  font-size: 0.875rem;
+  color: var(--navy-700);
+  margin-bottom: 0.5rem;
+}
+
+.office-hours-row {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.8125rem;
+  color: var(--slate-500);
+  flex-wrap: wrap;
+}
