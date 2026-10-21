@@ -56,12 +56,12 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
             </span>
           </div>
           <div className="announcement-right">
-            <a href="tel:+919876543210" className="top-link">
-              <Phone size={13} /> +91 98765 43210
+            <a href="tel:+916283609913" className="top-link">
+              <Phone size={13} /> +91 6283 609 913
             </a>
             <span className="divider">|</span>
             <a 
-              href="https://wa.me/919876543210?text=Hi%20Magπ,%20I%20would%20like%20to%20inquire%20about%20online%20tuition" 
+              href="https://wa.me/916283609913?text=Hi%20Magπ,%20I%20would%20like%20to%20inquire%20about%20online%20tuition" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="top-link top-whatsapp"
@@ -167,10 +167,23 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
                       <strong>SABIS Educational System</strong>
                       <span>Choueifat School Term Finals</span>
                     </Link>
-                    <Link to="/online-tuition#ap" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong>US Common Core & AP Prep</strong>
-                      <span>Calculus, Stats & Science APs</span>
-                    </Link>
+                    <div className="dropdown-divider" style={{ borderTop: '1px solid var(--slate-200)', margin: '0.4rem 0' }}></div>
+                    <a href="/#find-tutor" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
+                      <strong style={{ color: 'var(--primary)' }}>🎯 Tutor Matchmaker Quiz</strong>
+                      <span>Find ideal examiner in 45 seconds</span>
+                    </a>
+                    <a href="/#pricing-calculator" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
+                      <strong style={{ color: 'var(--primary)' }}>💰 Fee & Savings Calculator</strong>
+                      <span>Calculate custom package rates</span>
+                    </a>
+                    <a href="/#faculty" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
+                      <strong>👨‍🏫 Top 1% Faculty Directory</strong>
+                      <span>Meet certified board examiners</span>
+                    </a>
+                    <a href="/#resources" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
+                      <strong>📚 Free Revision Guides</strong>
+                      <span>Download syllabus cheat-sheets</span>
+                    </a>
                   </div>
                 )}
               </li>
@@ -277,6 +290,14 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
                 <Link to="/online-tuition" onClick={() => setIsMobileMenuOpen(false)}>Online Tuition (IGCSE/IB/SABIS)</Link>
                 
                 <div className="mobile-nav-subgroup">
+                  <span className="mobile-group-title">Interactive Tools & Resources</span>
+                  <a href="/#find-tutor" onClick={() => setIsMobileMenuOpen(false)}>• 🎯 45-Sec Tutor Matchmaker</a>
+                  <a href="/#pricing-calculator" onClick={() => setIsMobileMenuOpen(false)}>• 💰 Fee & Savings Calculator</a>
+                  <a href="/#faculty" onClick={() => setIsMobileMenuOpen(false)}>• 👨‍🏫 Meet Our Faculty</a>
+                  <a href="/#resources" onClick={() => setIsMobileMenuOpen(false)}>• 📚 Free Revision Guides</a>
+                </div>
+
+                <div className="mobile-nav-subgroup">
                   <span className="mobile-group-title">Skill Courses</span>
                   <Link to="/communication" onClick={() => setIsMobileMenuOpen(false)}>• Communication Skills (Speech & MUN)</Link>
                   <Link to="/coding-and-programming" onClick={() => setIsMobileMenuOpen(false)}>• Coding & Programming (Python & AI)</Link>
@@ -299,7 +320,7 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
                   <Sparkles size={18} /> Book a Free Demo
                 </button>
                 <a 
-                  href="https://wa.me/919876543210" 
+                  href="https://wa.me/916283609913" 
                   className="btn btn-whatsapp btn-full"
                   target="_blank" 
                   rel="noopener noreferrer"

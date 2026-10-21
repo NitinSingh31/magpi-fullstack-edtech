@@ -111,7 +111,7 @@ export default function CareersSection() {
                       <label>Phone / WhatsApp</label>
                       <input 
                         type="tel" 
-                        placeholder="+91 98765 43210" 
+                        placeholder="+91 6283 609 913" 
                         required 
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}

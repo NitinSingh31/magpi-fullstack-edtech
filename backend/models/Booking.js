@@ -36,6 +36,18 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     default: 'Evening (5:00 PM - 8:00 PM)'
   },
+  preferredDate: {
+    type: String,
+    default: ''
+  },
+  referenceCode: {
+    type: String,
+    default: ''
+  },
+  tutorPreference: {
+    type: String,
+    default: ''
+  },
   whatsappUpdates: {
     type: Boolean,
     default: true

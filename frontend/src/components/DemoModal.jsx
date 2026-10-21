@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { 
   Sparkles, 
@@ -11,25 +11,64 @@ import {
   Mail, 
   User, 
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  Download,
+  CalendarCheck,
+  ShieldCheck,
+  Award
 } from 'lucide-react';
 import './DemoModal.css';
 import api from '../services/api.js';
 
 export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
+  // Tomorrow's date in YYYY-MM-DD
+  const tomorrowStr = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  // Parse tutor if passed (e.g. "Mathematics with Dr. Jonathan Vance")
+  let defaultSubject = 'Mathematics';
+  let defaultTutor = '';
+  if (initialCourse) {
+    if (initialCourse.includes(' with ')) {
+      const parts = initialCourse.split(' with ');
+      defaultSubject = parts[0];
+      defaultTutor = parts[1]?.split('(')[0]?.trim() || '';
+    } else {
+      defaultSubject = initialCourse;
+    }
+  }
+
   const [formData, setFormData] = useState({
     parentName: '',
     email: '',
     phone: '',
     curriculum: 'Cambridge IGCSE',
     grade: 'Grade 9 - 10',
-    subject: initialCourse || 'Mathematics',
-    preferredTime: 'Evening (5:00 PM - 8:00 PM)',
+    subject: defaultSubject,
+    preferredDate: tomorrowStr,
+    preferredTime: '05:00 PM - 05:45 PM (Prime Evening)',
+    tutorPreference: defaultTutor,
     whatsappUpdates: true
   });
 
+  const [bookingRef, setBookingRef] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (initialCourse) {
+      if (initialCourse.includes(' with ')) {
+        const parts = initialCourse.split(' with ');
+        setFormData(prev => ({
+          ...prev,
+          subject: parts[0],
+          tutorPreference: parts[1]?.split('(')[0]?.trim() || ''
+        }));
+      } else {
+        setFormData(prev => ({ ...prev, subject: initialCourse }));
+      }
+    }
+  }, [initialCourse]);
 
   if (!isOpen) return null;
 
@@ -45,8 +84,14 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
     e.preventDefault();
     setIsSubmitting(true);
 
+    const generatedRef = `MAG-${Math.floor(10000 + Math.random() * 90000)}`;
+    setBookingRef(generatedRef);
+
     try {
-      await api.createBooking(formData);
+      await api.createBooking({
+        ...formData,
+        referenceCode: generatedRef
+      });
     } catch (err) {
       console.warn('Backend server offline or unreachable; using local client state', err);
     } finally {
@@ -70,6 +115,53 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
     onClose();
   };
 
+  // Google Calendar Link Generator
+  const getGoogleCalendarUrl = () => {
+    const dateFormatted = formData.preferredDate.replace(/-/g, '');
+    const startTime = '170000Z';
+    const endTime = '174500Z';
+    const title = encodeURIComponent(`Magπ 1-on-1 Trial Class: ${formData.subject}`);
+    const details = encodeURIComponent(
+      `Personalized 45-minute diagnostic session with accredited board specialist.\n` +
+      `Reference ID: ${bookingRef}\n` +
+      `Curriculum: ${formData.curriculum} (${formData.grade})\n` +
+      `Student Name: ${formData.parentName}\n` +
+      `Meeting link will be dispatched via WhatsApp/Email before session.`
+    );
+    const location = encodeURIComponent('Online HD Classroom (Google Meet)');
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateFormatted}T${startTime}/${dateFormatted}T${endTime}&details=${details}&location=${location}`;
+  };
+
+  // .ics Calendar File Download
+  const handleDownloadICS = () => {
+    const dateClean = formData.preferredDate.replace(/-/g, '');
+    const icsContent = 
+      `BEGIN:VCALENDAR\n` +
+      `VERSION:2.0\n` +
+      `PRODID:-//Magpi Education//1-on-1 Diagnostic Trial//EN\n` +
+      `CALSCALE:GREGORIAN\n` +
+      `METHOD:PUBLISH\n` +
+      `BEGIN:VEVENT\n` +
+      `UID:${bookingRef}@magpi.education\n` +
+      `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z\n` +
+      `DTSTART:${dateClean}T170000Z\n` +
+      `DTEND:${dateClean}T174500Z\n` +
+      `SUMMARY:Magπ 1-on-1 Trial Class - ${formData.subject}\n` +
+      `DESCRIPTION:Diagnostic session for ${formData.curriculum} (${formData.grade}). Reference: ${bookingRef}\n` +
+      `LOCATION:Online HD Classroom (Google Meet)\n` +
+      `STATUS:CONFIRMED\n` +
+      `END:VEVENT\n` +
+      `END:VCALENDAR`;
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `magpi-trial-${bookingRef}.ics`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="demo-modal-overlay" onClick={onClose}>
       <div className="demo-modal-dialog" onClick={e => e.stopPropagation()}>
@@ -86,8 +178,14 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
               <h2 className="modal-title">Book Your 45-Minute Diagnostic Trial</h2>
               <p className="modal-desc">
                 Experience Magπ's personalized 1-on-1 digital classroom and receive a comprehensive 
-                subject gap analysis report from an accredited examiner.
+                subject gap analysis report from an accredited board examiner.
               </p>
+              {formData.tutorPreference && (
+                <div className="matched-tutor-banner">
+                  <Award size={15} />
+                  <span>Matching with preferred mentor: <strong>{formData.tutorPreference}</strong></span>
+                </div>
+              )}
             </div>
 
             <form onSubmit={handleSubmit} className="demo-form">
@@ -130,7 +228,7 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="subject">Target Subject / Skill</label>
+                  <label htmlFor="subject">Target Subject / Topic</label>
                   <input 
                     type="text" 
                     id="subject" 
@@ -143,19 +241,33 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="preferredTime">Preferred Class Time</label>
-                  <select 
-                    id="preferredTime" 
-                    name="preferredTime" 
-                    value={formData.preferredTime} 
+                  <label htmlFor="preferredDate">Preferred Date</label>
+                  <input 
+                    type="date" 
+                    id="preferredDate" 
+                    name="preferredDate" 
+                    value={formData.preferredDate}
+                    min={todayStr}
                     onChange={handleChange}
-                  >
-                    <option value="Morning (9:00 AM - 12:00 PM)">Morning (9:00 AM - 12:00 PM)</option>
-                    <option value="Afternoon (1:00 PM - 5:00 PM)">Afternoon (1:00 PM - 5:00 PM)</option>
-                    <option value="Evening (5:00 PM - 8:00 PM)">Evening (5:00 PM - 8:00 PM)</option>
-                    <option value="Weekend Flexible">Weekend Flexible</option>
-                  </select>
+                    required
+                  />
                 </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="preferredTime">Select 45-Minute Class Slot</label>
+                <select 
+                  id="preferredTime" 
+                  name="preferredTime" 
+                  value={formData.preferredTime} 
+                  onChange={handleChange}
+                >
+                  <option value="10:00 AM - 10:45 AM (Morning Slot)">10:00 AM - 10:45 AM (Morning Slot)</option>
+                  <option value="02:00 PM - 02:45 PM (Afternoon Slot)">02:00 PM - 02:45 PM (Afternoon Slot)</option>
+                  <option value="05:00 PM - 05:45 PM (Prime Evening)">05:00 PM - 05:45 PM (Prime Evening)</option>
+                  <option value="07:00 PM - 07:45 PM (Late Evening)">07:00 PM - 07:45 PM (Late Evening)</option>
+                  <option value="08:30 PM - 09:15 PM (Night / International)">08:30 PM - 09:15 PM (Night / International)</option>
+                </select>
               </div>
 
               <div className="form-group">
@@ -230,8 +342,8 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
               </button>
 
               <div className="form-security-note">
-                <CheckCircle2 size={14} color="#10B981" />
-                <span>Your information is 100% confidential. No spam or spam calls.</span>
+                <ShieldCheck size={14} color="#10B981" />
+                <span>Your information is 100% confidential. No spam calls or lock-in obligations.</span>
               </div>
             </form>
           </div>
@@ -239,6 +351,10 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
           <div className="demo-modal-success-view">
             <div className="success-icon-badge">
               <CheckCircle2 size={42} />
+            </div>
+
+            <div className="success-ref-pill">
+              Reference ID: <strong>{bookingRef}</strong>
             </div>
 
             <h2 className="success-title">Trial Session Requested! 🎉</h2>
@@ -257,24 +373,45 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
                 </div>
               </div>
               <div className="summary-item">
-                <Clock size={16} className="summary-icon" />
+                <Calendar size={16} className="summary-icon" />
                 <div>
-                  <small>Requested Time Slot</small>
-                  <strong>{formData.preferredTime}</strong>
+                  <small>Scheduled Slot</small>
+                  <strong>{formData.preferredDate} • {formData.preferredTime}</strong>
                 </div>
               </div>
               <div className="summary-item">
                 <Mail size={16} className="summary-icon" />
                 <div>
-                  <small>Confirmation Sent To</small>
+                  <small>Confirmation Dispatched</small>
                   <strong>{formData.email} & WhatsApp</strong>
                 </div>
               </div>
             </div>
 
+            {/* Calendar Actions */}
+            <div className="calendar-actions-row">
+              <a 
+                href={getGoogleCalendarUrl()} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn-cal-action"
+              >
+                <CalendarCheck size={15} />
+                <span>Add to Google Calendar</span>
+              </a>
+              <button 
+                type="button" 
+                onClick={handleDownloadICS} 
+                className="btn-cal-action"
+              >
+                <Download size={15} />
+                <span>Download .ics Invite</span>
+              </button>
+            </div>
+
             <div className="success-actions">
               <a 
-                href={`https://wa.me/919876543210?text=Hi%20Magπ,%20I%20just%20booked%20a%20trial%20for%20${encodeURIComponent(formData.subject)}%20(${encodeURIComponent(formData.curriculum)})%20for%20${encodeURIComponent(formData.parentName)}`}
+                href={`https://wa.me/916283609913?text=Hi%20Magπ,%20I%20just%20booked%20a%20trial%20for%20${encodeURIComponent(formData.subject)}%20(${encodeURIComponent(formData.curriculum)})%20for%20${encodeURIComponent(formData.parentName)}.%20Ref:%20${bookingRef}`}
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="btn btn-whatsapp btn-full"

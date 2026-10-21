@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import './PagesCommon.css';
 import './OnlineTuitionPage.css';
+import FacultyShowcase from '../components/FacultyShowcase';
+import TuitionCalculator from '../components/TuitionCalculator';
 
 export default function OnlineTuitionPage({ onOpenDemo }) {
   const [selectedBoard, setSelectedBoard] = useState('all');
@@ -393,7 +395,13 @@ export default function OnlineTuitionPage({ onOpenDemo }) {
         </div>
       </section>
 
-      {/* 5. Trial Class Booking Call to Action */}
+      {/* 5. Accredited Faculty Showcase */}
+      <FacultyShowcase onOpenDemo={onOpenDemo} />
+
+      {/* 6. Tuition Fee & Savings Calculator */}
+      <TuitionCalculator onOpenDemo={onOpenDemo} />
+
+      {/* 7. Trial Class Booking Call to Action */}
       <section className="page-cta-banner">
         <div className="container cta-content-wrapper">
           <h2>Get a Personalized Study Plan for Your Child</h2>

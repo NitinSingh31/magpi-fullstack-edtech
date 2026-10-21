@@ -78,7 +78,7 @@ export default function ContactPage({ onOpenDemo }) {
       city: "Mumbai & New Delhi, India",
       address: "Bandra Kurla Complex (BKC), Mumbai",
       hours: "8:00 AM – 10:00 PM IST",
-      phone: "+91 98765 43210"
+      phone: "+91 6283 609 913"
     }
   ];
 
@@ -102,7 +102,7 @@ export default function ContactPage({ onOpenDemo }) {
             Have questions about syllabus requirements, tutor matching, or pricing packages? Our senior education coordinators are available 7 days a week across multiple timezones.
           </p>
           <div className="page-hero-actions">
-            <a href="https://wa.me/919876543210?text=Hi%20Magπ,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+            <a href="https://wa.me/916283609913?text=Hi%20Magπ,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
               <MessageCircle size={16} /> Instant WhatsApp Support
             </a>
             <button onClick={() => onOpenDemo()} className="btn btn-outline" style={{ borderColor: 'rgba(255,255,255,0.4)', color: '#FFFFFF' }}>
@@ -120,14 +120,14 @@ export default function ContactPage({ onOpenDemo }) {
               <div className="feature-strip-icon"><Phone size={22} /></div>
               <div>
                 <strong>Direct Call Support</strong>
-                <a href="tel:+919876543210" style={{ color: 'var(--primary)', fontWeight: 600 }}>+91 98765 43210</a>
+                <a href="tel:+916283609913" style={{ color: 'var(--primary)', fontWeight: 600 }}>+91 6283 609 913</a>
               </div>
             </div>
             <div className="feature-strip-item">
               <div className="feature-strip-icon"><MessageCircle size={22} /></div>
               <div>
                 <strong>WhatsApp Admissions</strong>
-                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 600 }}>Chat with Counselor</a>
+                <a href="https://wa.me/916283609913" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 600 }}>Chat with Counselor</a>
               </div>
             </div>
             <div className="feature-strip-item">

@@ -271,6 +271,71 @@
   color: var(--navy-900);
 }
 
+.matched-tutor-banner {
+  margin-top: 1rem;
+  padding: 0.65rem 1rem;
+  background: var(--primary-subtle);
+  border: 1px solid rgba(0, 114, 206, 0.25);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--primary);
+}
+
+.matched-tutor-banner strong {
+  color: var(--navy-900);
+}
+
+.success-ref-pill {
+  font-size: 0.8125rem;
+  font-family: var(--font-mono);
+  background: #EFF6FF;
+  color: #1D4ED8;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid #BFDBFE;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-actions-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 500px) {
+  .calendar-actions-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-cal-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1rem;
+  background: #FFFFFF;
+  border: 1.5px solid var(--slate-300);
+  border-radius: 12px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--navy-800);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-cal-action:hover {
+  background: var(--primary-subtle);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
 .success-actions {
   width: 100%;
   display: flex;

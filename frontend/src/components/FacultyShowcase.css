@@ -1,0 +1,235 @@
+/* ==========================================================================
+   Faculty Showcase Styles
+   ========================================================================== */
+
+.faculty-showcase-section {
+  background: var(--bg-page);
+  padding: 5rem 0;
+  position: relative;
+}
+
+.faculty-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 2.5rem 0 3rem;
+}
+
+.faculty-tab {
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--slate-200);
+  background: #FFFFFF;
+  color: var(--navy-700);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.faculty-tab:hover {
+  border-color: rgba(0, 114, 206, 0.4);
+  background: var(--primary-subtle);
+  color: var(--primary);
+}
+
+.faculty-tab.active {
+  background: var(--navy-900);
+  color: #FFFFFF;
+  border-color: var(--navy-900);
+  box-shadow: 0 4px 12px rgba(6, 25, 56, 0.2);
+}
+
+.faculty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .faculty-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .faculty-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.faculty-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--slate-200);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: all var(--transition-normal);
+}
+
+.faculty-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 114, 206, 0.4);
+  box-shadow: var(--shadow-xl);
+}
+
+.faculty-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.faculty-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 114, 206, 0.2);
+}
+
+.verified-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #FFFFFF;
+}
+
+.faculty-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.faculty-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  margin: 0;
+}
+
+.faculty-role {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.faculty-degree {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--slate-500);
+}
+
+.faculty-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.f-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--slate-100);
+  color: var(--navy-800);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.faculty-review-box {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: 14px;
+  padding: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.quote-icon {
+  color: var(--primary);
+  opacity: 0.4;
+}
+
+.faculty-review-box p {
+  font-size: 0.825rem;
+  font-style: italic;
+  color: var(--navy-700);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.faculty-review-box small {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--slate-500);
+}
+
+.faculty-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--slate-200);
+}
+
+.faculty-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.f-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+.f-stat strong {
+  color: var(--navy-900);
+}
+
+.f-stat span {
+  color: var(--slate-400);
+}
+
+.star-icon {
+  color: #F59E0B;
+  fill: #F59E0B;
+}
+
+.clock-icon {
+  color: var(--primary);
+}
+
+.btn-book-faculty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border-radius: 10px;
+}

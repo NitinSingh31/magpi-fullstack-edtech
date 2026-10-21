@@ -4,9 +4,13 @@ import AchieveGoals from '../components/AchieveGoals';
 import StatsBar from '../components/StatsBar';
 import CurriculumsSection from '../components/CurriculumsSection';
 import CourseCatalog from '../components/CourseCatalog';
+import TutorMatcher from '../components/TutorMatcher';
 import Methodology from '../components/Methodology';
+import FacultyShowcase from '../components/FacultyShowcase';
 import ComparisonTable from '../components/ComparisonTable';
+import TuitionCalculator from '../components/TuitionCalculator';
 import Testimonials from '../components/Testimonials';
+import ResourceHub from '../components/ResourceHub';
 import GlobalReach from '../components/GlobalReach';
 import FAQ from '../components/FAQ';
 
@@ -28,19 +32,31 @@ export default function HomePage({ onOpenDemo }) {
       {/* 5. Comprehensive Courses & Skill Categories Explorer */}
       <CourseCatalog onSelectCourseForDemo={onOpenDemo} />
 
-      {/* 6. 4-Step Learning Methodology */}
+      {/* 6. AI 45-Second Tutor Matchmaker Quiz */}
+      <TutorMatcher onOpenDemo={onOpenDemo} />
+
+      {/* 7. 4-Step Learning Methodology */}
       <Methodology onOpenDemo={onOpenDemo} />
 
-      {/* 7. Value Comparison Table (Magπ vs Traditional Offline) */}
+      {/* 8. Top 1% Global Faculty & Board Examiners Showcase */}
+      <FacultyShowcase onOpenDemo={onOpenDemo} />
+
+      {/* 9. Value Comparison Table (Magπ vs Traditional Offline) */}
       <ComparisonTable onOpenDemo={onOpenDemo} />
 
-      {/* 8. Real Parent & Student Testimonials */}
+      {/* 10. Interactive Tuition Fee & Package Savings Calculator */}
+      <TuitionCalculator onOpenDemo={onOpenDemo} />
+
+      {/* 11. Real Parent & Student Testimonials */}
       <Testimonials />
 
-      {/* 9. International Student Community & Timezones */}
+      {/* 12. Free Study Resources & Revision Hub (Lead Magnet) */}
+      <ResourceHub />
+
+      {/* 13. International Student Community & Timezones */}
       <GlobalReach />
 
-      {/* 10. Frequently Asked Questions */}
+      {/* 14. Frequently Asked Questions */}
       <FAQ />
     </div>
   );

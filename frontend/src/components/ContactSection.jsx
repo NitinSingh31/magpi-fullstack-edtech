@@ -76,7 +76,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <small>Call Our Admissions Desk</small>
-                  <a href="tel:+919876543210">+91 98765 43210</a>
+                  <a href="tel:+916283609913">+91 6283 609 913</a>
                 </div>
               </div>
 
@@ -87,11 +87,11 @@ export default function ContactSection() {
                 <div>
                   <small>Instant WhatsApp Support</small>
                   <a 
-                    href="https://wa.me/919876543210?text=Hi%20Magπ,%20I%20have%20an%20inquiry%20regarding%20classes" 
+                    href="https://wa.me/916283609913?text=Hi%20Magπ,%20I%20have%20an%20inquiry%20regarding%20classes" 
                     target="_blank" 
                     rel="noopener noreferrer"
                   >
-                    +91 98765 43210 (Click to Chat)
+                    +91 6283 609 913 (Click to Chat)
                   </a>
                 </div>
               </div>

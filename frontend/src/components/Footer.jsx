@@ -91,6 +91,10 @@ export default function Footer({ onOpenDemo, onOpenAdmin }) {
           <div className="footer-col">
             <h4 className="footer-col-title">Quick Links & Inquiries</h4>
             <ul className="footer-links" style={{ marginBottom: '1.25rem' }}>
+              <li><a href="/#find-tutor">🎯 45-Sec Tutor Matchmaker</a></li>
+              <li><a href="/#pricing-calculator">💰 Fee & Savings Calculator</a></li>
+              <li><a href="/#faculty">👨‍🏫 Top 1% Faculty Showcase</a></li>
+              <li><a href="/#resources">📚 Free Revision Guides & Cheatsheets</a></li>
               <li><Link to="/about-us">About Magπ & Story</Link></li>
               <li><Link to="/events">Live Events & Masterclasses</Link></li>
               <li><Link to="/careers">Careers / Join Faculty</Link></li>
@@ -104,7 +108,7 @@ export default function Footer({ onOpenDemo, onOpenAdmin }) {
               </li>
               <li>
                 <Phone size={16} />
-                <a href="tel:+919876543210">+91 98765 43210 (Global Desk)</a>
+                <a href="tel:+916283609913">+91 6283 609 913 (Global Desk)</a>
               </li>
               <li>
                 <MapPin size={16} />
