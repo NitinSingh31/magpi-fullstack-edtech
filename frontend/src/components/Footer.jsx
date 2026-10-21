@@ -16,13 +16,13 @@ export default function Footer() {
           <div className="footer-col brand-col">
             <Link to="/" className="footer-logo-link">
               <img 
-                src="/assets/psittacus/logo.png" 
-                alt="Psittacus" 
+                src="/assets/magpi-logo.png" 
+                alt="Magπ" 
                 className="footer-logo-img" 
               />
             </Link>
             <p className="footer-about-text">
-              Psittacus is transforming education through innovative learning solutions. We are committed to making personalized, engaging, and accessible learning experiences for students and educators worldwide.
+              Magπ is transforming education through innovative learning solutions. We are committed to making personalized, engaging, and accessible learning experiences for students and educators worldwide.
             </p>
           </div>
 
@@ -95,11 +95,11 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Copyright Strip - Terracotta Coral #F48F68 */}
+      {/* Bottom Copyright Strip - Deep Royal Navy #0A2540 */}
       <div className="psittacus-copyright-bar">
         <div className="container copyright-inner">
           <p className="copyright-text">
-            Copyright © 2025 Steamvidya Educational Hub Private Limited. All rights reserved.
+            Copyright © 2025 Magπ Education. All rights reserved.
           </p>
 
           {/* Scroll to Top Button */}

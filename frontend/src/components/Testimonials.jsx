@@ -27,7 +27,7 @@ export default function Testimonials() {
 
       <div className="container">
         <div className="psittacus-header">
-          <h2 className="psittacus-title">What Parents & Students Say About Psittacus</h2>
+          <h2 className="psittacus-title">What Parents & Students Say About Magπ</h2>
         </div>
 
         <div className="testimonials-cards-row">

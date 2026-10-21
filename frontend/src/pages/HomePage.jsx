@@ -15,7 +15,7 @@ export default function HomePage({ onOpenDemo }) {
       {/* 1. Hero Section */}
       <Hero onOpenDemo={onOpenDemo} />
 
-      {/* 2. Achieve Your Goals With Psittacus */}
+      {/* 2. Achieve Your Goals With Magπ */}
       <AchieveGoals />
 
       {/* 3. Global Statistics Counter Bar */}
@@ -27,10 +27,10 @@ export default function HomePage({ onOpenDemo }) {
       {/* 5. What We Offer? */}
       <WhatWeOffer />
 
-      {/* 6. Comparison: Psittacus Online Tuition VS Traditional Offline Tution */}
+      {/* 6. Comparison: Magπ Online Tuition VS Traditional Offline Tution */}
       <ComparisonTable onOpenDemo={onOpenDemo} />
 
-      {/* 7. What Parents & Students Say About Psittacus */}
+      {/* 7. What Parents & Students Say About Magπ */}
       <Testimonials />
 
       {/* 8. Our Students Across The Globe */}

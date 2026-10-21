@@ -338,7 +338,7 @@ export const TESTIMONIALS = [
     board: 'Cambridge IGCSE Physics & Math',
     rating: 5,
     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&h=150&q=80',
-    quote: 'Finding a tutor who truly understands the Cambridge IGCSE Physics mark-scheme was challenging until we found Psittacus. In just 4 months, Zayd progressed from a B grade to consistently scoring A* in his mocks.'
+    quote: 'Finding a tutor who truly understands the Cambridge IGCSE Physics mark-scheme was challenging until we found Magπ. In just 4 months, Zayd progressed from a B grade to consistently scoring A* in his mocks.'
   },
   {
     id: 2,
@@ -349,7 +349,7 @@ export const TESTIMONIALS = [
     board: 'IB Diploma (Math AA HL)',
     rating: 5,
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80',
-    quote: 'IB Math Higher Level was overwhelming for Sophie. Her Psittacus mentor broke down complex calculus and probability concepts with incredible patience and visual whiteboards. Her confidence has soared.'
+    quote: 'IB Math Higher Level was overwhelming for Sophie. Her Magπ mentor broke down complex calculus and probability concepts with incredible patience and visual whiteboards. Her confidence has soared.'
   },
   {
     id: 3,
@@ -360,7 +360,7 @@ export const TESTIMONIALS = [
     board: 'Coding & STEAM Lab',
     rating: 5,
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&h=150&q=80',
-    quote: 'Most coding classes just show videos. At Psittacus, Aarav builds real interactive programs and writes clean Python with his mentor. He even built a weather prediction model for his school science fair!'
+    quote: 'Most coding classes just show videos. At Magπ, Aarav builds real interactive programs and writes clean Python with his mentor. He even built a weather prediction model for his school science fair!'
   },
   {
     id: 4,
@@ -381,8 +381,8 @@ export const FAQS = [
     a: 'Once you book a demo, our academic advisor reaches out to understand your child\'s curriculum (IB, IGCSE, SABIS, CBSE, US Board, etc.), current grade, and areas of challenge. We then match you with a specialized senior tutor for a live 45-minute diagnostic session where the student experiences our interactive digital classroom firsthand.'
   },
   {
-    q: 'How are Psittacus tutors screened and certified?',
-    a: 'We maintain an acceptance rate under 1.8%. Every Psittacus tutor undergoes rigorous screening: verification of academic credentials (from top global universities), subject proficiency testing, live teaching simulations evaluated by senior examiners, and thorough background checks.'
+    q: 'How are Magπ tutors screened and certified?',
+    a: 'We maintain an acceptance rate under 1.8%. Every Magπ tutor undergoes rigorous screening: verification of academic credentials (from top global universities), subject proficiency testing, live teaching simulations evaluated by senior examiners, and thorough background checks.'
   },
   {
     q: 'What if my child does not feel comfortable with the assigned tutor?',
@@ -394,6 +394,6 @@ export const FAQS = [
   },
   {
     q: 'Can we reschedule sessions if my child has school exams or travel plans?',
-    a: 'Yes! Psittacus offers ultimate flexibility. You can reschedule any class with a simple notice to your dedicated academic coordinator with zero penalty.'
+    a: 'Yes! Magπ offers ultimate flexibility. You can reschedule any class with a simple notice to your dedicated academic coordinator with zero penalty.'
   }
 ];

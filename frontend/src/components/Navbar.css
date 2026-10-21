@@ -2,9 +2,9 @@
    Psittacus Navbar & Announcement Bar Styles
    ========================================================================== */
 
-/* Top Announcement Bar - Terracotta #F48F68 */
+/* Top Announcement Bar - Magπ Royal Navy #0A2540 */
 .announcement-bar {
-  background-color: #F48F68;
+  background-color: #0A2540;
   color: #FFFFFF;
   font-size: 0.8125rem;
   padding: 0.45rem 0;
@@ -34,7 +34,7 @@
 }
 
 .announcement-left .top-link:hover {
-  opacity: 0.85;
+  color: #38BDF8;
 }
 
 .announcement-left .divider {
@@ -72,8 +72,9 @@
 }
 
 .social-circle:hover {
-  background-color: #FFFFFF;
-  color: #F48F68;
+  background-color: #0077E6;
+  border-color: #0077E6;
+  color: #FFFFFF;
 }
 
 .top-admin-btn {
@@ -129,7 +130,7 @@
 }
 
 .brand-logo-img {
-  height: 48px;
+  height: 52px;
   width: auto;
   object-fit: contain;
 }
@@ -153,7 +154,7 @@
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 600;
-  color: #111111;
+  color: #0A2540;
   text-decoration: none;
   padding: 0.5rem 0;
   position: relative;
@@ -162,11 +163,11 @@
 }
 
 .nav-link:hover {
-  color: #F48F68;
+  color: #0077E6;
 }
 
 .nav-link.active {
-  color: #F48F68;
+  color: #0077E6;
 }
 
 /* Dropdown */
@@ -197,8 +198,8 @@
   min-width: 270px;
   background-color: #FFFFFF;
   border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-  border: 1px solid #EFEAE4;
+  box-shadow: 0 10px 30px rgba(10, 37, 64, 0.12);
+  border: 1px solid #E2E8F0;
   padding: 0.6rem 0;
   margin-top: 0.5rem;
   z-index: 100;
@@ -227,29 +228,29 @@
 }
 
 .dropdown-item:hover {
-  background-color: #FFF7F2;
-  color: #F48F68;
+  background-color: #EFF6FF;
+  color: #0077E6;
 }
 
 .dropdown-item .item-icon {
-  color: #F48F68;
+  color: #0077E6;
   flex-shrink: 0;
 }
 
 .dropdown-item strong {
   display: block;
   font-size: 0.88rem;
-  color: #222222;
+  color: #0A2540;
 }
 
 .dropdown-item:hover strong {
-  color: #F48F68;
+  color: #0077E6;
 }
 
 .dropdown-item span {
   display: block;
   font-size: 0.75rem;
-  color: #777777;
+  color: #64748B;
 }
 
 /* Right Header CTA Button: "Get In Touch!" */
@@ -263,27 +264,27 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #343A40;
+  background-color: #0077E6;
   color: #FFFFFF;
   padding: 0.7rem 1.45rem;
   border-radius: 8px;
   font-size: 0.92rem;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 3px 8px rgba(52, 58, 64, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 119, 230, 0.35);
   transition: all var(--transition-normal);
 }
 
 .btn-get-in-touch:hover {
-  background-color: #212529;
+  background-color: #0062C4;
   transform: translateY(-1px);
-  box-shadow: 0 5px 14px rgba(52, 58, 64, 0.3);
+  box-shadow: 0 6px 16px rgba(0, 119, 230, 0.45);
 }
 
 /* Mobile Toggle */
 .mobile-toggle {
   display: none;
-  color: #222222;
+  color: #0A2540;
 }
 
 @media (max-width: 992px) {
@@ -325,12 +326,12 @@
   padding: 0.85rem 0.5rem;
   font-size: 1.05rem;
   font-weight: 600;
-  color: #222222;
+  color: #0A2540;
 }
 
 .mobile-menu-list li a:hover,
 .mobile-menu-list li a.active {
-  color: #F48F68;
+  color: #0077E6;
 }
 
 .mobile-dropdown-header {

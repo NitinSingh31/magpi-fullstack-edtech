@@ -43,7 +43,7 @@ export default function WhatWeOffer() {
         <div className="psittacus-header">
           <h2 className="psittacus-title">What We Offer?</h2>
           <p className="psittacus-subtitle">
-            At Psittacus, our values aren't just words — they are the principles that shape every course we create, every learner we support, and every goal we strive to achieve. These core values define our culture, drive our mission, and ensure we stay committed to delivering meaningful learning experiences.
+            At Magπ, our values aren't just words — they are the principles that shape every course we create, every learner we support, and every goal we strive to achieve. These core values define our culture, drive our mission, and ensure we stay committed to delivering meaningful learning experiences.
           </p>
         </div>
 

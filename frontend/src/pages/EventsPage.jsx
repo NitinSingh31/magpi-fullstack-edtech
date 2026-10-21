@@ -307,7 +307,7 @@ export default function EventsPage({ onOpenDemo }) {
           <div className="school-partnership-card">
             <div className="partnership-content">
               <span className="badge-tag brand">For Schools & Educators</span>
-              <h3>Want Psittacus Faculty to Host a Workshop for Your School?</h3>
+              <h3>Want Magπ Faculty to Host a Workshop for Your School?</h3>
               <p>
                 We collaborate with international schools across the UAE, Singapore, UK, and India to deliver guest masterclasses on exam decoding, STEM robotics, and MUN debate training.
               </p>

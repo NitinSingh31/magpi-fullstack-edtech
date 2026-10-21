@@ -102,7 +102,7 @@ export default function ContactPage({ onOpenDemo }) {
             Have questions about syllabus requirements, tutor matching, or pricing packages? Our senior education coordinators are available 7 days a week across multiple timezones.
           </p>
           <div className="page-hero-actions">
-            <a href="https://wa.me/916283609913?text=Hi%20Psittacus,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+            <a href="https://wa.me/916283609913?text=Hi%20Mag%CF%80,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
               <MessageCircle size={16} /> Instant WhatsApp Support
             </a>
             <button onClick={() => onOpenDemo()} className="btn btn-outline" style={{ borderColor: 'rgba(255,255,255,0.4)', color: '#FFFFFF' }}>

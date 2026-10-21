@@ -4,7 +4,7 @@
 
 .psittacus-comparison-section {
   padding: 5rem 0;
-  background-color: #FEFBF7;
+  background-color: var(--bg-page);
 }
 
 .psittacus-table-container {
@@ -12,8 +12,8 @@
   margin: 2.5rem auto 0;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid #D5CECE;
+  box-shadow: 0 4px 20px rgba(10, 37, 64, 0.06);
+  border: 1px solid #E2E8F0;
 }
 
 .psittacus-table {
@@ -23,7 +23,7 @@
 }
 
 .psittacus-table thead tr {
-  background-color: #F48F68;
+  background-color: var(--primary);
 }
 
 .psittacus-table thead th {
@@ -44,7 +44,7 @@
   font-family: var(--font-body);
   font-size: 0.95rem;
   line-height: 1.55;
-  border-right: 1px solid #E5E1D8;
+  border-right: 1px solid #E2E8F0;
   vertical-align: middle;
 }
 
@@ -55,17 +55,17 @@
 /* White Alternating Rows */
 .psittacus-table tbody tr.row-light {
   background-color: #FFFFFF;
-  color: #333333;
+  color: #334155;
 }
 
 .psittacus-table tbody tr.row-light .cell-feature {
-  color: #222222;
+  color: #0A2540;
   font-weight: 600;
 }
 
 /* Dark Slate Alternating Rows */
 .psittacus-table tbody tr.row-dark {
-  background-color: #3A464E;
+  background-color: var(--dark-slate);
   color: #FFFFFF;
 }
 

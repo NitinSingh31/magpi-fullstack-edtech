@@ -101,7 +101,7 @@ export default function CareersPage() {
             Teach What You Love, <span className="text-highlight">From Wherever You Are</span>
           </h1>
           <p className="page-hero-desc">
-            Join Psittacus’s elite faculty of international educators, curriculum directors, and subject specialists. Teach motivated students across global boards with high hourly compensation, total schedule autonomy, and full administrative support.
+            Join Magπ’s elite faculty of international educators, curriculum directors, and subject specialists. Teach motivated students across global boards with high hourly compensation, total schedule autonomy, and full administrative support.
           </p>
           <div className="page-hero-actions">
             <a href="#open-positions" className="btn btn-primary">
@@ -306,7 +306,7 @@ export default function CareersPage() {
                 </div>
 
                 <div className="form-group">
-                  <label>Why do you want to teach with Psittacus? (Brief Statement)</label>
+                  <label>Why do you want to teach with Magπ? (Brief Statement)</label>
                   <textarea 
                     rows="3"
                     placeholder="Tell us about your teaching philosophy and how you help students grasp difficult concepts..."

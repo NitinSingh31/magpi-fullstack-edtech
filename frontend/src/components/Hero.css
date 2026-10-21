@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .psittacus-hero {
-  background-color: #FEFBF7;
+  background-color: var(--bg-page);
   padding: 4.5rem 0 3rem;
   overflow: hidden;
   position: relative;
@@ -25,13 +25,13 @@
   font-family: var(--font-heading);
   font-size: 3.4rem;
   line-height: 1.22;
-  color: #3A5161;
+  color: #0A2540;
   font-weight: 700;
   margin-bottom: 1.5rem;
 }
 
 .hero-board-rotator {
-  color: #F48F68;
+  color: #0077E6;
   display: inline-block;
   min-width: 140px;
   animation: fadeInBoard 0.4s ease-out;
@@ -52,7 +52,7 @@
   font-family: var(--font-body);
   font-size: 1.05rem;
   line-height: 1.75;
-  color: #555555;
+  color: #475569;
   margin-bottom: 2.2rem;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .btn-hero-demo {
-  background-color: #F48F68;
+  background-color: #0077E6;
   color: #FFFFFF;
   padding: 0.95rem 2.25rem;
   border-radius: 8px;
@@ -72,14 +72,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  box-shadow: 0 4px 15px rgba(244, 143, 104, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 119, 230, 0.4);
   transition: all var(--transition-normal);
 }
 
 .btn-hero-demo:hover {
-  background-color: #e27d55;
+  background-color: #0062C4;
   transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(244, 143, 104, 0.5);
+  box-shadow: 0 6px 22px rgba(0, 119, 230, 0.5);
 }
 
 .thumb-icon {

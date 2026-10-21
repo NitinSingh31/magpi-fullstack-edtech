@@ -128,13 +128,13 @@ export default function AboutPage({ onOpenDemo }) {
             <span className="active">About Us</span>
           </div>
           <div className="page-hero-badge">
-            <Sparkles size={14} /> Get to Know Psittacus
+            <Sparkles size={14} /> Get to Know Magπ
           </div>
           <h1 className="page-hero-title">
             Fueling Student Growth for <span className="text-highlight">Tomorrow’s Challenges</span>
           </h1>
           <p className="page-hero-desc">
-            Psittacus is a next-generation 1-on-1 and group online learning platform built on curiosity, adaptability, and intellectual excellence. We empower young scholars across global boards like IGCSE, IB, SABIS, and A & AS Level.
+            Magπ is a next-generation 1-on-1 and group online learning platform built on curiosity, adaptability, and intellectual excellence. We empower young scholars across global boards like IGCSE, IB, SABIS, and A & AS Level.
           </p>
           <div className="page-hero-actions">
             <button onClick={() => onOpenDemo()} className="btn btn-primary">
@@ -183,21 +183,21 @@ export default function AboutPage({ onOpenDemo }) {
         </div>
       </div>
 
-      {/* 3. The Inspiration Behind Psittacus */}
+      {/* 3. The Inspiration Behind Magπ */}
       <section className="page-section inspiration-section">
         <div className="container">
           <div className="inspiration-grid">
             <div className="inspiration-content">
               <div className="badge-tag brand">Origin Story</div>
-              <h2 className="section-title">The Philosophy of Psittacus</h2>
+              <h2 className="section-title">The Philosophy of Magπ</h2>
               <p className="inspiration-text">
-                Our name and brand identity draw deep inspiration from <strong>Psittacus (the African Grey Parrot)</strong> — recognized by cognitive scientists as one of the most intelligent and articulate creatures on the planet.
+                Our name and brand identity draw deep inspiration from the <strong>Magpie</strong> — recognized by cognitive scientists as one of the most intelligent, inquisitive, and self-aware creatures in the animal kingdom.
               </p>
               <p className="inspiration-text">
-                Known for exceptional problem-solving, cognitive reasoning, and rapid vocal synthesis, Psittacus represents the ultimate fusion of intellect, adaptability, and clear communication.
+                Combined with the mathematical constant <strong>π (Pi)</strong> — representing infinity, precision, and boundless discovery — <strong>Magπ</strong> symbolizes the continuous evolution of a young scholar’s mind.
               </p>
               <p className="inspiration-text">
-                At <strong>Psittacus</strong>, we don't believe in passive rote learning; we train students to think critically, deduce solutions, and solve complex problems autonomously across global curricula.
+                At <strong>Magπ</strong>, we don't believe in rote memorization; we train students to think critically, deduce solutions, and solve complex problems autonomously across international curricula.
               </p>
               <div className="inspiration-stats-row">
                 <div className="inspire-stat">
@@ -217,10 +217,10 @@ export default function AboutPage({ onOpenDemo }) {
             <div className="inspiration-media">
               <div className="inspiration-card-visual">
                 <img 
-                  src="/assets/psittacus/logo.png" 
-                  alt="Psittacus Emblem" 
+                  src="/assets/magpi-logo.png" 
+                  alt="Magπ Emblem" 
                   className="inspiration-mascot-img"
-                  style={{ maxHeight: '160px', objectFit: 'contain' }}
+                  style={{ maxHeight: '180px', objectFit: 'contain' }}
                 />
                 <div className="mascot-tag-pill">
                   <Brain size={18} />
@@ -268,7 +268,7 @@ export default function AboutPage({ onOpenDemo }) {
             <div className="badge-tag brand">What Drives Us</div>
             <h2>Our Core Values</h2>
             <p>
-              At Psittacus, our values aren't just decorative words. They guide every lesson plan we prepare, every tutor we onboard, and every milestone we celebrate with parents.
+              At Magπ, our values aren't just decorative words. They guide every lesson plan we prepare, every tutor we onboard, and every milestone we celebrate with parents.
             </p>
           </div>
 
@@ -291,7 +291,7 @@ export default function AboutPage({ onOpenDemo }) {
             <div className="badge-tag brand">Vetted Excellence</div>
             <h2>Why Parents Trust Our Tutors</h2>
             <p>
-              We accept fewer than 1.8% of global tutor applicants. Every Psittacus educator goes through a rigorous 5-stage vetting procedure.
+              We accept fewer than 1.8% of global tutor applicants. Every Magπ educator goes through a rigorous 5-stage vetting procedure.
             </p>
           </div>
 
@@ -345,7 +345,7 @@ export default function AboutPage({ onOpenDemo }) {
         <div className="container cta-content-wrapper">
           <h2>Ready to Elevate Your Child’s Learning?</h2>
           <p>
-            Experience the Psittacus difference with a 45-minute zero-risk trial session. Diagnostic assessment included.
+            Experience the Magπ difference with a 45-minute zero-risk trial session. Diagnostic assessment included.
           </p>
           <div className="cta-actions">
             <button onClick={() => onOpenDemo()} className="btn btn-primary btn-lg">

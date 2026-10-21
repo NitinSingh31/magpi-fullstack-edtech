@@ -5,7 +5,7 @@
 .psittacus-testimonials-section {
   position: relative;
   padding: 5rem 0 6rem;
-  background-color: #FEFBF7;
+  background-color: var(--bg-page);
 }
 
 /* Angled separator banner on top */
@@ -15,7 +15,7 @@
   left: 0;
   right: 0;
   height: 28px;
-  background-color: #3A464E;
+  background-color: var(--dark-slate);
   transform: skewY(-1.2deg);
   transform-origin: top left;
   z-index: 1;
@@ -30,27 +30,27 @@
 
 .psittacus-review-card {
   background-color: #FFFFFF;
-  border: 1.5px solid #F48F68;
+  border: 1.5px solid var(--primary);
   border-radius: 16px;
   padding: 2.5rem 1.85rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 15px rgba(10, 37, 64, 0.04);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   min-height: 230px;
 }
 
 .psittacus-review-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(244, 143, 104, 0.15);
+  box-shadow: 0 10px 25px var(--primary-glow);
 }
 
 .review-text {
   font-family: var(--font-body);
   font-size: 0.98rem;
   line-height: 1.7;
-  color: #333333;
+  color: #334155;
   margin-bottom: 2rem;
 }
 
@@ -62,14 +62,14 @@
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 700;
-  color: #3A5161;
+  color: #0A2540;
   margin: 0 0 0.25rem;
 }
 
 .review-author-role {
   font-family: var(--font-body);
   font-size: 0.88rem;
-  color: #F48F68;
+  color: var(--primary);
   font-weight: 600;
   display: block;
 }

@@ -120,7 +120,7 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
     const dateFormatted = formData.preferredDate.replace(/-/g, '');
     const startTime = '170000Z';
     const endTime = '174500Z';
-    const title = encodeURIComponent(`Psittacus 1-on-1 Trial Class: ${formData.subject}`);
+    const title = encodeURIComponent(`Magπ 1-on-1 Trial Class: ${formData.subject}`);
     const details = encodeURIComponent(
       `Personalized 45-minute diagnostic session with accredited board specialist.\n` +
       `Reference ID: ${bookingRef}\n` +
@@ -138,15 +138,15 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
     const icsContent = 
       `BEGIN:VCALENDAR\n` +
       `VERSION:2.0\n` +
-      `PRODID:-//Psittacus Education//1-on-1 Diagnostic Trial//EN\n` +
+      `PRODID:-//Magπ Education//1-on-1 Diagnostic Trial//EN\n` +
       `CALSCALE:GREGORIAN\n` +
       `METHOD:PUBLISH\n` +
       `BEGIN:VEVENT\n` +
-      `UID:${bookingRef}@psittacuslab.com\n` +
+      `UID:${bookingRef}@magpi.education\n` +
       `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z\n` +
       `DTSTART:${dateClean}T170000Z\n` +
       `DTEND:${dateClean}T174500Z\n` +
-      `SUMMARY:Psittacus 1-on-1 Trial Class - ${formData.subject}\n` +
+      `SUMMARY:Magπ 1-on-1 Trial Class - ${formData.subject}\n` +
       `DESCRIPTION:Diagnostic session for ${formData.curriculum} (${formData.grade}). Reference: ${bookingRef}\n` +
       `LOCATION:Online HD Classroom (Google Meet)\n` +
       `STATUS:CONFIRMED\n` +
@@ -157,7 +157,7 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `psittacus-trial-${bookingRef}.ics`;
+    link.download = `magpi-trial-${bookingRef}.ics`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -177,7 +177,7 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
               </div>
               <h2 className="modal-title">Book Your 45-Minute Diagnostic Trial</h2>
               <p className="modal-desc">
-                Experience Psittacus's personalized 1-on-1 digital classroom and receive a comprehensive 
+                Experience Magπ's personalized 1-on-1 digital classroom and receive a comprehensive 
                 subject gap analysis report from an accredited board examiner.
               </p>
               {formData.tutorPreference && (
@@ -411,7 +411,7 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
 
             <div className="success-actions">
               <a 
-                href={`https://wa.me/916283609913?text=Hi%20Psittacus,%20I%20just%20booked%20a%20trial%20for%20${encodeURIComponent(formData.subject)}%20(${encodeURIComponent(formData.curriculum)})%20for%20${encodeURIComponent(formData.parentName)}.%20Ref:%20${bookingRef}`}
+                href={`https://wa.me/916283609913?text=Hi%20Mag%CF%80,%20I%20just%20booked%20a%20trial%20for%20${encodeURIComponent(formData.subject)}%20(${encodeURIComponent(formData.curriculum)})%20for%20${encodeURIComponent(formData.parentName)}.%20Ref:%20${bookingRef}`}
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="btn btn-whatsapp btn-full"

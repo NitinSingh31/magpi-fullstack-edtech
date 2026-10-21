@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .psittacus-stats-banner {
-  background-color: #3A464E;
+  background-color: var(--dark-slate);
   color: #FFFFFF;
   padding: 0;
   overflow: visible;
@@ -35,7 +35,7 @@
   font-family: var(--font-heading);
   font-size: 2.75rem;
   font-weight: 800;
-  color: #F48F68;
+  color: #38BDF8;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }

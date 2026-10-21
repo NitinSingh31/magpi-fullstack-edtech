@@ -4,7 +4,7 @@
 
 .psittacus-global-section {
   padding: 5rem 0;
-  background-color: #FEFBF7;
+  background-color: var(--bg-page);
 }
 
 .global-countries-grid {
@@ -16,7 +16,7 @@
 
 .country-flag-card {
   background-color: #FFFFFF;
-  border: 1px solid #3A464E;
+  border: 1px solid var(--dark-slate);
   border-radius: 14px;
   padding: 1.25rem 1.5rem;
   display: flex;

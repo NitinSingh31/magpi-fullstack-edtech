@@ -4,7 +4,7 @@
    ========================================================================== */
 
 .page-hero-banner {
-  background: #3A464E;
+  background: #0A2540;
   color: #FFFFFF;
   padding: 5rem 0 4.5rem;
   position: relative;
@@ -19,7 +19,7 @@
   width: 450px;
   height: 450px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(244, 143, 104, 0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 119, 230, 0.3) 0%, transparent 70%);
   filter: blur(50px);
   pointer-events: none;
 }
@@ -32,7 +32,7 @@
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(244, 143, 104, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 70%);
   filter: blur(40px);
   pointer-events: none;
 }
@@ -53,11 +53,11 @@
 }
 
 .page-breadcrumbs a:hover {
-  color: #F48F68;
+  color: #0077E6;
 }
 
 .page-breadcrumbs span.active {
-  color: #F48F68;
+  color: #0077E6;
   font-weight: 600;
 }
 
@@ -65,9 +65,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(244, 143, 104, 0.18);
+  background: rgba(0, 119, 230, 0.2);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(244, 143, 104, 0.35);
+  border: 1px solid rgba(0, 119, 230, 0.4);
   color: #FFFFFF;
   padding: 0.4rem 1rem;
   border-radius: 9999px;
@@ -89,7 +89,7 @@
 }
 
 .page-hero-title .text-highlight {
-  color: #F48F68;
+  color: #38BDF8;
   background: none;
   -webkit-text-fill-color: initial;
 }
@@ -180,7 +180,7 @@
   display: block;
   width: 60px;
   height: 3px;
-  background: #F48F68;
+  background: #0077E6;
   margin: 12px auto 0;
   border-radius: 2px;
 }

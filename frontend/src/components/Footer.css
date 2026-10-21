@@ -38,12 +38,12 @@
   max-width: 320px;
 }
 
-/* Titles with Orange Underline */
+/* Titles with Underline */
 .footer-col-title {
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 700;
-  color: #3A5161;
+  color: #0A2540;
   margin-bottom: 1.25rem;
   position: relative;
   display: inline-block;
@@ -54,7 +54,7 @@
   display: block;
   width: 42px;
   height: 2.5px;
-  background-color: #F48F68;
+  background-color: var(--primary);
   margin-top: 6px;
   border-radius: 2px;
 }
@@ -78,7 +78,7 @@
 }
 
 .footer-nav-list li a:hover {
-  color: #F48F68;
+  color: var(--primary);
   padding-left: 4px;
 }
 
@@ -107,11 +107,11 @@
 }
 
 .footer-contact-list li a:hover {
-  color: #F48F68;
+  color: var(--primary);
 }
 
 .contact-icon {
-  color: #3A5161;
+  color: var(--primary);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -132,23 +132,23 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1px solid #3A5161;
+  border: 1px solid var(--dark-slate);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #3A5161;
+  color: var(--dark-slate);
   transition: all var(--transition-fast);
 }
 
 .footer-social-icon:hover {
-  background-color: #F48F68;
-  border-color: #F48F68;
+  background-color: var(--primary);
+  border-color: var(--primary);
   color: #FFFFFF;
 }
 
 /* Copyright Strip */
 .psittacus-copyright-bar {
-  background-color: #F48F68;
+  background-color: var(--dark-slate);
   color: #FFFFFF;
   padding: 1.15rem 0;
   position: relative;
@@ -177,7 +177,7 @@
   transform: translateY(-50%);
   width: 38px;
   height: 38px;
-  background-color: #3A464E;
+  background-color: var(--primary);
   color: #FFFFFF;
   border-radius: 6px;
   display: flex;
@@ -189,7 +189,7 @@
 }
 
 .psittacus-scroll-top-btn:hover {
-  background-color: #262E34;
+  background-color: var(--primary-hover);
 }
 
 @media (max-width: 992px) {

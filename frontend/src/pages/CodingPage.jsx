@@ -28,7 +28,7 @@ export default function CodingPage({ onOpenDemo }) {
         "Sequence, loops, nested conditionals & event-driven architecture",
         "Variables, game scoring systems, and multi-level design",
         "Collision detection, character physics & gravity algorithms",
-        "Publishing playable games to the Psittacus online student arcade"
+        "Publishing playable games to the Magπ online student arcade"
       ],
       outcome: "Build 8+ complete arcade games with zero prior coding experience"
     },
@@ -134,7 +134,7 @@ export default function CodingPage({ onOpenDemo }) {
               <div className="feature-strip-icon"><Cpu size={22} /></div>
               <div>
                 <strong>Capstone Certification</strong>
-                <span>Official Psittacus Tech Excellence Credential upon completion</span>
+                <span>Official Magπ Tech Excellence Credential upon completion</span>
               </div>
             </div>
           </div>
@@ -200,10 +200,10 @@ export default function CodingPage({ onOpenDemo }) {
                 <span className="dot yellow"></span>
                 <span className="dot green"></span>
               </div>
-              <span className="terminal-filename">ai_vision_detector.py — Psittacus Coding Lab</span>
+              <span className="terminal-filename">ai_vision_detector.py — Magπ Coding Lab</span>
             </div>
             <pre className="code-content">
-{`# Psittacus Future Skills Lab — AI Computer Vision Project (Ages 13+)
+{`# Magπ Future Skills Lab — AI Computer Vision Project (Ages 13+)
 import cv2
 import numpy as np
 

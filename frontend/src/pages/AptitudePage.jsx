@@ -193,7 +193,7 @@ export default function AptitudePage({ onOpenDemo }) {
         <div className="container">
           <div className="page-section-header">
             <div className="badge-tag brand">Cognitive Science</div>
-            <h2>The Psittacus Brain Gym Architecture</h2>
+            <h2>The Magπ Brain Gym Architecture</h2>
             <p>
               How our brain-training exercises expand working memory and cognitive processing speed.
             </p>

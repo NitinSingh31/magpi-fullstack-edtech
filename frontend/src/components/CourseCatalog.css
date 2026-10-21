@@ -81,7 +81,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: #F48F68;
+  background-color: var(--primary);
   color: #FFFFFF;
   width: 100%;
   padding: 0.85rem 1.5rem;
@@ -90,12 +90,12 @@
   font-weight: 600;
   text-decoration: none;
   transition: all var(--transition-normal);
-  box-shadow: 0 4px 12px rgba(244, 143, 104, 0.3);
+  box-shadow: 0 4px 12px var(--primary-glow);
 }
 
 .btn-course-check:hover {
-  background-color: #e27d55;
-  box-shadow: 0 6px 16px rgba(244, 143, 104, 0.45);
+  background-color: var(--primary-hover);
+  box-shadow: 0 6px 16px rgba(0, 119, 230, 0.45);
 }
 
 @media (max-width: 992px) {

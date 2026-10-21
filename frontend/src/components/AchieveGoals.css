@@ -4,7 +4,7 @@
 
 .achieve-goals-section {
   padding: 4.5rem 0 5rem;
-  background-color: #FEFBF7;
+  background-color: var(--bg-page);
 }
 
 .goals-cards-row {

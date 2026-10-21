@@ -44,7 +44,7 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
 
   return (
     <>
-      {/* Top Announcement Bar - Psittacus Terracotta #F48F68 */}
+      {/* Top Announcement Bar - Magπ Royal Navy #0A2540 */}
       <div className="announcement-bar">
         <div className="container announcement-content">
           <div className="announcement-left">
@@ -91,11 +91,11 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
       {/* Main Sticky Navbar */}
       <header className={`site-header ${isScrolled ? 'scrolled' : ''}`}>
         <div className="container header-inner">
-          {/* Brand Logo - Exact Psittacus Logo */}
-          <Link to="/" className="brand-logo" aria-label="Psittacus Home">
+          {/* Brand Logo - Magπ Logo */}
+          <Link to="/" className="brand-logo" aria-label="Magπ Home">
             <img 
-              src="/assets/psittacus/logo.png" 
-              alt="Psittacus" 
+              src="/assets/magpi-logo.png" 
+              alt="Magπ" 
               className="brand-logo-img" 
             />
           </Link>
@@ -206,7 +206,7 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
           {/* Right Header Actions */}
           <div className="header-actions">
             <a 
-              href="https://wa.me/916283609913?text=Hi%20Psittacus,%20I%20would%20like%20to%20get%20in%20touch%20with%20an%20academic%20counselor"
+              href="https://wa.me/916283609913?text=Hi%20Mag%CF%80,%20I%20would%20like%20to%20get%20in%20touch%20with%20an%20academic%20counselor"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-get-in-touch"

@@ -4,7 +4,7 @@
 
 .what-we-offer-section {
   padding: 5rem 0;
-  background-color: #FEFBF7;
+  background-color: var(--bg-page);
 }
 
 .offers-grid {
@@ -16,7 +16,7 @@
 
 .offer-card {
   background-color: #FFFFFF;
-  border: 1px solid #D5CECE;
+  border: 1px solid #E2E8F0;
   border-radius: 18px;
   padding: 3rem 2rem 2.5rem;
   text-align: center;
@@ -30,27 +30,27 @@
 
 .offer-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(58, 70, 78, 0.08);
+  box-shadow: 0 10px 25px rgba(10, 37, 64, 0.08);
 }
 
 .offer-icon-circle {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background-color: #F48F68;
+  background-color: var(--primary);
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 12px rgba(244, 143, 104, 0.3);
+  box-shadow: 0 4px 12px var(--primary-glow);
 }
 
 .offer-card-title {
   font-family: var(--font-heading);
   font-size: 1.22rem;
   font-weight: 700;
-  color: #3A5161;
+  color: #0A2540;
   line-height: 1.45;
   margin: 0;
 }

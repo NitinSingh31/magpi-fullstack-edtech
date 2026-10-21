@@ -34,7 +34,7 @@ export default function ComparisonTable() {
     <section className="psittacus-comparison-section" id="comparison">
       <div className="container">
         <div className="psittacus-header">
-          <h2 className="psittacus-title">Psittacus Online Tuition VS Traditional Offline Tution</h2>
+          <h2 className="psittacus-title">Magπ Online Tuition VS Traditional Offline Tution</h2>
         </div>
 
         <div className="psittacus-table-container">
@@ -42,7 +42,7 @@ export default function ComparisonTable() {
             <thead>
               <tr>
                 <th className="th-feature">Feature</th>
-                <th className="th-psittacus">Psittacus Now Online Learning</th>
+                <th className="th-psittacus">Magπ Online Learning</th>
                 <th className="th-traditional">Traditional Tuition Centers</th>
               </tr>
             </thead>

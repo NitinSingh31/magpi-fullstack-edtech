@@ -187,8 +187,8 @@ export default function AdminPanel({ isOpen, onClose }) {
         <div className="admin-header">
           <div className="admin-header-left">
             <div className="admin-title-row">
-              <img src="/assets/psittacus/logo.png" alt="Psittacus" className="admin-header-logo" />
-              <h2>Psittacus Leads & Inquiries Portal</h2>
+              <img src="/assets/magpi-logo.png" alt="Magπ" className="admin-header-logo" />
+              <h2>Magπ Leads & Inquiries Portal</h2>
             </div>
             <div className="db-badge">
               <Database size={14} />

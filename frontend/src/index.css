@@ -1,43 +1,43 @@
 /* ==========================================================================
-   Psittacus Lab Design System & Global Styles
-   Matches https://psittacuslab.com/ aesthetic, colors, typography and layouts
+   Magπ Design System & Global Styles
+   Derived from the official Magπ Royal Navy & Electric Cyan Logo
    ========================================================================== */
 
 :root {
-  /* Color Palette - Exact Psittacus Lab Tokens */
-  --primary: #F48F68;
-  --primary-hover: #e27d55;
-  --primary-dark: #cf6940;
-  --primary-light: #FFF2E2;
-  --primary-subtle: #FFF7F2;
-  --primary-glow: rgba(244, 143, 104, 0.35);
+  /* Color Palette - Exactly matching the Magπ Logo */
+  --primary: #0077E6;                  /* Vibrant Azure / Electric Cyan from the logo swoosh */
+  --primary-hover: #0062C4;
+  --primary-dark: #004D9E;
+  --primary-light: #EFF6FF;
+  --primary-subtle: #F0F7FF;
+  --primary-glow: rgba(0, 119, 230, 0.35);
 
-  --dark-slate: #3A464E;
-  --dark-slate-hover: #2d373e;
-  --dark-slate-deep: #2A333A;
-  --heading-dark: #3A5161;
-  --text-dark: #2F3842;
-  --text-body: #555555;
-  --text-muted: #7A7A7A;
+  --dark-slate: #0A2540;               /* Deep Royal Navy from the Magπ text & bird silhouette */
+  --dark-slate-hover: #081E33;
+  --dark-slate-deep: #051424;
+  --heading-dark: #0A2540;
+  --text-dark: #0F172A;
+  --text-body: #334155;
+  --text-muted: #64748B;
 
-  /* Psittacus Goal Card Pastels */
-  --card-tutors-bg: #FFF2E2;
-  --card-tutors-icon: #FCAB48;
-  --card-pricing-bg: #FDF1FF;
-  --card-pricing-icon: #A880B0;
-  --card-learning-bg: #FFEAE2;
-  --card-learning-icon: #F48F68;
-  --card-schedule-bg: #E6FDED;
-  --card-schedule-icon: #519C68;
-  --card-support-bg: #EDEAFF;
-  --card-support-icon: #5751E1;
+  /* Goal Card Pastels (Harmonized with Blue Design System) */
+  --card-tutors-bg: #EFF6FF;
+  --card-tutors-icon: #0077E6;
+  --card-pricing-bg: #F0FDF4;
+  --card-pricing-icon: #10B981;
+  --card-learning-bg: #E0F2FE;
+  --card-learning-icon: #0284C7;
+  --card-schedule-bg: #F5F3FF;
+  --card-schedule-icon: #6366F1;
+  --card-support-bg: #F8FAFC;
+  --card-support-icon: #0A2540;
 
   /* Neutrals & Surfaces */
-  --bg-page: #FEFBF7;
+  --bg-page: #F8FAFC;
   --bg-card: #FFFFFF;
-  --bg-secondary: #F8F5F0;
-  --border-light: #EBE6DF;
-  --border-dark: #3A464E;
+  --bg-secondary: #F1F5F9;
+  --border-light: #E2E8F0;
+  --border-dark: #0A2540;
 
   /* Typography */
   --font-heading: 'Roboto Slab', Georgia, 'Times New Roman', serif;
@@ -48,10 +48,10 @@
   --header-height: 84px;
 
   /* Elevation & Shadows */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(58, 70, 78, 0.08);
-  --shadow-lg: 0 10px 25px rgba(58, 70, 78, 0.1);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0 2px 4px rgba(10, 37, 64, 0.04);
+  --shadow-md: 0 4px 12px rgba(10, 37, 64, 0.08);
+  --shadow-lg: 0 10px 25px rgba(10, 37, 64, 0.12);
+  --shadow-card: 0 4px 20px rgba(10, 37, 64, 0.06);
 
   /* Transitions */
   --transition-fast: 0.15s ease;
@@ -198,12 +198,12 @@ input, select, textarea {
 .btn-primary {
   background-color: var(--primary);
   color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(244, 143, 104, 0.35);
+  box-shadow: 0 4px 12px var(--primary-glow);
 }
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
-  box-shadow: 0 6px 18px rgba(244, 143, 104, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 119, 230, 0.45);
   transform: translateY(-2px);
 }
 
