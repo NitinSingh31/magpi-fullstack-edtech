@@ -1,10 +1,10 @@
 /* ==========================================================================
-   Magπ Dedicated Pages Common Styles
+   Psittacus Subpages Common Styles
    Consistent Banner, Breadcrumbs & Hero Blocks for Sub-Pages
    ========================================================================== */
 
 .page-hero-banner {
-  background: linear-gradient(135deg, #061938 0%, #0A3678 60%, #0D4594 100%);
+  background: #3A464E;
   color: #FFFFFF;
   padding: 5rem 0 4.5rem;
   position: relative;
@@ -19,7 +19,7 @@
   width: 450px;
   height: 450px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 114, 206, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(244, 143, 104, 0.25) 0%, transparent 70%);
   filter: blur(50px);
   pointer-events: none;
 }
@@ -32,7 +32,7 @@
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(2, 139, 240, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(244, 143, 104, 0.15) 0%, transparent 70%);
   filter: blur(40px);
   pointer-events: none;
 }
@@ -47,17 +47,17 @@
 }
 
 .page-breadcrumbs a {
-  color: #94A3B8;
+  color: #CBD5E1;
   transition: color var(--transition-fast);
   text-decoration: none;
 }
 
 .page-breadcrumbs a:hover {
-  color: #FFFFFF;
+  color: #F48F68;
 }
 
 .page-breadcrumbs span.active {
-  color: #38BDF8;
+  color: #F48F68;
   font-weight: 600;
 }
 
@@ -65,9 +65,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(244, 143, 104, 0.18);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(244, 143, 104, 0.35);
   color: #FFFFFF;
   padding: 0.4rem 1rem;
   border-radius: 9999px;
@@ -79,6 +79,7 @@
 }
 
 .page-hero-title {
+  font-family: var(--font-heading);
   font-size: clamp(2.2rem, 4vw, 3.25rem);
   font-weight: 800;
   line-height: 1.2;
@@ -88,9 +89,9 @@
 }
 
 .page-hero-title .text-highlight {
-  background: linear-gradient(135deg, #38BDF8 0%, #60A5FA 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #F48F68;
+  background: none;
+  -webkit-text-fill-color: initial;
 }
 
 .page-hero-desc {
@@ -165,11 +166,23 @@
 }
 
 .page-section-header h2 {
+  font-family: var(--font-heading);
   font-size: 2.25rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--navy-900);
   margin-bottom: 1rem;
   line-height: 1.25;
+  position: relative;
+}
+
+.page-section-header h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #F48F68;
+  margin: 12px auto 0;
+  border-radius: 2px;
 }
 
 .page-section-header p {

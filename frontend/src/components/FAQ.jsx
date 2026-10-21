@@ -21,7 +21,7 @@ export default function FAQ() {
             Frequently Asked Questions
           </h2>
           <p className="section-subtitle">
-            Everything you need to know about starting your child's personalized learning journey with Magπ.
+            Everything you need to know about starting your child's personalized learning journey with Psittacus.
           </p>
         </div>
 

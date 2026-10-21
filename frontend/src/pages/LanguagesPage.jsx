@@ -197,7 +197,7 @@ export default function LanguagesPage({ onOpenDemo }) {
         <div className="container">
           <div className="page-section-header">
             <div className="badge-tag brand">Our Methodology</div>
-            <h2>The Magπ Natural Immersion Method</h2>
+            <h2>The Psittacus Natural Immersion Method</h2>
             <p>
               Why traditional school rote-learning fails, and why our 1-on-1 native conversational approach accelerates fluency by 3x.
             </p>

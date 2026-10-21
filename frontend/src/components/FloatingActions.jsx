@@ -17,7 +17,7 @@ export default function FloatingActions({ onOpenDemo }) {
 
       {/* Floating WhatsApp Quick Connect */}
       <a 
-        href="https://wa.me/916283609913?text=Hello%20Magπ,%20I%20would%20like%20to%20know%20more%20about%20your%201-on-1%20tuition%20classes."
+        href="https://wa.me/916283609913?text=Hello%20Psittacus,%20I%20would%20like%20to%20know%20more%20about%20your%201-on-1%20tuition%20classes."
         target="_blank" 
         rel="noopener noreferrer" 
         className="floating-whatsapp-btn"

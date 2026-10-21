@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { 
-  Sparkles, 
-  ChevronDown, 
   Phone, 
+  Mail, 
+  ChevronDown, 
   Menu, 
   X, 
-  GraduationCap, 
-  Code, 
-  Globe2, 
-  Calendar,
-  MessageCircle,
+  Sparkles,
   Database,
-  Briefcase,
-  Mail,
-  Send,
+  GraduationCap,
+  Code,
   MessageSquare,
-  Brain
+  Globe2,
+  Brain,
+  MessageCircle
 } from 'lucide-react';
 import './Navbar.css';
 
@@ -24,6 +21,7 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [mobileExpandedSection, setMobileExpandedSection] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -34,7 +32,7 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menus on route change
+  // Close mobile drawer on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
@@ -46,35 +44,45 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
 
   return (
     <>
-      {/* Top Announcement Bar */}
+      {/* Top Announcement Bar - Psittacus Terracotta #F48F68 */}
       <div className="announcement-bar">
         <div className="container announcement-content">
           <div className="announcement-left">
-            <span className="live-dot"></span>
-            <span className="announcement-text">
-              <strong>Admissions Open 2026-27:</strong> 1-on-1 Online Tuition for IGCSE, IB, SABIS, STEAM & Languages
-            </span>
-          </div>
-          <div className="announcement-right">
             <a href="tel:+916283609913" className="top-link">
               <Phone size={13} /> +91 6283 609 913
             </a>
             <span className="divider">|</span>
-            <a 
-              href="https://wa.me/916283609913?text=Hi%20Magπ,%20I%20would%20like%20to%20inquire%20about%20online%20tuition" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="top-link top-whatsapp"
-            >
-              <MessageCircle size={13} /> WhatsApp
+            <a href="mailto:education@steamvidya.com" className="top-link">
+              <Mail size={13} /> education@steamvidya.com
             </a>
-            <span className="divider">|</span>
+          </div>
+          
+          <div className="announcement-right">
+            <span className="follow-label">Follow Us:</span>
+            <div className="social-pills">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-circle" aria-label="Facebook">
+                <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-circle" aria-label="Instagram">
+                <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="social-circle" aria-label="X Twitter">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-circle" aria-label="LinkedIn">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-circle" aria-label="YouTube">
+                <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </a>
+            </div>
+
             <button 
               onClick={onOpenAdmin} 
               className="top-link top-admin-btn"
-              title="View Leads Database"
+              title="Leads Database"
             >
-              <Database size={13} /> Admin Leads
+              <Database size={12} /> Admin
             </button>
           </div>
         </div>
@@ -83,9 +91,13 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
       {/* Main Sticky Navbar */}
       <header className={`site-header ${isScrolled ? 'scrolled' : ''}`}>
         <div className="container header-inner">
-          {/* Brand Logo */}
-          <Link to="/" className="brand-logo" aria-label="Magπ Home">
-            <img src="/images/logo.png" alt="Magπ" className="brand-logo-img" />
+          {/* Brand Logo - Exact Psittacus Logo */}
+          <Link to="/" className="brand-logo" aria-label="Psittacus Home">
+            <img 
+              src="/assets/psittacus/logo.png" 
+              alt="Psittacus" 
+              className="brand-logo-img" 
+            />
           </Link>
 
           {/* Desktop Navigation Links */}
@@ -116,76 +128,13 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
                   Events
                 </NavLink>
               </li>
-
-              {/* Online Tuition Dropdown */}
-              <li 
-                className="nav-item has-dropdown"
-                onMouseEnter={() => setActiveDropdown('academics')}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <div className="dropdown-trigger-wrapper">
-                  <NavLink 
-                    to="/online-tuition" 
-                    className={({ isActive }) => `nav-link dropdown-toggle ${isActive ? 'active' : ''}`}
-                  >
-                    Online Tuition
-                  </NavLink>
-                  <button 
-                    className="dropdown-chevron-btn"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleDropdown('academics');
-                    }}
-                    aria-label="Toggle tuition dropdown"
-                  >
-                    <ChevronDown size={14} className={`arrow-icon ${activeDropdown === 'academics' ? 'rotated' : ''}`} />
-                  </button>
-                </div>
-
-                {activeDropdown === 'academics' && (
-                  <div className="dropdown-menu">
-                    <div className="dropdown-header">
-                      <GraduationCap size={16} /> <span>Curriculums We Cover</span>
-                    </div>
-                    <Link to="/online-tuition" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong>All Online Tuition Programs</strong>
-                      <span>Explore all global boards & subjects</span>
-                    </Link>
-                    <Link to="/online-tuition#igcse" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong>Cambridge IGCSE & GCSE</strong>
-                      <span>CAIE & Pearson Edexcel Core/Ext</span>
-                    </Link>
-                    <Link to="/online-tuition#ib" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong>IB MYP & Diploma (DP)</strong>
-                      <span>Math AA/AI, Physics, Chem HL</span>
-                    </Link>
-                    <Link to="/online-tuition#alevels" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong>Cambridge AS & A-Levels</strong>
-                      <span>Advanced Pure Math & Sciences</span>
-                    </Link>
-                    <Link to="/online-tuition#sabis" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong>SABIS Educational System</strong>
-                      <span>Choueifat School Term Finals</span>
-                    </Link>
-                    <div className="dropdown-divider" style={{ borderTop: '1px solid var(--slate-200)', margin: '0.4rem 0' }}></div>
-                    <a href="/#find-tutor" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong style={{ color: 'var(--primary)' }}>🎯 Tutor Matchmaker Quiz</strong>
-                      <span>Find ideal examiner in 45 seconds</span>
-                    </a>
-                    <a href="/#pricing-calculator" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong style={{ color: 'var(--primary)' }}>💰 Fee & Savings Calculator</strong>
-                      <span>Calculate custom package rates</span>
-                    </a>
-                    <a href="/#faculty" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong>👨‍🏫 Top 1% Faculty Directory</strong>
-                      <span>Meet certified board examiners</span>
-                    </a>
-                    <a href="/#resources" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <strong>📚 Free Revision Guides</strong>
-                      <span>Download syllabus cheat-sheets</span>
-                    </a>
-                  </div>
-                )}
+              <li>
+                <NavLink 
+                  to="/online-tuition" 
+                  className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                >
+                  Online Tuition
+                </NavLink>
               </li>
 
               {/* Skill Courses Dropdown */}
@@ -194,40 +143,41 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
                 onMouseEnter={() => setActiveDropdown('skills')}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
-                <button 
-                  className={`nav-link dropdown-toggle ${['/communication', '/coding-and-programming', '/language-classes', '/reasoning-and-aptitude'].includes(location.pathname) ? 'active' : ''}`}
-                  onClick={() => toggleDropdown('skills')}
-                  aria-expanded={activeDropdown === 'skills'}
-                >
-                  Skill Courses <ChevronDown size={14} className={`arrow-icon ${activeDropdown === 'skills' ? 'rotated' : ''}`} />
-                </button>
+                <div className="dropdown-trigger-wrapper">
+                  <span className={`nav-link dropdown-toggle ${['/communication', '/coding-and-programming', '/language-classes', '/reasoning-and-aptitude'].includes(location.pathname) ? 'active' : ''}`}>
+                    Skill Courses
+                  </span>
+                  <ChevronDown size={14} className={`arrow-icon ${activeDropdown === 'skills' ? 'rotated' : ''}`} />
+                </div>
+
                 {activeDropdown === 'skills' && (
                   <div className="dropdown-menu">
-                    <div className="dropdown-header">
-                      <Code size={16} /> <span>Specialized Skill Academies</span>
-                    </div>
                     <Link to="/communication" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <div className="dropdown-item-content">
+                      <MessageSquare size={16} className="item-icon" />
+                      <div>
                         <strong>Communication Skills</strong>
-                        <span>Public Speaking, Debate, MUN & Writing</span>
+                        <span>Public Speaking, Debate & MUN</span>
                       </div>
                     </Link>
                     <Link to="/coding-and-programming" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <div className="dropdown-item-content">
+                      <Code size={16} className="item-icon" />
+                      <div>
                         <strong>Coding and Programming</strong>
-                        <span>Python, AI, Scratch & Web Development</span>
+                        <span>Scratch, Python, AI & Web Dev</span>
                       </div>
                     </Link>
                     <Link to="/language-classes" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <div className="dropdown-item-content">
+                      <Globe2 size={16} className="item-icon" />
+                      <div>
                         <strong>Global Languages</strong>
-                        <span>French, Spanish, German & Mandarin</span>
+                        <span>French, Spanish, German, Mandarin</span>
                       </div>
                     </Link>
                     <Link to="/reasoning-and-aptitude" className="dropdown-item" onClick={() => setActiveDropdown(null)}>
-                      <div className="dropdown-item-content">
+                      <Brain size={16} className="item-icon" />
+                      <div>
                         <strong>Reasoning & Aptitude</strong>
-                        <span>Vedic Math, Olympiad & Logic Puzzles</span>
+                        <span>Vedic Math & Olympiad prep</span>
                       </div>
                     </Link>
                   </div>
@@ -236,37 +186,34 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
 
               <li>
                 <NavLink 
-                  to="/careers" 
-                  className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                >
-                  Careers
-                </NavLink>
-              </li>
-              <li>
-                <NavLink 
                   to="/contact-us" 
                   className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 >
                   Contact Us
                 </NavLink>
               </li>
+              <li>
+                <NavLink 
+                  to="/careers" 
+                  className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                >
+                  Careers
+                </NavLink>
+              </li>
             </ul>
           </nav>
 
-          {/* Desktop Right CTAs */}
+          {/* Right Header Actions */}
           <div className="header-actions">
-            <Link 
-              to="/contact-us"
-              className="btn btn-secondary btn-sm d-none-mobile"
+            <a 
+              href="https://wa.me/916283609913?text=Hi%20Psittacus,%20I%20would%20like%20to%20get%20in%20touch%20with%20an%20academic%20counselor"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-get-in-touch"
             >
-              <Send size={15} /> Get In Touch!
-            </Link>
-            <button 
-              onClick={() => onOpenDemo()}
-              className="btn btn-primary btn-sm glow-on-hover"
-            >
-              <Sparkles size={16} /> Book a Free Demo
-            </button>
+              <MessageCircle size={17} />
+              <span>Get In Touch!</span>
+            </a>
 
             {/* Mobile Hamburger Button */}
             <button 
@@ -274,7 +221,7 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle Navigation Menu"
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
@@ -283,31 +230,33 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
         {isMobileMenuOpen && (
           <div className="mobile-drawer">
             <div className="mobile-drawer-inner">
-              <nav className="mobile-nav">
-                <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-                <Link to="/about-us" onClick={() => setIsMobileMenuOpen(false)}>About Us</Link>
-                <Link to="/events" onClick={() => setIsMobileMenuOpen(false)}>Upcoming Events</Link>
-                <Link to="/online-tuition" onClick={() => setIsMobileMenuOpen(false)}>Online Tuition (IGCSE/IB/SABIS)</Link>
+              <ul className="mobile-menu-list">
+                <li><NavLink to="/" onClick={() => setIsMobileMenuOpen(false)}>Home</NavLink></li>
+                <li><NavLink to="/about-us" onClick={() => setIsMobileMenuOpen(false)}>About Us</NavLink></li>
+                <li><NavLink to="/events" onClick={() => setIsMobileMenuOpen(false)}>Events</NavLink></li>
+                <li><NavLink to="/online-tuition" onClick={() => setIsMobileMenuOpen(false)}>Online Tuition</NavLink></li>
                 
-                <div className="mobile-nav-subgroup">
-                  <span className="mobile-group-title">Interactive Tools & Resources</span>
-                  <a href="/#find-tutor" onClick={() => setIsMobileMenuOpen(false)}>• 🎯 45-Sec Tutor Matchmaker</a>
-                  <a href="/#pricing-calculator" onClick={() => setIsMobileMenuOpen(false)}>• 💰 Fee & Savings Calculator</a>
-                  <a href="/#faculty" onClick={() => setIsMobileMenuOpen(false)}>• 👨‍🏫 Meet Our Faculty</a>
-                  <a href="/#resources" onClick={() => setIsMobileMenuOpen(false)}>• 📚 Free Revision Guides</a>
-                </div>
+                <li className="mobile-dropdown-section">
+                  <div 
+                    className="mobile-dropdown-header" 
+                    onClick={() => setMobileExpandedSection(mobileExpandedSection === 'skills' ? null : 'skills')}
+                  >
+                    <span>Skill Courses</span>
+                    <ChevronDown size={16} className={mobileExpandedSection === 'skills' ? 'rotated' : ''} />
+                  </div>
+                  {mobileExpandedSection === 'skills' && (
+                    <ul className="mobile-submenu">
+                      <li><NavLink to="/communication" onClick={() => setIsMobileMenuOpen(false)}>Communication Skills</NavLink></li>
+                      <li><NavLink to="/coding-and-programming" onClick={() => setIsMobileMenuOpen(false)}>Coding and Programming</NavLink></li>
+                      <li><NavLink to="/language-classes" onClick={() => setIsMobileMenuOpen(false)}>Global Languages</NavLink></li>
+                      <li><NavLink to="/reasoning-and-aptitude" onClick={() => setIsMobileMenuOpen(false)}>Reasoning & Aptitude</NavLink></li>
+                    </ul>
+                  )}
+                </li>
 
-                <div className="mobile-nav-subgroup">
-                  <span className="mobile-group-title">Skill Courses</span>
-                  <Link to="/communication" onClick={() => setIsMobileMenuOpen(false)}>• Communication Skills (Speech & MUN)</Link>
-                  <Link to="/coding-and-programming" onClick={() => setIsMobileMenuOpen(false)}>• Coding & Programming (Python & AI)</Link>
-                  <Link to="/language-classes" onClick={() => setIsMobileMenuOpen(false)}>• Global Languages (French & Spanish)</Link>
-                  <Link to="/reasoning-and-aptitude" onClick={() => setIsMobileMenuOpen(false)}>• Reasoning & Aptitude (Olympiad Math)</Link>
-                </div>
-
-                <Link to="/careers" onClick={() => setIsMobileMenuOpen(false)}>Careers / Become a Tutor</Link>
-                <Link to="/contact-us" onClick={() => setIsMobileMenuOpen(false)}>Contact Us</Link>
-              </nav>
+                <li><NavLink to="/contact-us" onClick={() => setIsMobileMenuOpen(false)}>Contact Us</NavLink></li>
+                <li><NavLink to="/careers" onClick={() => setIsMobileMenuOpen(false)}>Careers</NavLink></li>
+              </ul>
 
               <div className="mobile-drawer-footer">
                 <button 
@@ -321,11 +270,11 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
                 </button>
                 <a 
                   href="https://wa.me/916283609913" 
-                  className="btn btn-whatsapp btn-full"
+                  className="btn btn-dark btn-full"
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
-                  <MessageCircle size={18} /> Chat on WhatsApp
+                  <MessageCircle size={18} /> Get In Touch!
                 </a>
               </div>
             </div>

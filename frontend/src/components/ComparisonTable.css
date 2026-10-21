@@ -1,136 +1,95 @@
 /* ==========================================================================
-   Comparison Table Styles
+   Psittacus Comparison Table Styles
    ========================================================================== */
 
-.comparison-section {
-  background: #FAF8F5;
+.psittacus-comparison-section {
+  padding: 5rem 0;
+  background-color: #FEFBF7;
 }
 
-.table-wrapper {
-  overflow-x: auto;
-  background: #FFFFFF;
-  border-radius: 24px;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--slate-200);
-  margin-bottom: 2.5rem;
+.psittacus-table-container {
+  max-width: 1040px;
+  margin: 2.5rem auto 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid #D5CECE;
 }
 
-.comparison-table {
+.psittacus-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.comparison-table th,
-.comparison-table td {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--slate-200);
+.psittacus-table thead tr {
+  background-color: #F48F68;
 }
 
-.comparison-table th {
-  background: var(--slate-50);
+.psittacus-table thead th {
+  padding: 1.25rem 1.75rem;
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--navy-900);
-}
-
-.feature-col {
-  width: 28%;
-}
-
-.magpi-col {
-  width: 32%;
-  background: rgba(0, 114, 206, 0.06) !important;
-  border-left: 2px solid var(--primary);
-  border-right: 2px solid var(--primary);
-  position: relative;
-}
-
-.col-header-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #0A3678 0%, #0072CE 100%);
   color: #FFFFFF;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  margin-bottom: 0.35rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-.magpi-col .col-title {
-  color: var(--navy-900);
-  font-size: 1.1rem;
-  font-weight: 800;
+.psittacus-table thead th:last-child {
+  border-right: none;
 }
 
-.other-col {
-  width: 20%;
+.psittacus-table tbody td {
+  padding: 1.45rem 1.75rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  border-right: 1px solid #E5E1D8;
+  vertical-align: middle;
 }
 
-.comparison-table tbody tr:last-child td {
-  border-bottom: none;
+.psittacus-table tbody td:last-child {
+  border-right: none;
 }
 
-.feature-cell strong {
-  font-size: 0.9375rem;
-  color: var(--navy-900);
+/* White Alternating Rows */
+.psittacus-table tbody tr.row-light {
+  background-color: #FFFFFF;
+  color: #333333;
 }
 
-.magpi-cell {
-  background: rgba(0, 114, 206, 0.03);
-  border-left: 2px solid var(--primary);
-  border-right: 2px solid var(--primary);
-}
-
-.cell-content {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  font-size: 0.875rem;
-  color: var(--navy-700);
-}
-
-.magpi-cell .cell-content span {
+.psittacus-table tbody tr.row-light .cell-feature {
+  color: #222222;
   font-weight: 600;
-  color: var(--navy-900);
 }
 
-.status-icon {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
+/* Dark Slate Alternating Rows */
+.psittacus-table tbody tr.row-dark {
+  background-color: #3A464E;
+  color: #FFFFFF;
 }
 
-.status-icon.success {
-  background: var(--accent-green-light);
-  color: var(--accent-green);
+.psittacus-table tbody tr.row-dark td {
+  border-right-color: rgba(255, 255, 255, 0.15);
 }
 
-.status-icon.danger {
-  background: #FEE2E2;
-  color: #EF4444;
+.psittacus-table tbody tr.row-dark .cell-feature {
+  color: #FFFFFF;
+  font-weight: 600;
 }
 
-.comparison-cta-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  text-align: center;
-  flex-wrap: wrap;
-}
+@media (max-width: 768px) {
+  .psittacus-table-container {
+    overflow-x: auto;
+  }
 
-.comparison-cta-box p {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--navy-900);
-  margin: 0;
+  .psittacus-table {
+    min-width: 650px;
+  }
+
+  .psittacus-table thead th,
+  .psittacus-table tbody td {
+    padding: 1rem 1.15rem;
+    font-size: 0.88rem;
+  }
 }

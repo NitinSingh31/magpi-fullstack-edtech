@@ -87,7 +87,7 @@ export default function ContactSection() {
                 <div>
                   <small>Instant WhatsApp Support</small>
                   <a 
-                    href="https://wa.me/916283609913?text=Hi%20Magπ,%20I%20have%20an%20inquiry%20regarding%20classes" 
+                    href="https://wa.me/916283609913?text=Hi%20Psittacus,%20I%20have%20an%20inquiry%20regarding%20classes" 
                     target="_blank" 
                     rel="noopener noreferrer"
                   >

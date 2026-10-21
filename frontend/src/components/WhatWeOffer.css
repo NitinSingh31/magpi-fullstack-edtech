@@ -1,0 +1,74 @@
+/* ==========================================================================
+   What We Offer Styles - Exact Psittacus Lab
+   ========================================================================== */
+
+.what-we-offer-section {
+  padding: 5rem 0;
+  background-color: #FEFBF7;
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.offer-card {
+  background-color: #FFFFFF;
+  border: 1px solid #D5CECE;
+  border-radius: 18px;
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  min-height: 240px;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(58, 70, 78, 0.08);
+}
+
+.offer-icon-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #F48F68;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(244, 143, 104, 0.3);
+}
+
+.offer-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: #3A5161;
+  line-height: 1.45;
+  margin: 0;
+}
+
+@media (max-width: 992px) {
+  .offers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .offers-grid {
+    grid-template-columns: 1fr;
+    padding: 0 0.5rem;
+  }
+
+  .offer-card {
+    min-height: auto;
+    padding: 2.2rem 1.5rem;
+  }
+}

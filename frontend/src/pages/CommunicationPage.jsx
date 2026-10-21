@@ -65,7 +65,7 @@ export default function CommunicationPage({ onOpenDemo }) {
         "500+ high-frequency academic vocabulary words in context",
         "Poetic meter, rhetorical metaphors & persuasive essays"
       ],
-      outcome: "Publish stories in Magπ’s annual Global Student Anthology"
+      outcome: "Publish stories in Psittacus’s annual Global Student Anthology"
     }
   ];
 
@@ -188,7 +188,7 @@ export default function CommunicationPage({ onOpenDemo }) {
         <div className="container">
           <div className="page-section-header">
             <div className="badge-tag brand">Our Framework</div>
-            <h2>The Magπ Oratory Blueprint</h2>
+            <h2>The Psittacus Oratory Blueprint</h2>
             <p>
               How our students consistently emerge as articulate leaders in their schools and communities.
             </p>

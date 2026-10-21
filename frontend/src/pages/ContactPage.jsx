@@ -74,9 +74,9 @@ export default function ContactPage({ onOpenDemo }) {
       phone: "+65 6789 0123"
     },
     {
-      region: "India & South Asia Admissions Hub",
-      city: "Mumbai & New Delhi, India",
-      address: "Bandra Kurla Complex (BKC), Mumbai",
+      region: "India & Global Operations Hub",
+      city: "Jaipur, Rajasthan, India",
+      address: "266/84, Pratap Nagar, Sanganer, Jaipur 302033",
       hours: "8:00 AM – 10:00 PM IST",
       phone: "+91 6283 609 913"
     }
@@ -102,7 +102,7 @@ export default function ContactPage({ onOpenDemo }) {
             Have questions about syllabus requirements, tutor matching, or pricing packages? Our senior education coordinators are available 7 days a week across multiple timezones.
           </p>
           <div className="page-hero-actions">
-            <a href="https://wa.me/916283609913?text=Hi%20Magπ,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+            <a href="https://wa.me/916283609913?text=Hi%20Psittacus,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
               <MessageCircle size={16} /> Instant WhatsApp Support
             </a>
             <button onClick={() => onOpenDemo()} className="btn btn-outline" style={{ borderColor: 'rgba(255,255,255,0.4)', color: '#FFFFFF' }}>
@@ -134,7 +134,7 @@ export default function ContactPage({ onOpenDemo }) {
               <div className="feature-strip-icon"><Mail size={22} /></div>
               <div>
                 <strong>Official Admissions Email</strong>
-                <a href="mailto:admissions@magpi.education" style={{ color: 'var(--primary)', fontWeight: 600 }}>admissions@magpi.education</a>
+                <a href="mailto:education@steamvidya.com" style={{ color: 'var(--primary)', fontWeight: 600 }}>education@steamvidya.com</a>
               </div>
             </div>
             <div className="feature-strip-item">

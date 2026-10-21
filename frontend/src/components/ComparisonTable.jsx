@@ -1,83 +1,66 @@
 import React from 'react';
-import { COMPARISON_DATA } from '../data/coursesData';
-import { Check, X, Sparkles, Scale } from 'lucide-react';
 import './ComparisonTable.css';
 
-export default function ComparisonTable({ onOpenDemo }) {
+const COMPARISON_ROWS = [
+  {
+    feature: '1-on-1 Attention',
+    psittacus: 'Dedicated one-on-one sessions tailored to each learner’s pace',
+    traditional: 'Group classes often dilute individual support'
+  },
+  {
+    feature: 'Flexibility & Access',
+    psittacus: 'Learn comfortably from anywhere with flexible time slots',
+    traditional: 'Fixed timings and physical presence required'
+  },
+  {
+    feature: 'Real-time Parent Updates',
+    psittacus: 'Transparent communication and regular performance insights',
+    traditional: 'Mostly restricted to scheduled parent meetings'
+  },
+  {
+    feature: 'Curriculum-Specific Experts',
+    psittacus: 'Tutors trained specifically in international curricula standards',
+    traditional: 'Often, generalized teaching is not aligned with global boards'
+  },
+  {
+    feature: 'Smart Learning Tools',
+    psittacus: 'Engaging tools like adaptive quizzes, goal tracking & AI insights',
+    traditional: 'Traditional whiteboard or book-based learning without digital support'
+  }
+];
+
+export default function ComparisonTable() {
   return (
-    <section className="section comparison-section" id="comparison">
+    <section className="psittacus-comparison-section" id="comparison">
       <div className="container">
-        <div className="section-header">
-          <div className="badge-tag blue">
-            <Scale size={14} /> Clear Side-by-Side Value
-          </div>
-          <h2 className="section-title">
-            Magπ Online Tuition VS Traditional Offline Tuition
-          </h2>
-          <p className="section-subtitle">
-            See why personalized 1-on-1 online tutoring delivers superior results, higher retention, 
-            and zero commute fatigue compared to conventional crowded coaching centers.
-          </p>
+        <div className="psittacus-header">
+          <h2 className="psittacus-title">Psittacus Online Tuition VS Traditional Offline Tution</h2>
         </div>
 
-        <div className="table-wrapper">
-          <table className="comparison-table">
+        <div className="psittacus-table-container">
+          <table className="psittacus-table">
             <thead>
               <tr>
-                <th className="feature-col">Key Feature</th>
-                <th className="magpi-col">
-                  <div className="col-header-badge">Recommended</div>
-                  <span className="col-title">Mag<span className="brand-pi">π</span> 1-on-1 Academy</span>
-                </th>
-                <th className="other-col">
-                  <span className="col-title">Traditional Coaching Centers</span>
-                </th>
-                <th className="other-col">
-                  <span className="col-title">Generic Video Learning Apps</span>
-                </th>
+                <th className="th-feature">Feature</th>
+                <th className="th-psittacus">Psittacus Now Online Learning</th>
+                <th className="th-traditional">Traditional Tuition Centers</th>
               </tr>
             </thead>
             <tbody>
-              {COMPARISON_DATA.map((row, index) => (
-                <tr key={index}>
-                  <td className="feature-cell">
-                    <strong>{row.feature}</strong>
-                  </td>
-                  <td className="magpi-cell">
-                    <div className="cell-content">
-                      <div className="status-icon success">
-                        <Check size={14} />
-                      </div>
-                      <span>{row.magpi}</span>
-                    </div>
-                  </td>
-                  <td className="other-cell">
-                    <div className="cell-content">
-                      <div className="status-icon danger">
-                        <X size={14} />
-                      </div>
-                      <span>{row.offline}</span>
-                    </div>
-                  </td>
-                  <td className="other-cell">
-                    <div className="cell-content">
-                      <div className="status-icon danger">
-                        <X size={14} />
-                      </div>
-                      <span>{row.genericVideo}</span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              {COMPARISON_ROWS.map((row, index) => {
+                const isDarkRow = index % 2 === 1;
+                return (
+                  <tr key={index} className={isDarkRow ? 'row-dark' : 'row-light'}>
+                    <td className="cell-feature">
+                      <strong>{row.feature}</strong>
+                    </td>
+                    <td className="cell-psittacus">{row.psittacus}</td>
+                    <td className="cell-traditional">{row.traditional}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
-        </div>
-
-        <div className="comparison-cta-box">
-          <p>Ready to give your child an unfair academic advantage?</p>
-          <button onClick={onOpenDemo} className="btn btn-primary">
-            <Sparkles size={16} /> Book Your 45-Min Free Assessment
-          </button>
         </div>
       </div>
     </section>
