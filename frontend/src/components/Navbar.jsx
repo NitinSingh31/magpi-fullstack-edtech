@@ -47,8 +47,8 @@ export default function Navbar({ onOpenDemo }) {
       <div className="announcement-bar">
         <div className="container announcement-content">
           <div className="announcement-left">
-            <a href="tel:+916283609913" className="top-link">
-              <Phone size={13} /> +91 6283 609 913
+            <a href="tel:+919056999005" className="top-link">
+              <Phone size={13} /> +91 90569 99005
             </a>
             <span className="divider">|</span>
             <a href="mailto:contact@magpiedu.com" className="top-link">
@@ -197,7 +197,7 @@ export default function Navbar({ onOpenDemo }) {
           {/* Right Header Actions */}
           <div className="header-actions">
             <a 
-              href="https://wa.me/916283609913?text=Hi%20Mag%CF%80,%20I%20would%20like%20to%20get%20in%20touch%20with%20an%20academic%20counselor"
+              href="https://wa.me/919056999005?text=Hi%20Mag%CF%80,%20I%20would%20like%20to%20get%20in%20touch%20with%20an%20academic%20counselor"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-get-in-touch"
@@ -260,7 +260,7 @@ export default function Navbar({ onOpenDemo }) {
                   <Sparkles size={18} /> Book a Free Demo
                 </button>
                 <a 
-                  href="https://wa.me/916283609913" 
+                  href="https://wa.me/919056999005" 
                   className="btn btn-dark btn-full"
                   target="_blank" 
                   rel="noopener noreferrer"

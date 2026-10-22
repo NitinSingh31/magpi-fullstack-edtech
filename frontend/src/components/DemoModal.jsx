@@ -411,7 +411,7 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
 
             <div className="success-actions">
               <a 
-                href={`https://wa.me/916283609913?text=Hi%20Mag%CF%80,%20I%20just%20booked%20a%20trial%20for%20${encodeURIComponent(formData.subject)}%20(${encodeURIComponent(formData.curriculum)})%20for%20${encodeURIComponent(formData.parentName)}.%20Ref:%20${bookingRef}`}
+                href={`https://wa.me/919056999005?text=Hi%20Mag%CF%80,%20I%20just%20booked%20a%20trial%20for%20${encodeURIComponent(formData.subject)}%20(${encodeURIComponent(formData.curriculum)})%20for%20${encodeURIComponent(formData.parentName)}.%20Ref:%20${bookingRef}`}
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="btn btn-whatsapp btn-full"

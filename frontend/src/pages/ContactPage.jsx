@@ -75,10 +75,10 @@ export default function ContactPage({ onOpenDemo }) {
     },
     {
       region: "India & Global Operations Hub",
-      city: "Jaipur, Rajasthan, India",
-      address: "266/84, Pratap Nagar, Sanganer, Jaipur 302033",
+      city: "Ludhiana, Punjab, India",
+      address: "7 min Mahaveer Jain Colony, Puneet Nagar, Ludhiana 141007",
       hours: "8:00 AM – 10:00 PM IST",
-      phone: "+91 6283 609 913"
+      phone: "+91 90569 99005"
     }
   ];
 
@@ -102,7 +102,7 @@ export default function ContactPage({ onOpenDemo }) {
             Have questions about syllabus requirements, tutor matching, or pricing packages? Our senior education coordinators are available 7 days a week across multiple timezones.
           </p>
           <div className="page-hero-actions">
-            <a href="https://wa.me/916283609913?text=Hi%20Mag%CF%80,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+            <a href="https://wa.me/919056999005?text=Hi%20Mag%CF%80,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
               <MessageCircle size={16} /> Instant WhatsApp Support
             </a>
             <button onClick={() => onOpenDemo()} className="btn btn-outline" style={{ borderColor: 'rgba(255,255,255,0.4)', color: '#FFFFFF' }}>
@@ -120,14 +120,14 @@ export default function ContactPage({ onOpenDemo }) {
               <div className="feature-strip-icon"><Phone size={22} /></div>
               <div>
                 <strong>Direct Call Support</strong>
-                <a href="tel:+916283609913" style={{ color: 'var(--primary)', fontWeight: 600 }}>+91 6283 609 913</a>
+                <a href="tel:+919056999005" style={{ color: 'var(--primary)', fontWeight: 600 }}>+91 90569 99005</a>
               </div>
             </div>
             <div className="feature-strip-item">
               <div className="feature-strip-icon"><MessageCircle size={22} /></div>
               <div>
                 <strong>WhatsApp Admissions</strong>
-                <a href="https://wa.me/916283609913" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 600 }}>Chat with Counselor</a>
+                <a href="https://wa.me/919056999005" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 600 }}>Chat with Counselor</a>
               </div>
             </div>
             <div className="feature-strip-item">

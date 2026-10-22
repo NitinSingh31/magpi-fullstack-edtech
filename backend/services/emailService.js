@@ -53,7 +53,7 @@ export const emailService = {
                   </ol>
 
                   <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://wa.me/916283609913?text=Hi%20Magπ,%20inquiring%20about%20booking%20${referenceCode}" 
+                    <a href="https://wa.me/919056999005?text=Hi%20Magπ,%20inquiring%20about%20booking%20${referenceCode}" 
                        style="background: #25D366; color: #ffffff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
                       Connect on WhatsApp
                     </a>

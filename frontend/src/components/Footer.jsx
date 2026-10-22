@@ -61,7 +61,7 @@ export default function Footer() {
             <ul className="footer-contact-list">
               <li>
                 <Phone size={16} className="contact-icon" />
-                <a href="tel:+916283609913">+91 6283 609 913</a>
+                <a href="tel:+919056999005">+91 90569 99005</a>
               </li>
               <li>
                 <Mail size={16} className="contact-icon" />
@@ -69,7 +69,7 @@ export default function Footer() {
               </li>
               <li>
                 <MapPin size={18} className="contact-icon map-icon" />
-                <span>266/84, Pratap Nagar, Sanganer, Jaipur, Rajasthan 302033 (INDIA)</span>
+                <span>7 min Mahaveer Jain Colony, Puneet Nagar, Ludhiana 141007 (INDIA)</span>
               </li>
             </ul>
 
