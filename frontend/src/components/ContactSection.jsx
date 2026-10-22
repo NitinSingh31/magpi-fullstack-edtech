@@ -101,8 +101,8 @@ export default function ContactSection() {
                   <Mail size={18} />
                 </div>
                 <div>
-                  <small>Official Admissions Email</small>
-                  <a href="mailto:admissions@magpi.education">admissions@magpi.education</a>
+                  <small>Official Email</small>
+                  <a href="mailto:contact@magpiedu.com">contact@magpiedu.com</a>
                 </div>
               </div>
 

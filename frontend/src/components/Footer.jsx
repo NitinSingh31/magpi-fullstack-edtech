@@ -65,7 +65,7 @@ export default function Footer() {
               </li>
               <li>
                 <Mail size={16} className="contact-icon" />
-                <a href="mailto:education@steamvidya.com">education@steamvidya.com</a>
+                <a href="mailto:contact@magpiedu.com">contact@magpiedu.com</a>
               </li>
               <li>
                 <MapPin size={18} className="contact-icon map-icon" />

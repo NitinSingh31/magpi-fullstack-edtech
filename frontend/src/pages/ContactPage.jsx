@@ -133,8 +133,8 @@ export default function ContactPage({ onOpenDemo }) {
             <div className="feature-strip-item">
               <div className="feature-strip-icon"><Mail size={22} /></div>
               <div>
-                <strong>Official Admissions Email</strong>
-                <a href="mailto:education@steamvidya.com" style={{ color: 'var(--primary)', fontWeight: 600 }}>education@steamvidya.com</a>
+                <strong>Official Email</strong>
+                <a href="mailto:contact@magpiedu.com" style={{ color: 'var(--primary)', fontWeight: 600 }}>contact@magpiedu.com</a>
               </div>
             </div>
             <div className="feature-strip-item">

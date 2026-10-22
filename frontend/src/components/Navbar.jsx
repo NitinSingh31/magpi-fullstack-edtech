@@ -52,8 +52,8 @@ export default function Navbar({ onOpenDemo, onOpenAdmin }) {
               <Phone size={13} /> +91 6283 609 913
             </a>
             <span className="divider">|</span>
-            <a href="mailto:education@steamvidya.com" className="top-link">
-              <Mail size={13} /> education@steamvidya.com
+            <a href="mailto:contact@magpiedu.com" className="top-link">
+              <Mail size={13} /> contact@magpiedu.com
             </a>
           </div>
           

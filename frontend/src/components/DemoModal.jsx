@@ -142,7 +142,7 @@ export default function DemoModal({ isOpen, onClose, initialCourse = '' }) {
       `CALSCALE:GREGORIAN\n` +
       `METHOD:PUBLISH\n` +
       `BEGIN:VEVENT\n` +
-      `UID:${bookingRef}@magpi.education\n` +
+      `UID:${bookingRef}@magpiedu.com\n` +
       `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z\n` +
       `DTSTART:${dateClean}T170000Z\n` +
       `DTEND:${dateClean}T174500Z\n` +

@@ -25,7 +25,7 @@ export const emailService = {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            from: process.env.EMAIL_FROM || 'Magπ Education <admissions@magpi.education>',
+            from: process.env.EMAIL_FROM || 'Magπ Education <contact@magpiedu.com>',
             to: [email],
             subject: `Confirmed: Free 45-Min Trial Session for ${subject} [Ref: ${referenceCode}]`,
             html: `
