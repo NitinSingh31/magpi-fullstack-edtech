@@ -1,0 +1,635 @@
+/* ==========================================================================
+   Magπ Dedicated Admin Dashboard Page Styles
+   ========================================================================== */
+
+.admin-page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #061938 0%, #0A2540 50%, #0E355F 100%);
+  color: #1E293B;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Dedicated Admin Page Top Navbar */
+.admin-page-navbar {
+  background: rgba(6, 25, 56, 0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.admin-page-logo {
+  height: 38px;
+  width: auto;
+}
+
+.admin-navbar-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-navbar-title h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.admin-navbar-title span {
+  font-size: 0.78rem;
+  color: #93C5FD;
+}
+
+.admin-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-db-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #E2E8F0;
+}
+
+.db-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #E2E8F0;
+}
+
+.db-dot.online {
+  background: #10B981;
+  box-shadow: 0 0 10px #10B981;
+}
+
+.db-dot.offline {
+  background: #EF4444;
+  box-shadow: 0 0 10px #EF4444;
+}
+
+.btn-admin-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-admin-nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-admin-nav.logout-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #FCA5A5;
+}
+
+.btn-admin-nav.logout-btn:hover {
+  background: #EF4444;
+  color: #FFFFFF;
+  border-color: #EF4444;
+}
+
+/* ==========================================================================
+   Full-Page Security Passkey Lock Screen
+   ========================================================================== */
+.admin-lock-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.admin-lock-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lock-avatar-shield {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0072CE, #0A2540);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+  box-shadow: 0 10px 25px rgba(0, 114, 206, 0.35);
+}
+
+.admin-lock-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0A2540;
+  margin-bottom: 0.5rem;
+}
+
+.admin-lock-card p {
+  font-size: 0.9rem;
+  color: #64748B;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.admin-pin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pin-field-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pin-field-icon {
+  position: absolute;
+  left: 1rem;
+  color: #94A3B8;
+}
+
+.pin-input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.85rem;
+  border-radius: 12px;
+  border: 1.5px solid #CBD5E1;
+  font-size: 1rem;
+  color: #0F172A;
+  transition: all 0.2s ease;
+  background: #F8FAFC;
+  outline: none;
+}
+
+.pin-input:focus {
+  border-color: #0072CE;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(0, 114, 206, 0.12);
+}
+
+.pin-error-alert {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  font-size: 0.85rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.btn-unlock-submit {
+  width: 100%;
+  background: linear-gradient(135deg, #0072CE, #0A2540);
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.85rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 8px 20px rgba(0, 114, 206, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-unlock-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(0, 114, 206, 0.35);
+}
+
+.back-to-site-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: #64748B;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.back-to-site-link:hover {
+  color: #0072CE;
+}
+
+/* ==========================================================================
+   Main Admin Content Dashboard Area
+   ========================================================================== */
+.admin-page-main {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.admin-card-surface {
+  background: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Tabs Header */
+.admin-control-strip {
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-nav-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-pill-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.tab-pill-btn.active {
+  background: #0072CE;
+  color: #FFFFFF;
+}
+
+.tab-badge {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+.tab-pill-btn.active .tab-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+.status-pills-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.status-pill-opt {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.status-pill-opt:hover {
+  background: #F1F5F9;
+}
+
+.status-pill-opt.active {
+  background: #0A2540;
+  color: #FFFFFF;
+  border-color: #0A2540;
+}
+
+/* Search Bar & Stats Strip */
+.admin-search-strip {
+  padding: 1rem 2rem;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-search-wrapper {
+  flex: 1;
+  min-width: 280px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon-svg {
+  position: absolute;
+  left: 1rem;
+  color: #94A3B8;
+}
+
+.admin-search-input {
+  width: 100%;
+  padding: 0.65rem 1rem 0.65rem 2.65rem;
+  border-radius: 10px;
+  border: 1.5px solid #E2E8F0;
+  font-size: 0.9rem;
+  color: #0F172A;
+  background: #F8FAFC;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.admin-search-input:focus {
+  border-color: #0072CE;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(0, 114, 206, 0.1);
+}
+
+.admin-record-counter {
+  font-size: 0.85rem;
+  color: #64748B;
+}
+
+.admin-record-counter strong {
+  color: #0A2540;
+}
+
+/* Leads Records Grid */
+.admin-records-viewport {
+  padding: 1.5rem 2rem;
+  min-height: 420px;
+  max-height: 65vh;
+  overflow-y: auto;
+  background: #FAFAFA;
+}
+
+.lead-cards-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-lead-row-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.admin-lead-row-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.lead-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #F1F5F9;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.lead-row-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lead-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #EFF6FF;
+  color: #0072CE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lead-user-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #0F172A;
+}
+
+.lead-ref-pill {
+  background: #F1F5F9;
+  color: #475569;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.lead-date-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #94A3B8;
+  font-size: 0.78rem;
+}
+
+.status-dropdown {
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.status-dropdown.pending {
+  background: #FEF3C7;
+  color: #92400E;
+  border-color: #FCD34D;
+}
+
+.status-dropdown.contacted {
+  background: #DBEAFE;
+  color: #1E40AF;
+  border-color: #93C5FD;
+}
+
+.status-dropdown.confirmed {
+  background: #D1FAE5;
+  color: #065F46;
+  border-color: #6EE7B7;
+}
+
+.status-dropdown.completed {
+  background: #F3E8FF;
+  color: #6B21A8;
+  border-color: #D8B4FE;
+}
+
+.lead-info-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.info-tile {
+  background: #F8FAFC;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-tile-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: #64748B;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.info-tile-val {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.info-tile-sub {
+  font-size: 0.8rem;
+  color: #64748B;
+}
+
+.contact-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #0072CE;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.contact-action-btn:hover {
+  text-decoration: underline;
+}
+
+.lead-message-quote {
+  margin-top: 0.85rem;
+  padding: 0.85rem 1rem;
+  background: #F8FAFC;
+  border-left: 3px solid #0072CE;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+/* Empty & Loading States */
+.admin-state-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #64748B;
+}
+
+.admin-state-view p {
+  font-size: 1rem;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.spinning-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .admin-page-navbar {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .admin-navbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .admin-page-main {
+    padding: 0 1rem;
+  }
+  .admin-control-strip {
+    padding: 1rem;
+  }
+}

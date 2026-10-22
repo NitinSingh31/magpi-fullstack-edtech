@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import DemoModal from './components/DemoModal';
 import FloatingActions from './components/FloatingActions';
-import AdminPanel from './components/AdminPanel';
 
-// Dedicated Pages matching psittacuslab.com structure
+// Dedicated Pages matching structure
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import OnlineTuitionPage from './pages/OnlineTuitionPage';
@@ -18,11 +17,13 @@ import LanguagesPage from './pages/LanguagesPage';
 import AptitudePage from './pages/AptitudePage';
 import CareersPage from './pages/CareersPage';
 import ContactPage from './pages/ContactPage';
+import AdminPage from './pages/AdminPage';
 
-export default function App() {
+function AppContent() {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [selectedCourseForDemo, setSelectedCourseForDemo] = useState('');
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   const handleOpenDemo = (courseTitle = '') => {
     setSelectedCourseForDemo(courseTitle);
@@ -35,62 +36,61 @@ export default function App() {
   };
 
   return (
+    <div className="magpi-app">
+      {/* Public Navigation Header - Hidden on Admin Dashboard */}
+      {!isAdminRoute && (
+        <Navbar onOpenDemo={() => handleOpenDemo()} />
+      )}
+
+      {/* Dynamic Route View */}
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage onOpenDemo={handleOpenDemo} />} />
+          <Route path="/about-us" element={<AboutPage onOpenDemo={handleOpenDemo} />} />
+          <Route path="/online-tuition" element={<OnlineTuitionPage onOpenDemo={handleOpenDemo} />} />
+          <Route path="/events" element={<EventsPage onOpenDemo={handleOpenDemo} />} />
+          <Route path="/upcoming-events" element={<EventsPage onOpenDemo={handleOpenDemo} />} />
+          
+          {/* Skill Courses Dedicated Pages */}
+          <Route path="/communication" element={<CommunicationPage onOpenDemo={handleOpenDemo} />} />
+          <Route path="/coding-and-programming" element={<CodingPage onOpenDemo={handleOpenDemo} />} />
+          <Route path="/language-classes" element={<LanguagesPage onOpenDemo={handleOpenDemo} />} />
+          <Route path="/languages" element={<LanguagesPage onOpenDemo={handleOpenDemo} />} />
+          <Route path="/reasoning-and-aptitude" element={<AptitudePage onOpenDemo={handleOpenDemo} />} />
+
+          {/* Careers & Contact Pages */}
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/contact-us" element={<ContactPage onOpenDemo={handleOpenDemo} />} />
+
+          {/* Dedicated Protected Admin Route */}
+          <Route path="/admin" element={<AdminPage />} />
+
+          {/* Fallback */}
+          <Route path="*" element={<HomePage onOpenDemo={handleOpenDemo} />} />
+        </Routes>
+      </main>
+
+      {/* Public Footer & Floating Widgets - Hidden on Admin Dashboard */}
+      {!isAdminRoute && (
+        <>
+          <Footer onOpenDemo={() => handleOpenDemo()} />
+          <FloatingActions onOpenDemo={() => handleOpenDemo()} />
+          <DemoModal 
+            isOpen={isDemoOpen} 
+            onClose={handleCloseDemo} 
+            initialCourse={selectedCourseForDemo}
+          />
+        </>
+      )}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="magpi-app">
-        {/* Navigation Header */}
-        <Navbar 
-          onOpenDemo={() => handleOpenDemo()} 
-          onOpenAdmin={() => setIsAdminOpen(true)}
-        />
-
-        {/* Dynamic Route View - Dedicated Pages */}
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage onOpenDemo={handleOpenDemo} />} />
-            <Route path="/about-us" element={<AboutPage onOpenDemo={handleOpenDemo} />} />
-            <Route path="/online-tuition" element={<OnlineTuitionPage onOpenDemo={handleOpenDemo} />} />
-            <Route path="/events" element={<EventsPage onOpenDemo={handleOpenDemo} />} />
-            <Route path="/upcoming-events" element={<EventsPage onOpenDemo={handleOpenDemo} />} />
-            
-            {/* Skill Courses Dedicated Pages */}
-            <Route path="/communication" element={<CommunicationPage onOpenDemo={handleOpenDemo} />} />
-            <Route path="/coding-and-programming" element={<CodingPage onOpenDemo={handleOpenDemo} />} />
-            <Route path="/language-classes" element={<LanguagesPage onOpenDemo={handleOpenDemo} />} />
-            <Route path="/languages" element={<LanguagesPage onOpenDemo={handleOpenDemo} />} />
-            <Route path="/reasoning-and-aptitude" element={<AptitudePage onOpenDemo={handleOpenDemo} />} />
-
-            {/* Careers & Contact Pages */}
-            <Route path="/careers" element={<CareersPage />} />
-            <Route path="/contact-us" element={<ContactPage onOpenDemo={handleOpenDemo} />} />
-
-            {/* Fallback */}
-            <Route path="*" element={<HomePage onOpenDemo={handleOpenDemo} />} />
-          </Routes>
-        </main>
-
-        {/* Footer */}
-        <Footer 
-          onOpenDemo={() => handleOpenDemo()} 
-          onOpenAdmin={() => setIsAdminOpen(true)}
-        />
-
-        {/* Floating Action Buttons */}
-        <FloatingActions onOpenDemo={() => handleOpenDemo()} />
-
-        {/* Interactive Free Demo Booking Modal */}
-        <DemoModal 
-          isOpen={isDemoOpen} 
-          onClose={handleCloseDemo} 
-          initialCourse={selectedCourseForDemo}
-        />
-
-        {/* Full-Featured Admin Leads Management Portal */}
-        <AdminPanel 
-          isOpen={isAdminOpen} 
-          onClose={() => setIsAdminOpen(false)} 
-        />
-      </div>
+      <AppContent />
     </BrowserRouter>
   );
 }
