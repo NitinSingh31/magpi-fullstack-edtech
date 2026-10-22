@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Database, 
   RefreshCw, 
   CheckCircle2, 
   Clock, 
@@ -37,15 +36,13 @@ export default function AdminPage() {
   const [bookings, setBookings] = useState([]);
   const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [dbStatus, setDbStatus] = useState({ database: 'Checking...', status: 'loading' });
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [bookingsRes, inquiriesRes, healthRes] = await Promise.allSettled([
+      const [bookingsRes, inquiriesRes] = await Promise.allSettled([
         api.getBookings(),
-        api.getInquiries(),
-        api.checkHealth()
+        api.getInquiries()
       ]);
 
       if (bookingsRes.status === 'fulfilled' && bookingsRes.value?.success) {
@@ -55,13 +52,8 @@ export default function AdminPage() {
       if (inquiriesRes.status === 'fulfilled' && inquiriesRes.value?.success) {
         setInquiries(inquiriesRes.value.data || []);
       }
-
-      if (healthRes.status === 'fulfilled') {
-        setDbStatus(healthRes.value);
-      }
     } catch (err) {
       console.warn('Backend not reachable:', err);
-      setDbStatus({ database: 'Backend Offline', status: 'offline' });
     } finally {
       setLoading(false);
     }
@@ -164,12 +156,6 @@ export default function AdminPage() {
         </div>
 
         <div className="admin-navbar-right">
-          <div className="admin-db-status">
-            <Database size={14} />
-            <span>DB: <strong>{dbStatus.database || 'Connecting...'}</strong></span>
-            <span className={`db-dot ${dbStatus.status === 'online' ? 'online' : 'offline'}`}></span>
-          </div>
-
           {isAuthenticated && (
             <>
               <button onClick={exportLeadsToCSV} className="btn-admin-nav" title="Export CSV">

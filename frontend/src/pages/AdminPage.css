@@ -61,34 +61,7 @@
   gap: 1rem;
 }
 
-.admin-db-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 0.4rem 0.85rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  color: #E2E8F0;
-}
 
-.db-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #E2E8F0;
-}
-
-.db-dot.online {
-  background: #10B981;
-  box-shadow: 0 0 10px #10B981;
-}
-
-.db-dot.offline {
-  background: #EF4444;
-  box-shadow: 0 0 10px #EF4444;
-}
 
 .btn-admin-nav {
   display: inline-flex;
