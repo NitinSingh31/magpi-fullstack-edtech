@@ -12,6 +12,9 @@ const distPath = path.resolve(__dirname, '../frontend/dist');
 
 const app = express();
 
+// Enable trust proxy for Render / Cloudflare reverse proxies
+app.set('trust proxy', 1);
+
 // Security Middleware
 app.use(helmetMiddleware);
 app.use(corsMiddleware);

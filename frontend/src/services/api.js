@@ -11,7 +11,7 @@ const isDev = Boolean(
 const RAW_API_URL = import.meta.env.VITE_API_BASE_URL;
 const BASE_URL = RAW_API_URL 
   ? RAW_API_URL.replace(/\/$/, '') 
-  : (isDev ? 'http://localhost:5001/api' : '/api');
+  : (isDev ? 'http://localhost:5001/api' : 'https://magpi-fullstack-edtech.onrender.com/api');
 
 /**
  * Standard fetch wrapper with JSON parsing and error handling
@@ -51,6 +51,9 @@ async function request(endpoint, options = {}) {
     return data;
   } catch (error) {
     console.warn(`[API Client] Request failed: ${endpoint}`, error.message);
+    if (error.message === 'Failed to fetch') {
+      throw new Error('Unable to reach the backend server (Render may be spinning up or deploying). Please retry in 30 seconds.');
+    }
     throw error;
   }
 }
