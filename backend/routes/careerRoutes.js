@@ -5,12 +5,16 @@ import {
   updateCareerOpening, 
   deleteCareerOpening 
 } from '../controllers/careerController.js';
+import { requireAdminAuth } from '../middleware/authMiddleware.js';
 
 const router = Router();
 
+// Public route to view active jobs
 router.get('/', getCareerOpenings);
-router.post('/', createCareerOpening);
-router.patch('/:id', updateCareerOpening);
-router.delete('/:id', deleteCareerOpening);
+
+// Protected admin routes to modify jobs
+router.post('/', requireAdminAuth, createCareerOpening);
+router.patch('/:id', requireAdminAuth, updateCareerOpening);
+router.delete('/:id', requireAdminAuth, deleteCareerOpening);
 
 export default router;

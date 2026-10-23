@@ -16,7 +16,7 @@ const allowedOrigins = process.env.CLIENT_URL ? [process.env.CLIENT_URL] : ['*']
 
 export const corsMiddleware = cors({
   origin: allowedOrigins.includes('*') ? '*' : allowedOrigins,
-  methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true
 });
 
@@ -32,5 +32,20 @@ export const apiRateLimiter = rateLimit({
   message: {
     success: false,
     error: 'Too many requests from this IP address, please try again after 15 minutes.'
+  }
+});
+
+/**
+ * Strict Admin Login Rate Limiter (Brute-Force Protection)
+ * Max 5 failed attempts per 15 minutes
+ */
+export const adminLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: 'Security Lockout: Too many login attempts. Please wait 15 minutes before trying again.'
   }
 });

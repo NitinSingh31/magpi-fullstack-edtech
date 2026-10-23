@@ -23,14 +23,17 @@ import {
 import './AdminPanel.css';
 import api from '../services/api.js';
 
-const ADMIN_PIN = 'magpi2026'; // Default security passkey
-
 export default function AdminPanel({ isOpen, onClose }) {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return sessionStorage.getItem('magpi_admin_auth') === 'true';
+    return Boolean(
+      sessionStorage.getItem('magpi_admin_auth') === 'true' &&
+      sessionStorage.getItem('magpi_admin_token')
+    );
   });
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState(false);
+  const [pinErrorMessage, setPinErrorMessage] = useState('');
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'inquiries'
   const [statusFilter, setStatusFilter] = useState('all');
@@ -75,20 +78,36 @@ export default function AdminPanel({ isOpen, onClose }) {
     }
   }, [isOpen, isAuthenticated]);
 
-  const handlePinSubmit = (e) => {
+  const handlePinSubmit = async (e) => {
     e.preventDefault();
-    if (pinInput.trim() === ADMIN_PIN) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('magpi_admin_auth', 'true');
-      setPinError(false);
-      setPinInput('');
-    } else {
+    if (!pinInput.trim()) return;
+
+    setIsAuthenticating(true);
+    setPinError(false);
+    setPinErrorMessage('');
+
+    try {
+      const res = await api.loginAdmin(pinInput.trim());
+      if (res.success && res.token) {
+        sessionStorage.setItem('magpi_admin_token', res.token);
+        sessionStorage.setItem('magpi_admin_auth', 'true');
+        setIsAuthenticated(true);
+        setPinInput('');
+      } else {
+        setPinError(true);
+        setPinErrorMessage(res.error || 'Invalid security passkey.');
+      }
+    } catch (err) {
       setPinError(true);
+      setPinErrorMessage(err.message || 'Authentication failed. Please verify credentials.');
+    } finally {
+      setIsAuthenticating(false);
     }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+    sessionStorage.removeItem('magpi_admin_token');
     sessionStorage.removeItem('magpi_admin_auth');
     setPinInput('');
   };
@@ -235,11 +254,13 @@ export default function AdminPanel({ isOpen, onClose }) {
                 <KeyRound size={18} className="pin-icon" />
                 <input 
                   type="password"
-                  placeholder="Enter Passkey (e.g. magpi2026)"
+                  placeholder="Enter Admin Security Passkey"
                   value={pinInput}
+                  disabled={isAuthenticating}
                   onChange={e => {
                     setPinInput(e.target.value);
                     setPinError(false);
+                    setPinErrorMessage('');
                   }}
                   autoFocus
                 />
@@ -247,12 +268,12 @@ export default function AdminPanel({ isOpen, onClose }) {
 
               {pinError && (
                 <div className="pin-error-msg">
-                  ⚠️ Invalid passkey. Default passkey is <code>magpi2026</code>.
+                  {pinErrorMessage || '⚠️ Invalid security passkey. Access denied.'}
                 </div>
               )}
 
-              <button type="submit" className="btn btn-primary btn-unlock">
-                <Unlock size={16} /> Unlock Leads Portal
+              <button type="submit" className="btn btn-primary btn-unlock" disabled={isAuthenticating || !pinInput.trim()}>
+                <Unlock size={16} /> {isAuthenticating ? 'Verifying...' : 'Unlock Leads Portal'}
               </button>
             </form>
             <span className="lock-hint">🔒 End-to-end encrypted • Session stored securely</span>

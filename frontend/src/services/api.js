@@ -18,9 +18,13 @@ const BASE_URL = RAW_API_URL
  */
 async function request(endpoint, options = {}) {
   const url = `${BASE_URL}${endpoint}`;
+  const token = typeof window !== 'undefined' ? sessionStorage.getItem('magpi_admin_token') : null;
+  const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+
   const config = {
     headers: {
       'Content-Type': 'application/json',
+      ...authHeaders,
       ...options.headers
     },
     ...options
@@ -31,6 +35,11 @@ async function request(endpoint, options = {}) {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
+      // If 401 Unauthorized, automatically clear stale token
+      if (res.status === 401 && typeof window !== 'undefined') {
+        sessionStorage.removeItem('magpi_admin_token');
+        sessionStorage.removeItem('magpi_admin_auth');
+      }
       const errorMsg = data.error || `HTTP ${res.status}: ${res.statusText}`;
       throw new Error(errorMsg);
     }
@@ -48,6 +57,23 @@ export const api = {
    */
   async checkHealth() {
     return request('/health');
+  },
+
+  /**
+   * Admin Authentication (JWT Login)
+   */
+  async loginAdmin(password) {
+    return request('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ password })
+    });
+  },
+
+  /**
+   * Verify Active Admin Session Token
+   */
+  async verifyAdminSession() {
+    return request('/auth/verify');
   },
 
   /**
