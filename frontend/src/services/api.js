@@ -18,7 +18,9 @@ const BASE_URL = RAW_API_URL
  */
 async function request(endpoint, options = {}) {
   const url = `${BASE_URL}${endpoint}`;
-  const token = typeof window !== 'undefined' ? sessionStorage.getItem('magpi_admin_token') : null;
+  const token = typeof window !== 'undefined' 
+    ? (sessionStorage.getItem('magpi_admin_token') || localStorage.getItem('magpi_admin_token'))
+    : null;
   const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
 
   const config = {
@@ -39,6 +41,8 @@ async function request(endpoint, options = {}) {
       if (res.status === 401 && typeof window !== 'undefined') {
         sessionStorage.removeItem('magpi_admin_token');
         sessionStorage.removeItem('magpi_admin_auth');
+        localStorage.removeItem('magpi_admin_token');
+        localStorage.removeItem('magpi_admin_auth');
       }
       const errorMsg = data.error || `HTTP ${res.status}: ${res.statusText}`;
       throw new Error(errorMsg);
@@ -62,10 +66,14 @@ export const api = {
   /**
    * Admin Authentication (JWT Login)
    */
-  async loginAdmin(password) {
+  async loginAdmin(credentials) {
+    const payload = typeof credentials === 'string'
+      ? { password: credentials }
+      : credentials;
+
     return request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ password })
+      body: JSON.stringify(payload)
     });
   },
 

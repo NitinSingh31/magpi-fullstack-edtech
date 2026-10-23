@@ -28,7 +28,8 @@ import {
   Layers,
   Sparkles,
   Users,
-  FileText
+  FileText,
+  AlertCircle
 } from 'lucide-react';
 import './AdminPage.css';
 import api from '../services/api.js';
@@ -36,13 +37,20 @@ import api from '../services/api.js';
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return Boolean(
-      sessionStorage.getItem('magpi_admin_auth') === 'true' &&
-      sessionStorage.getItem('magpi_admin_token')
+      (sessionStorage.getItem('magpi_admin_auth') === 'true' && sessionStorage.getItem('magpi_admin_token')) ||
+      (localStorage.getItem('magpi_admin_auth') === 'true' && localStorage.getItem('magpi_admin_token'))
     );
   });
-  const [pinInput, setPinInput] = useState('');
-  const [pinError, setPinError] = useState(false);
-  const [pinErrorMessage, setPinErrorMessage] = useState('');
+
+  // Login Form States (Matching Management Portal Layout)
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [captchaCode, setCaptchaCode] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [showLostPassword, setShowLostPassword] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'inquiries' | 'careers' | 'applications'
@@ -69,8 +77,17 @@ export default function AdminPage() {
   });
   const [savingJob, setSavingJob] = useState(false);
 
+  const generateCaptcha = () => {
+    const d1 = Math.floor(Math.random() * 9) + 1;
+    const d2 = Math.floor(Math.random() * 10);
+    const d3 = Math.floor(Math.random() * 10);
+    setCaptchaCode(`${d1}${d2}${d3}`);
+    setCaptchaInput('');
+  };
+
   const fetchData = async () => {
-    if (!sessionStorage.getItem('magpi_admin_token')) {
+    const token = sessionStorage.getItem('magpi_admin_token') || localStorage.getItem('magpi_admin_token');
+    if (!token) {
       setIsAuthenticated(false);
       return;
     }
@@ -107,7 +124,8 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem('magpi_admin_token');
+    generateCaptcha();
+    const token = sessionStorage.getItem('magpi_admin_token') || localStorage.getItem('magpi_admin_token');
     if (token) {
       api.verifyAdminSession()
         .then(() => {
@@ -118,6 +136,8 @@ export default function AdminPage() {
           setIsAuthenticated(false);
           sessionStorage.removeItem('magpi_admin_token');
           sessionStorage.removeItem('magpi_admin_auth');
+          localStorage.removeItem('magpi_admin_token');
+          localStorage.removeItem('magpi_admin_auth');
         });
     } else {
       setIsAuthenticated(false);
@@ -130,28 +150,48 @@ export default function AdminPage() {
     }
   }, [isAuthenticated]);
 
-  const handlePinSubmit = async (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    if (!pinInput.trim()) return;
+    if (!password.trim()) {
+      setLoginError('Please enter your password.');
+      return;
+    }
+
+    if (captchaInput.trim() !== captchaCode) {
+      setLoginError('Security verification code does not match. Please try again.');
+      generateCaptcha();
+      return;
+    }
 
     setIsAuthenticating(true);
-    setPinError(false);
-    setPinErrorMessage('');
+    setLoginError('');
 
     try {
-      const res = await api.loginAdmin(pinInput.trim());
+      const res = await api.loginAdmin({
+        username: username.trim(),
+        password: password.trim(),
+        rememberMe
+      });
+
       if (res.success && res.token) {
-        sessionStorage.setItem('magpi_admin_token', res.token);
-        sessionStorage.setItem('magpi_admin_auth', 'true');
+        if (rememberMe) {
+          localStorage.setItem('magpi_admin_token', res.token);
+          localStorage.setItem('magpi_admin_auth', 'true');
+        } else {
+          sessionStorage.setItem('magpi_admin_token', res.token);
+          sessionStorage.setItem('magpi_admin_auth', 'true');
+        }
         setIsAuthenticated(true);
-        setPinInput('');
+        setPassword('');
+        setCaptchaInput('');
+        setLoginError('');
       } else {
-        setPinError(true);
-        setPinErrorMessage(res.error || 'Invalid security passkey.');
+        setLoginError(res.error || 'Invalid username or password.');
+        generateCaptcha();
       }
     } catch (err) {
-      setPinError(true);
-      setPinErrorMessage(err.message || 'Authentication failed. Please verify credentials.');
+      setLoginError(err.message || 'Authentication failed. Please verify credentials.');
+      generateCaptcha();
     } finally {
       setIsAuthenticating(false);
     }
@@ -161,7 +201,10 @@ export default function AdminPage() {
     setIsAuthenticated(false);
     sessionStorage.removeItem('magpi_admin_token');
     sessionStorage.removeItem('magpi_admin_auth');
-    setPinInput('');
+    localStorage.removeItem('magpi_admin_token');
+    localStorage.removeItem('magpi_admin_auth');
+    setPassword('');
+    generateCaptcha();
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -342,6 +385,179 @@ export default function AdminPage() {
     a.notes?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (!isAuthenticated) {
+    return (
+      <div className="admin-auth-viewport">
+        {/* Top Management Portal Header */}
+        <header className="admin-auth-header">
+          <div className="admin-auth-brand-gold">MAGπ EDUCATION</div>
+          <div className="admin-auth-sub-brand">MANAGEMENT PORTAL</div>
+        </header>
+
+        {/* Auth Sign In Card */}
+        <div className="admin-auth-card">
+          <div className="admin-auth-card-head">
+            <h2>Sign In</h2>
+            <p>Authorized administrators &amp; recruiters</p>
+          </div>
+
+          {loginError && (
+            <div className="admin-auth-error-banner">
+              <AlertCircle size={15} />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleLoginSubmit} className="admin-auth-form">
+            <div className="auth-form-group">
+              <label htmlFor="admin-username">Username or Email Address</label>
+              <input
+                id="admin-username"
+                type="text"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setLoginError('');
+                }}
+                disabled={isAuthenticating}
+                autoFocus
+              />
+            </div>
+
+            <div className="auth-form-group">
+              <label htmlFor="admin-password">Password</label>
+              <div className="auth-password-wrapper">
+                <input
+                  id="admin-password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setLoginError('');
+                  }}
+                  disabled={isAuthenticating}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="auth-eye-btn"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="auth-form-group">
+              <div className="auth-captcha-header">
+                <label>Security Verification Code</label>
+                <button
+                  type="button"
+                  onClick={generateCaptcha}
+                  className="auth-captcha-refresh"
+                >
+                  <RefreshCw size={12} className={isAuthenticating ? 'spinning-icon' : ''} />
+                  <span>Refresh</span>
+                </button>
+              </div>
+
+              <div className="auth-captcha-display" aria-label="Verification Code">
+                {captchaCode.split('').join('   ')}
+              </div>
+
+              <label htmlFor="admin-captcha" className="auth-sub-label">Enter the code above</label>
+              <input
+                id="admin-captcha"
+                type="text"
+                placeholder="Type the 3-digit code"
+                maxLength={4}
+                value={captchaInput}
+                onChange={(e) => {
+                  setCaptchaInput(e.target.value);
+                  setLoginError('');
+                }}
+                disabled={isAuthenticating}
+              />
+            </div>
+
+            <div className="auth-card-footer-row">
+              <label className="auth-remember-label">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  disabled={isAuthenticating}
+                />
+                <span>Remember Me</span>
+              </label>
+
+              <button
+                type="submit"
+                className="auth-submit-btn"
+                disabled={isAuthenticating || !password.trim() || !captchaInput.trim()}
+              >
+                {isAuthenticating ? (
+                  <>
+                    <RefreshCw size={14} className="spinning-icon" /> Logging In...
+                  </>
+                ) : (
+                  'Log In'
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Bottom Helper Links */}
+        <div className="admin-auth-links">
+          <button
+            type="button"
+            onClick={() => setShowLostPassword(true)}
+            className="auth-lost-link"
+          >
+            Lost your password?
+          </button>
+
+          <Link to="/" className="auth-return-link">
+            &larr; Return to Magπ Education
+          </Link>
+        </div>
+
+        {/* Lost Password Modal Dialog */}
+        {showLostPassword && (
+          <div className="auth-modal-overlay" onClick={() => setShowLostPassword(false)}>
+            <div className="auth-modal-card" onClick={(e) => e.stopPropagation()}>
+              <div className="auth-modal-header">
+                <h3>Admin Credentials Recovery</h3>
+                <button onClick={() => setShowLostPassword(false)} className="auth-modal-close">
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="auth-modal-body">
+                <p>For high-grade enterprise security, master credentials are securely configured on the server environment.</p>
+                <div className="auth-modal-instruction">
+                  <p><strong>To update or recover your credentials:</strong></p>
+                  <ol>
+                    <li>Access your hosting server environment (e.g., Render, Railway, or local <code>backend/.env</code>).</li>
+                    <li>Update the <code>ADMIN_USERNAME</code> and <code>ADMIN_PASSWORD</code> variables.</li>
+                    <li>Restart the backend service to apply changes immediately.</li>
+                  </ol>
+                  <p className="auth-modal-sub">Need assistance? Reach out directly to your technical admin team at <code>contact@magpiedu.com</code>.</p>
+                </div>
+              </div>
+              <div className="auth-modal-footer">
+                <button onClick={() => setShowLostPassword(false)} className="btn-modal-primary">
+                  Got It
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="admin-page-container">
       {/* Top Dedicated Admin Navigation Bar */}
@@ -358,77 +574,20 @@ export default function AdminPage() {
         </div>
 
         <div className="admin-navbar-right">
-          {isAuthenticated && (
-            <>
-              <button onClick={exportLeadsToCSV} className="btn-admin-nav" title="Export CSV">
-                <Download size={15} /> <span>Export CSV</span>
-              </button>
-              <button onClick={fetchData} className="btn-admin-nav" title="Refresh records">
-                <RefreshCw size={15} className={loading ? 'spinning-icon' : ''} /> <span>Refresh</span>
-              </button>
-              <button onClick={handleLogout} className="btn-admin-nav logout-btn" title="Log out">
-                <Lock size={15} /> <span>Logout</span>
-              </button>
-            </>
-          )}
+          <button onClick={exportLeadsToCSV} className="btn-admin-nav" title="Export CSV">
+            <Download size={15} /> <span>Export CSV</span>
+          </button>
+          <button onClick={fetchData} className="btn-admin-nav" title="Refresh records">
+            <RefreshCw size={15} className={loading ? 'spinning-icon' : ''} /> <span>Refresh</span>
+          </button>
+          <button onClick={handleLogout} className="btn-admin-nav logout-btn" title="Log out">
+            <Lock size={15} /> <span>Logout</span>
+          </button>
         </div>
       </header>
 
-      {/* Security Passkey Lock Screen */}
-      {!isAuthenticated ? (
-        <div className="admin-lock-wrapper">
-          <div className="admin-lock-card">
-            <div className="lock-avatar-shield">
-              <Shield size={36} />
-            </div>
-            <h2>Admin Portal Access</h2>
-            <p>Enter the master security passkey to view student bookings, parent leads, and manage career openings & teacher applications.</p>
-
-            <form onSubmit={handlePinSubmit} className="admin-pin-form">
-              <div className="pin-field-group">
-                <KeyRound size={18} className="pin-field-icon" />
-                <input 
-                  type="password"
-                  placeholder="Enter Admin Security Passkey"
-                  value={pinInput}
-                  disabled={isAuthenticating}
-                  onChange={e => {
-                    setPinInput(e.target.value);
-                    setPinError(false);
-                    setPinErrorMessage('');
-                  }}
-                  className="pin-input"
-                  autoFocus
-                />
-              </div>
-
-              {pinError && (
-                <div className="pin-error-alert">
-                  {pinErrorMessage || '⚠️ Invalid security passkey. Access denied.'}
-                </div>
-              )}
-
-              <button type="submit" className="btn-unlock-submit" disabled={isAuthenticating || !pinInput.trim()}>
-                {isAuthenticating ? (
-                  <>
-                    <RefreshCw size={17} className="spinning-icon" /> Verifying...
-                  </>
-                ) : (
-                  <>
-                    <Unlock size={17} /> Unlock Portal
-                  </>
-                )}
-              </button>
-            </form>
-
-            <Link to="/" className="back-to-site-link">
-              ← Return to Public Website
-            </Link>
-          </div>
-        </div>
-      ) : (
-        /* Main Logged-In Dashboard */
-        <main className="admin-page-main">
+      {/* Main Logged-In Dashboard */}
+      <main className="admin-page-main">
           <div className="admin-card-surface">
             {/* Control Strip & Tabs */}
             <div className="admin-control-strip">
@@ -829,7 +988,6 @@ export default function AdminPage() {
             </div>
           </div>
         </main>
-      )}
 
       {/* Career Opening Add / Edit Modal */}
       {isJobModalOpen && (
