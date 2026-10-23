@@ -88,6 +88,16 @@ export const api = {
   },
 
   /**
+   * Change Admin Security Password
+   */
+  async changePassword(currentPassword, newPassword) {
+    return request('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+  },
+
+  /**
    * Submit a new Trial Booking
    */
   async createBooking(bookingData) {

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { storageService } from '../services/storageService.js';
 
 const ADMIN_USERNAME = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'magpi2026';
 const JWT_SECRET = process.env.JWT_SECRET || 'magpi_jwt_master_secret_key_2026_secure';
 
 export const adminLogin = async (req, res) => {
@@ -15,7 +15,10 @@ export const adminLogin = async (req, res) => {
       });
     }
 
+    const currentCreds = await storageService.getAdminCredentials();
+
     const allowedUsernames = [
+      currentCreds.username,
       ADMIN_USERNAME,
       'admin',
       'magpi',
@@ -34,7 +37,7 @@ export const adminLogin = async (req, res) => {
       }
     }
 
-    if (password !== ADMIN_PASSWORD) {
+    if (password !== currentCreds.password) {
       return res.status(401).json({
         success: false,
         error: 'Invalid username or password.'
@@ -74,4 +77,46 @@ export const verifySession = async (req, res) => {
     authenticated: true,
     role: req.admin?.role || 'admin'
   });
+};
+
+export const changeAdminPassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please enter both current and new password.'
+      });
+    }
+
+    if (newPassword.trim().length < 6) {
+      return res.status(400).json({
+        success: false,
+        error: 'New password must be at least 6 characters long.'
+      });
+    }
+
+    const currentCreds = await storageService.getAdminCredentials();
+
+    if (currentPassword !== currentCreds.password) {
+      return res.status(401).json({
+        success: false,
+        error: 'Current password is incorrect. Verification failed.'
+      });
+    }
+
+    await storageService.updateAdminPassword(newPassword.trim());
+
+    return res.json({
+      success: true,
+      message: 'Admin security password changed successfully.'
+    });
+  } catch (error) {
+    console.error('Change password error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to update admin password on server.'
+    });
+  }
 };

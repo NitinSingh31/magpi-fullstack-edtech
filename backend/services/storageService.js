@@ -5,6 +5,7 @@ import { Booking } from '../models/Booking.js';
 import { Inquiry } from '../models/Inquiry.js';
 import { CareerOpening } from '../models/CareerOpening.js';
 import { FacultyApplication } from '../models/FacultyApplication.js';
+import { AdminCredential } from '../models/AdminCredential.js';
 import { isDatabaseConnected } from '../config/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,6 +16,7 @@ const BOOKINGS_FILE = path.join(DATA_DIR, 'bookings.json');
 const INQUIRIES_FILE = path.join(DATA_DIR, 'inquiries.json');
 const CAREERS_FILE = path.join(DATA_DIR, 'careers.json');
 const APPLICATIONS_FILE = path.join(DATA_DIR, 'applications.json');
+const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
 
 const DEFAULT_CAREERS = [
   {
@@ -296,5 +298,70 @@ export const storageService = {
       }
       return null;
     }
+  },
+
+  async getAdminCredentials() {
+    const fallbackPassword = process.env.ADMIN_PASSWORD || 'magpi2026';
+    const defaultUser = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
+
+    // 1. Check MongoDB Atlas
+    if (isDatabaseConnected()) {
+      try {
+        const doc = await AdminCredential.findOne({ username: 'admin' }).lean();
+        if (doc && doc.password) {
+          return { username: doc.username, password: doc.password };
+        }
+      } catch (err) {
+        console.warn('[Storage] Could not fetch admin credentials from MongoDB:', err.message);
+      }
+    }
+
+    // 2. Check local JSON fallback
+    try {
+      if (fs.existsSync(ADMIN_FILE)) {
+        const data = JSON.parse(fs.readFileSync(ADMIN_FILE, 'utf-8'));
+        if (data && data.password) {
+          return { username: data.username || defaultUser, password: data.password };
+        }
+      }
+    } catch (err) {
+      console.warn('[Storage] Could not read admin.json:', err.message);
+    }
+
+    // 3. Fallback to environment variables
+    return { username: defaultUser, password: fallbackPassword };
+  },
+
+  async updateAdminPassword(newPassword) {
+    const defaultUser = 'admin';
+
+    // 1. Save to MongoDB Atlas if connected
+    if (isDatabaseConnected()) {
+      try {
+        await AdminCredential.findOneAndUpdate(
+          { username: defaultUser },
+          { password: newPassword, updatedAt: new Date() },
+          { upsert: true, new: true }
+        );
+      } catch (err) {
+        console.warn('[Storage] Failed to update admin in MongoDB:', err.message);
+      }
+    }
+
+    // 2. Save to local fallback JSON
+    try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+      fs.writeFileSync(
+        ADMIN_FILE,
+        JSON.stringify({ username: defaultUser, password: newPassword, updatedAt: new Date().toISOString() }, null, 2),
+        'utf-8'
+      );
+    } catch (err) {
+      console.warn('[Storage] Failed to write admin.json:', err.message);
+    }
+
+    return true;
   }
 };

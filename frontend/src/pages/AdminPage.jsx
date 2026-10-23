@@ -77,6 +77,20 @@ export default function AdminPage() {
   });
   const [savingJob, setSavingJob] = useState(false);
 
+  // Change Password Modal State
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [passwordFormData, setPasswordFormData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordModalError, setPasswordModalError] = useState('');
+  const [passwordModalSuccess, setPasswordModalSuccess] = useState('');
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
   const generateCaptcha = () => {
     const d1 = Math.floor(Math.random() * 9) + 1;
     const d2 = Math.floor(Math.random() * 10);
@@ -205,6 +219,57 @@ export default function AdminPage() {
     localStorage.removeItem('magpi_admin_auth');
     setPassword('');
     generateCaptcha();
+  };
+
+  const handleChangePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPasswordModalError('');
+    setPasswordModalSuccess('');
+
+    const { currentPassword, newPassword, confirmPassword } = passwordFormData;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordModalError('All password fields are required.');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setPasswordModalError('New password must be at least 6 characters long.');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordModalError('New password and confirmation password do not match.');
+      return;
+    }
+
+    if (currentPassword === newPassword) {
+      setPasswordModalError('New password must be different from your current password.');
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    try {
+      const res = await api.changePassword(currentPassword, newPassword);
+      if (res.success) {
+        setPasswordModalSuccess('Security passkey updated successfully!');
+        setPasswordFormData({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        });
+        setTimeout(() => {
+          setIsPasswordModalOpen(false);
+          setPasswordModalSuccess('');
+        }, 2000);
+      } else {
+        setPasswordModalError(res.error || 'Failed to update passkey.');
+      }
+    } catch (err) {
+      setPasswordModalError(err.message || 'Failed to update security passkey.');
+    } finally {
+      setIsUpdatingPassword(false);
+    }
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -579,6 +644,18 @@ export default function AdminPage() {
           </button>
           <button onClick={fetchData} className="btn-admin-nav" title="Refresh records">
             <RefreshCw size={15} className={loading ? 'spinning-icon' : ''} /> <span>Refresh</span>
+          </button>
+          <button 
+            onClick={() => {
+              setPasswordModalError('');
+              setPasswordModalSuccess('');
+              setPasswordFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+              setIsPasswordModalOpen(true);
+            }} 
+            className="btn-admin-nav btn-pw-nav" 
+            title="Change Admin Security Passkey"
+          >
+            <KeyRound size={15} /> <span>Change Password</span>
           </button>
           <button onClick={handleLogout} className="btn-admin-nav logout-btn" title="Log out">
             <Lock size={15} /> <span>Logout</span>
@@ -1103,6 +1180,149 @@ export default function AdminPage() {
                 >
                   {savingJob ? <RefreshCw size={16} className="spinning-icon" /> : <Sparkles size={16} />}
                   <span>{editingJob ? 'Update Opening' : 'Save Opening'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Change Password Modal Dialog */}
+      {isPasswordModalOpen && (
+        <div className="auth-modal-overlay" onClick={() => setIsPasswordModalOpen(false)}>
+          <div className="admin-pw-modal-dialog" onClick={e => e.stopPropagation()}>
+            <div className="admin-pw-modal-header">
+              <div className="admin-pw-header-title">
+                <KeyRound size={18} className="gold-key-icon" />
+                <h3>Change Admin Passkey</h3>
+              </div>
+              <button 
+                onClick={() => setIsPasswordModalOpen(false)} 
+                className="admin-pw-modal-close"
+                aria-label="Close dialog"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleChangePasswordSubmit} className="admin-pw-form">
+              <p className="admin-pw-subtitle">
+                Update your master management portal password. Once changed, this will be saved securely and used for future logins.
+              </p>
+
+              {passwordModalError && (
+                <div className="admin-pw-alert error">
+                  <AlertCircle size={15} />
+                  <span>{passwordModalError}</span>
+                </div>
+              )}
+
+              {passwordModalSuccess && (
+                <div className="admin-pw-alert success">
+                  <CheckCircle2 size={15} />
+                  <span>{passwordModalSuccess}</span>
+                </div>
+              )}
+
+              <div className="admin-pw-field">
+                <label>Current Password *</label>
+                <div className="admin-pw-input-wrap">
+                  <input
+                    type={showCurrentPassword ? 'text' : 'password'}
+                    required
+                    placeholder="Enter current password"
+                    value={passwordFormData.currentPassword}
+                    onChange={e => {
+                      setPasswordFormData({ ...passwordFormData, currentPassword: e.target.value });
+                      setPasswordModalError('');
+                    }}
+                    disabled={isUpdatingPassword}
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    className="admin-pw-eye"
+                    tabIndex={-1}
+                  >
+                    {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="admin-pw-field">
+                <label>New Password *</label>
+                <div className="admin-pw-input-wrap">
+                  <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    required
+                    placeholder="Enter new password (min. 6 characters)"
+                    value={passwordFormData.newPassword}
+                    onChange={e => {
+                      setPasswordFormData({ ...passwordFormData, newPassword: e.target.value });
+                      setPasswordModalError('');
+                    }}
+                    disabled={isUpdatingPassword}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="admin-pw-eye"
+                    tabIndex={-1}
+                  >
+                    {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="admin-pw-field">
+                <label>Confirm New Password *</label>
+                <div className="admin-pw-input-wrap">
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    required
+                    placeholder="Confirm new password"
+                    value={passwordFormData.confirmPassword}
+                    onChange={e => {
+                      setPasswordFormData({ ...passwordFormData, confirmPassword: e.target.value });
+                      setPasswordModalError('');
+                    }}
+                    disabled={isUpdatingPassword}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="admin-pw-eye"
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="admin-pw-actions">
+                <button
+                  type="button"
+                  onClick={() => setIsPasswordModalOpen(false)}
+                  className="btn-pw-cancel"
+                  disabled={isUpdatingPassword}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn-pw-save"
+                  disabled={isUpdatingPassword}
+                >
+                  {isUpdatingPassword ? (
+                    <>
+                      <RefreshCw size={15} className="spinning-icon" /> Saving...
+                    </>
+                  ) : (
+                    <>
+                      <KeyRound size={15} /> Update Password
+                    </>
+                  )}
                 </button>
               </div>
             </form>
