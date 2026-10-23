@@ -53,27 +53,6 @@ export default function ContactPage({ onOpenDemo }) {
 
   const offices = [
     {
-      region: "United Arab Emirates & GCC Desk",
-      city: "Dubai, UAE",
-      address: "Downtown Educational District, Level 14",
-      hours: "9:00 AM – 9:00 PM GST",
-      phone: "+971 4 876 5432"
-    },
-    {
-      region: "United Kingdom & Europe Desk",
-      city: "London, UK",
-      address: "Holborn Science & Technology Hub, WC2A",
-      hours: "8:30 AM – 7:30 PM BST",
-      phone: "+44 20 7946 0921"
-    },
-    {
-      region: "Singapore & Southeast Asia Desk",
-      city: "Singapore",
-      address: "Marina Bay Learning Tower, 018981",
-      hours: "9:00 AM – 8:30 PM SGT",
-      phone: "+65 6789 0123"
-    },
-    {
       region: "India & Global Operations Hub",
       city: "Ludhiana, Punjab, India",
       address: "7 min Mahaveer Jain Colony, Puneet Nagar, Ludhiana 141007",
@@ -141,7 +120,7 @@ export default function ContactPage({ onOpenDemo }) {
               <div className="feature-strip-icon"><Clock size={22} /></div>
               <div>
                 <strong>Active Support Hours</strong>
-                <span>Mon – Sun, 8:00 AM – 10:00 PM IST / GST</span>
+                <span>Mon – Sun, 8:00 AM – 10:00 PM IST</span>
               </div>
             </div>
           </div>
@@ -198,7 +177,7 @@ export default function ContactPage({ onOpenDemo }) {
                       <input 
                         type="tel" 
                         required 
-                        placeholder="+971 50 123 4567"
+                        placeholder="+91 90569 99005"
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                       />
@@ -259,9 +238,9 @@ export default function ContactPage({ onOpenDemo }) {
 
             {/* Global Offices Info Column */}
             <div className="contact-info-column">
-              <div className="badge-tag brand">Global Reach</div>
-              <h3>Regional Admissions Nodes</h3>
-              <p>Our educators and counselors operate across five major educational corridors to provide synchronized timezone support.</p>
+              <div className="badge-tag brand">Headquarters</div>
+              <h3>Global Operations Hub</h3>
+              <p>Our central academic counseling team provides synchronized support for students and parents worldwide.</p>
 
               <div className="offices-list">
                 {offices.map((office, idx) => (
@@ -272,11 +251,40 @@ export default function ContactPage({ onOpenDemo }) {
                       <p className="office-address">{office.address}, {office.city}</p>
                       <div className="office-hours-row">
                         <span>🕒 {office.hours}</span>
-                        <span>📞 {office.phone}</span>
+                        <a href={`tel:${office.phone.replace(/\s+/g, '')}`} style={{ color: 'inherit' }}>
+                          📞 {office.phone}
+                        </a>
                       </div>
                     </div>
                   </div>
                 ))}
+              </div>
+
+              <div className="contact-quick-assist-card" style={{
+                marginTop: '1.5rem',
+                background: 'linear-gradient(135deg, rgba(0, 114, 206, 0.06) 0%, rgba(255, 122, 0, 0.06) 100%)',
+                border: '1px solid var(--slate-200)',
+                borderRadius: '18px',
+                padding: '1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, color: 'var(--navy-900)' }}>
+                  <Sparkles size={18} color="var(--primary)" /> Need Immediate Assistance?
+                </div>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--navy-600)', lineHeight: 1.5 }}>
+                  Connect with our senior education counselor on WhatsApp for instant curriculum advisory and free demo class allocation.
+                </p>
+                <a 
+                  href="https://wa.me/919056999005?text=Hi%20Mag%CF%80,%20I%20would%20like%20to%20speak%20with%20an%20academic%20counselor" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn btn-whatsapp"
+                  style={{ alignSelf: 'flex-start', marginTop: '0.25rem' }}
+                >
+                  <MessageCircle size={16} /> Chat on WhatsApp (+91 90569 99005)
+                </a>
               </div>
             </div>
           </div>

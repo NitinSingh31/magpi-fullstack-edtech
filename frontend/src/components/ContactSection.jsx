@@ -121,8 +121,8 @@ export default function ContactSection() {
                   <MapPin size={18} />
                 </div>
                 <div>
-                  <small>Regional Representation</small>
-                  <span>Dubai (UAE) • London (UK) • Singapore • New Delhi (India)</span>
+                  <small>Headquarters</small>
+                  <span>7 min Mahaveer Jain Colony, Puneet Nagar, Ludhiana 141007 (India)</span>
                 </div>
               </div>
             </div>
