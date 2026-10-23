@@ -2,34 +2,40 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import './CourseCatalog.css';
+import { useSiteMedia } from '../context/MediaContext';
 
 const COURSES = [
   {
     id: 'academics',
+    mediaKey: 'course_academic',
     title: 'Academic Subjects',
     image: '/assets/psittacus/course-academic.jpg',
     link: '/online-tuition'
   },
   {
     id: 'reasoning',
+    mediaKey: 'course_reasoning',
     title: 'Reasoning & Aptitude',
     image: '/assets/psittacus/course-reasoning.jpg',
     link: '/reasoning-and-aptitude'
   },
   {
     id: 'coding',
+    mediaKey: 'course_coding',
     title: 'Coding & Programming',
     image: '/assets/psittacus/course-coding.jpg',
     link: '/coding-and-programming'
   },
   {
     id: 'communication',
+    mediaKey: 'course_communication',
     title: 'Communication Skills',
     image: '/assets/psittacus/course-communication.jpg',
     link: '/communication'
   },
   {
     id: 'languages',
+    mediaKey: 'course_languages',
     title: 'Global Languages',
     image: '/assets/psittacus/course-languages.jpg',
     link: '/language-classes'
@@ -37,6 +43,8 @@ const COURSES = [
 ];
 
 export default function CourseCatalog() {
+  const { getMedia } = useSiteMedia();
+
   return (
     <section className="explore-courses-section" id="courses">
       <div className="container">
@@ -52,7 +60,7 @@ export default function CourseCatalog() {
             <div key={course.id} className="psittacus-course-card">
               <div className="course-card-image-wrap">
                 <img 
-                  src={course.image} 
+                  src={getMedia(course.mediaKey, course.image)} 
                   alt={course.title} 
                   className="course-card-img" 
                 />

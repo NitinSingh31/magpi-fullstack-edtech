@@ -29,10 +29,15 @@ import {
   Sparkles,
   Users,
   FileText,
-  AlertCircle
+  AlertCircle,
+  Image,
+  UploadCloud,
+  Check,
+  RotateCcw
 } from 'lucide-react';
 import './AdminPage.css';
 import api from '../services/api.js';
+import { useSiteMedia } from '../context/MediaContext';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -53,9 +58,16 @@ export default function AdminPage() {
   const [showLostPassword, setShowLostPassword] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'inquiries' | 'careers' | 'applications'
+  const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'inquiries' | 'careers' | 'applications' | 'media'
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Media Manager Integration
+  const { mediaItems, updateMedia, resetMedia, refreshMedia } = useSiteMedia();
+  const [mediaSectionFilter, setMediaSectionFilter] = useState('all');
+  const [uploadingMediaKey, setUploadingMediaKey] = useState(null);
+  const [mediaUrlInputs, setMediaUrlInputs] = useState({});
+  const [mediaToast, setMediaToast] = useState(null);
 
   const [bookings, setBookings] = useState([]);
   const [inquiries, setInquiries] = useState([]);
@@ -129,6 +141,11 @@ export default function AdminPage() {
 
       if (applicationsRes.status === 'fulfilled' && applicationsRes.value?.success) {
         setApplications(applicationsRes.value.data || []);
+      }
+
+      // Refresh dynamic media slots
+      if (typeof refreshMedia === 'function') {
+        refreshMedia();
       }
     } catch (err) {
       console.warn('Backend not reachable:', err);
@@ -391,10 +408,15 @@ export default function AdminPage() {
       careers.forEach(c => {
         csvContent += `"${c.title || ''}","${c.type || ''}","${c.location || ''}","${c.compensation || ''}","${c.boards || ''}","${(c.requirements || '').replace(/"/g, '""')}","${c.isActive !== false ? 'Active' : 'Paused'}","${c.createdAt ? new Date(c.createdAt).toISOString() : ''}"\n`;
       });
-    } else {
+    } else if (activeTab === 'applications') {
       csvContent += "Candidate Name,Email,Phone,Role Applied,Experience,Qualification,Subject,LinkedIn,Resume File,Status,Date\n";
       applications.forEach(a => {
         csvContent += `"${a.name || ''}","${a.email || ''}","${a.phone || ''}","${a.role || ''}","${a.experience || ''}","${a.qualification || ''}","${a.subject || ''}","${a.linkedin || ''}","${a.resume?.fileName || 'None'}","${a.status || 'New'}","${a.createdAt ? new Date(a.createdAt).toISOString() : ''}"\n`;
+      });
+    } else if (activeTab === 'media') {
+      csvContent += "Key,Label,Section,Status,Active URL,Last Updated\n";
+      mediaItems.forEach(m => {
+        csvContent += `"${m.key}","${m.label}","${m.section}","${m.isCustom ? 'Custom Upload' : 'Default'}","${m.activeUrl}","${m.updatedAt ? new Date(m.updatedAt).toISOString() : ''}"\n`;
       });
     }
 
@@ -449,6 +471,118 @@ export default function AdminPage() {
     a.qualification?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     a.notes?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Filter Media Slots
+  const filteredMedia = mediaItems.filter(m => {
+    const matchesSection = mediaSectionFilter === 'all' || m.section === mediaSectionFilter;
+    const matchesSearch = !searchTerm || 
+      m.label?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.key?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.section?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSection && matchesSearch;
+  });
+
+  const showMediaToast = (type, message) => {
+    setMediaToast({ type, message });
+    setTimeout(() => setMediaToast(null), 4000);
+  };
+
+  const compressImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        if (file.type === 'image/svg+xml' || file.size < 120000) {
+          return resolve(event.target.result);
+        }
+        const img = new window.Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const maxDim = 1600;
+          let { width, height } = img;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          resolve(canvas.toDataURL(mime, 0.88));
+        };
+        img.onerror = reject;
+      };
+      reader.onerror = reject;
+    });
+  };
+
+  const handleFileUpload = async (slotKey, e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showMediaToast('error', 'Please select a valid image file (PNG, JPG, WebP, SVG).');
+      return;
+    }
+
+    if (file.size > 12 * 1024 * 1024) {
+      showMediaToast('error', 'Image file is too large. Please select an image under 12MB.');
+      return;
+    }
+
+    setUploadingMediaKey(slotKey);
+    try {
+      const compressedDataUrl = await compressImage(file);
+      await updateMedia(slotKey, compressedDataUrl);
+      showMediaToast('success', 'Image published successfully! Live across the website now.');
+    } catch (err) {
+      showMediaToast('error', 'Failed to publish image: ' + err.message);
+    } finally {
+      setUploadingMediaKey(null);
+      e.target.value = '';
+    }
+  };
+
+  const handleUrlSave = async (slotKey) => {
+    const url = (mediaUrlInputs[slotKey] || '').trim();
+    if (!url) {
+      showMediaToast('error', 'Please enter a valid image web URL.');
+      return;
+    }
+    setUploadingMediaKey(slotKey);
+    try {
+      await updateMedia(slotKey, url);
+      showMediaToast('success', 'Image URL saved! Live across the website now.');
+      setMediaUrlInputs(prev => ({ ...prev, [slotKey]: '' }));
+    } catch (err) {
+      showMediaToast('error', 'Failed to save image URL: ' + err.message);
+    } finally {
+      setUploadingMediaKey(null);
+    }
+  };
+
+  const handleResetMedia = async (slot) => {
+    if (!window.confirm(`Reset "${slot.label}" back to original default image?`)) {
+      return;
+    }
+    setUploadingMediaKey(slot.key);
+    try {
+      await resetMedia(slot.key);
+      showMediaToast('success', `"${slot.label}" reset to default system asset.`);
+    } catch (err) {
+      showMediaToast('error', 'Failed to reset image: ' + err.message);
+    } finally {
+      setUploadingMediaKey(null);
+    }
+  };
 
   if (!isAuthenticated) {
     return (
@@ -701,6 +835,18 @@ export default function AdminPage() {
                   <span>Faculty Applications</span>
                   <span className="tab-badge">{applications.length}</span>
                 </button>
+                <button 
+                  className={`tab-pill-btn ${activeTab === 'media' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('media')}
+                >
+                  <Image size={16} />
+                  <span>Media & Banners</span>
+                  <span className="tab-badge">
+                    {mediaItems.filter(m => m.isCustom).length > 0 
+                      ? `${mediaItems.filter(m => m.isCustom).length} Custom` 
+                      : mediaItems.length}
+                  </span>
+                </button>
               </div>
 
               {activeTab === 'bookings' && (
@@ -712,6 +858,20 @@ export default function AdminPage() {
                       onClick={() => setStatusFilter(st)}
                     >
                       {st.charAt(0).toUpperCase() + st.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {activeTab === 'media' && (
+                <div className="status-pills-row">
+                  {['all', 'General & Branding', 'Home Page', 'Skill Courses'].map(sec => (
+                    <button
+                      key={sec}
+                      className={`status-pill-opt ${mediaSectionFilter === sec ? 'active' : ''}`}
+                      onClick={() => setMediaSectionFilter(sec)}
+                    >
+                      {sec === 'all' ? 'All Sections' : sec}
                     </button>
                   ))}
                 </div>
@@ -731,7 +891,9 @@ export default function AdminPage() {
                         ? "Search by name, email, phone, message..." 
                         : activeTab === 'careers'
                           ? "Search job openings by title, curriculum, location..."
-                          : "Search candidate name, email, phone, role, subjects, qualifications..."
+                          : activeTab === 'applications'
+                            ? "Search candidate name, email, phone, role, subjects, qualifications..."
+                            : "Search media slots by title, section, key..."
                   }
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
@@ -748,7 +910,9 @@ export default function AdminPage() {
                         ? filteredInquiries.length 
                         : activeTab === 'careers'
                           ? filteredCareers.length
-                          : filteredApplications.length}
+                          : activeTab === 'applications'
+                            ? filteredApplications.length
+                            : filteredMedia.length}
                   </strong> records
                 </div>
 
@@ -961,7 +1125,7 @@ export default function AdminPage() {
                     ))}
                   </div>
                 )
-              ) : (
+              ) : activeTab === 'applications' ? (
                 /* Faculty Applications Tab */
                 filteredApplications.length === 0 ? (
                   <div className="admin-state-view">
@@ -1061,6 +1225,127 @@ export default function AdminPage() {
                     ))}
                   </div>
                 )
+              ) : (
+                /* MEDIA & BANNERS MANAGER TAB */
+                <div className="admin-media-manager-wrap">
+                  <div className="admin-media-intro-banner">
+                    <div className="media-intro-text">
+                      <h4>Self-Serve Website Media & Banner Manager</h4>
+                      <p>
+                        Upload custom logos, student banners, and course covers directly from your laptop or phone, or paste an image URL. 
+                        Published images are live immediately across the entire website.
+                      </p>
+                    </div>
+                    {mediaToast && (
+                      <div className={`media-inline-toast ${mediaToast.type}`}>
+                        {mediaToast.type === 'success' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+                        <span>{mediaToast.message}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {filteredMedia.length === 0 ? (
+                    <div className="admin-state-view">
+                      <Image size={36} color="#94A3B8" />
+                      <p>No media slots match your current filter.</p>
+                    </div>
+                  ) : (
+                    <div className="admin-media-grid">
+                      {filteredMedia.map(slot => (
+                        <div key={slot.key} className={`admin-media-card ${slot.isCustom ? 'custom-active' : ''}`}>
+                          <div className="media-card-top">
+                            <div className="media-card-title-group">
+                              <span className="media-card-section-tag">{slot.section}</span>
+                              <h4 className="media-card-label">{slot.label}</h4>
+                            </div>
+                            <span className={`media-status-badge ${slot.isCustom ? 'custom' : 'default'}`}>
+                              {slot.isCustom ? (
+                                <>
+                                  <Check size={12} /> Custom Active
+                                </>
+                              ) : (
+                                'Default Asset'
+                              )}
+                            </span>
+                          </div>
+
+                          <div className="media-preview-box">
+                            <img 
+                              src={slot.activeUrl} 
+                              alt={slot.label} 
+                              className="media-preview-img"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = slot.defaultUrl;
+                              }}
+                            />
+                            {uploadingMediaKey === slot.key && (
+                              <div className="media-preview-loading-overlay">
+                                <RefreshCw size={24} className="spinning-icon" />
+                                <span>Publishing Image...</span>
+                              </div>
+                            )}
+                          </div>
+
+                          <p className="media-card-desc">{slot.description}</p>
+
+                          <div className="media-card-actions">
+                            <label className="btn-media-upload">
+                              <input 
+                                type="file" 
+                                accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                                onChange={(e) => handleFileUpload(slot.key, e)}
+                                disabled={uploadingMediaKey === slot.key}
+                                style={{ display: 'none' }}
+                              />
+                              <UploadCloud size={14} />
+                              <span>{slot.isCustom ? 'Replace Image' : 'Upload Image'}</span>
+                            </label>
+
+                            <div className="media-url-input-group">
+                              <input 
+                                type="url" 
+                                placeholder="Or paste image URL..."
+                                value={mediaUrlInputs[slot.key] || ''}
+                                onChange={(e) => setMediaUrlInputs({ ...mediaUrlInputs, [slot.key]: e.target.value })}
+                                disabled={uploadingMediaKey === slot.key}
+                                className="media-url-input"
+                              />
+                              <button 
+                                type="button"
+                                onClick={() => handleUrlSave(slot.key)}
+                                disabled={uploadingMediaKey === slot.key || !(mediaUrlInputs[slot.key] || '').trim()}
+                                className="btn-media-save-url"
+                                title="Save Image URL"
+                              >
+                                Save
+                              </button>
+                            </div>
+
+                            {slot.isCustom && (
+                              <button 
+                                type="button"
+                                onClick={() => handleResetMedia(slot)}
+                                disabled={uploadingMediaKey === slot.key}
+                                className="btn-media-reset"
+                                title="Reset back to default image"
+                              >
+                                <RotateCcw size={13} />
+                                <span>Reset to Default</span>
+                              </button>
+                            )}
+                          </div>
+
+                          {slot.updatedAt && (
+                            <div className="media-card-timestamp">
+                              Last updated: {new Date(slot.updatedAt).toLocaleDateString()} at {new Date(slot.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </div>

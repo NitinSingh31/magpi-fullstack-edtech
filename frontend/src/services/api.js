@@ -203,6 +203,32 @@ export const api = {
       method: 'PATCH',
       body: JSON.stringify({ status })
     });
+  },
+
+  /**
+   * Retrieve all website media slots and active images (Public / Cached)
+   */
+  async getSiteMedia() {
+    return request('/media');
+  },
+
+  /**
+   * Update / upload an image for a specific media slot (Admin)
+   */
+  async updateSiteMedia(key, imageUrl) {
+    return request(`/media/${encodeURIComponent(key)}`, {
+      method: 'PUT',
+      body: JSON.stringify({ imageUrl })
+    });
+  },
+
+  /**
+   * Reset a media slot back to its default system asset (Admin)
+   */
+  async resetSiteMedia(key) {
+    return request(`/media/${encodeURIComponent(key)}/reset`, {
+      method: 'POST'
+    });
   }
 };
 

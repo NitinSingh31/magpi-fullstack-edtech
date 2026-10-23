@@ -18,6 +18,7 @@ import AptitudePage from './pages/AptitudePage';
 import CareersPage from './pages/CareersPage';
 import ContactPage from './pages/ContactPage';
 import AdminPage from './pages/AdminPage';
+import { MediaProvider } from './context/MediaContext';
 
 function AppContent() {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
@@ -89,8 +90,10 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <AppContent />
+      <MediaProvider>
+        <ScrollToTop />
+        <AppContent />
+      </MediaProvider>
     </BrowserRouter>
   );
 }

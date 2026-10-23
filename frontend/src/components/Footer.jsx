@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, ChevronUp } from 'lucide-react';
 import './Footer.css';
+import { useSiteMedia } from '../context/MediaContext';
 
 export default function Footer() {
+  const { getMedia } = useSiteMedia();
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -16,7 +18,7 @@ export default function Footer() {
           <div className="footer-col brand-col">
             <Link to="/" className="footer-logo-link">
               <img 
-                src="/assets/magpi-logo.png" 
+                src={getMedia('brand_logo', '/assets/magpi-logo.png')} 
                 alt="Magπ" 
                 className="footer-logo-img" 
               />

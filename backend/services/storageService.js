@@ -6,6 +6,7 @@ import { Inquiry } from '../models/Inquiry.js';
 import { CareerOpening } from '../models/CareerOpening.js';
 import { FacultyApplication } from '../models/FacultyApplication.js';
 import { AdminCredential } from '../models/AdminCredential.js';
+import { SiteMedia } from '../models/SiteMedia.js';
 import { isDatabaseConnected } from '../config/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,6 +18,80 @@ const INQUIRIES_FILE = path.join(DATA_DIR, 'inquiries.json');
 const CAREERS_FILE = path.join(DATA_DIR, 'careers.json');
 const APPLICATIONS_FILE = path.join(DATA_DIR, 'applications.json');
 const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
+const MEDIA_FILE = path.join(DATA_DIR, 'media.json');
+
+export const DEFAULT_MEDIA_ITEMS = [
+  {
+    key: 'brand_logo',
+    label: 'Website Brand Logo',
+    section: 'General & Branding',
+    description: 'Header logo, sticky navbar, footer, and admin management portal. Recommended: Transparent PNG (approx. 200x60px).',
+    defaultUrl: '/assets/magpi-logo.png'
+  },
+  {
+    key: 'home_hero',
+    label: 'Home Page Hero Students Banner',
+    section: 'Home Page',
+    description: 'Main visual banner on the home page hero section. Recommended: High-res landscape image (approx. 1200x800px).',
+    defaultUrl: '/assets/psittacus/hero-students.jpg'
+  },
+  {
+    key: 'stats_student',
+    label: 'Global Stats Student Avatar',
+    section: 'Home Page',
+    description: 'Student avatar displayed alongside global stats (98% Score Improvement). Recommended: Transparent PNG (approx. 400x500px).',
+    defaultUrl: '/assets/psittacus/stats-student.png'
+  },
+  {
+    key: 'cta_explore',
+    label: 'Dual CTA: Explore Tuitions Card',
+    section: 'Home Page',
+    description: 'Illustration for "Experience the Magπ Advantage" 1-on-1 tutoring card.',
+    defaultUrl: '/assets/psittacus/cta-explore.png'
+  },
+  {
+    key: 'cta_enroll',
+    label: 'Dual CTA: Enroll in Courses Card',
+    section: 'Home Page',
+    description: 'Illustration for "Expand Horizons with Skill-Based Learning" card.',
+    defaultUrl: '/assets/psittacus/cta-enroll.png'
+  },
+  {
+    key: 'course_academic',
+    label: 'Course Banner: Academic Tutoring',
+    section: 'Skill Courses',
+    description: 'Banner for IGCSE, IB DP, AS/A-Level & SABIS board tutoring.',
+    defaultUrl: '/assets/psittacus/course-academic.jpg'
+  },
+  {
+    key: 'course_coding',
+    label: 'Course Banner: Coding & Programming',
+    section: 'Skill Courses',
+    description: 'Banner for Python, Web Dev, Scratch, AI & Robotics classes.',
+    defaultUrl: '/assets/psittacus/course-coding.jpg'
+  },
+  {
+    key: 'course_communication',
+    label: 'Course Banner: Communication Skills',
+    section: 'Skill Courses',
+    description: 'Banner for Public Speaking, Debating, and English Fluency.',
+    defaultUrl: '/assets/psittacus/course-communication.jpg'
+  },
+  {
+    key: 'course_languages',
+    label: 'Course Banner: Global Languages',
+    section: 'Skill Courses',
+    description: 'Banner for French, Spanish, German & Mandarin courses.',
+    defaultUrl: '/assets/psittacus/course-languages.jpg'
+  },
+  {
+    key: 'course_reasoning',
+    label: 'Course Banner: Reasoning & Aptitude',
+    section: 'Skill Courses',
+    description: 'Banner for Mental Math, Olympiads, and Critical Thinking.',
+    defaultUrl: '/assets/psittacus/course-reasoning.jpg'
+  }
+];
 
 const DEFAULT_CAREERS = [
   {
@@ -363,5 +438,146 @@ export const storageService = {
     }
 
     return true;
+  },
+
+  /**
+   * Retrieve all website media slots merged with active database / JSON customizations
+   */
+  async getSiteMedia() {
+    let savedMediaMap = {};
+
+    // 1. Try fetching from MongoDB Atlas
+    if (isDatabaseConnected()) {
+      try {
+        const docs = await SiteMedia.find().lean();
+        docs.forEach(doc => {
+          if (doc.key) {
+            savedMediaMap[doc.key] = doc;
+          }
+        });
+      } catch (err) {
+        console.warn('[Storage] Could not fetch site media from MongoDB:', err.message);
+      }
+    }
+
+    // 2. Try merging from local JSON fallback if MongoDB not connected or empty
+    if (Object.keys(savedMediaMap).length === 0) {
+      try {
+        if (fs.existsSync(MEDIA_FILE)) {
+          const fileData = JSON.parse(fs.readFileSync(MEDIA_FILE, 'utf-8'));
+          if (Array.isArray(fileData)) {
+            fileData.forEach(item => {
+              if (item.key) savedMediaMap[item.key] = item;
+            });
+          } else if (typeof fileData === 'object' && fileData !== null) {
+            savedMediaMap = fileData;
+          }
+        }
+      } catch (err) {
+        console.warn('[Storage] Could not read media.json:', err.message);
+      }
+    }
+
+    // 3. Merge with DEFAULT_MEDIA_ITEMS so all slots are guaranteed to exist
+    const items = DEFAULT_MEDIA_ITEMS.map(def => {
+      const saved = savedMediaMap[def.key] || {};
+      const customUrl = (saved.imageUrl && saved.imageUrl.trim()) ? saved.imageUrl.trim() : '';
+      return {
+        key: def.key,
+        label: saved.label || def.label,
+        section: saved.section || def.section,
+        description: saved.description || def.description,
+        defaultUrl: def.defaultUrl,
+        imageUrl: customUrl,
+        activeUrl: customUrl || def.defaultUrl,
+        isCustom: Boolean(customUrl),
+        updatedAt: saved.updatedAt || null,
+        updatedBy: saved.updatedBy || 'admin'
+      };
+    });
+
+    const map = {};
+    items.forEach(item => {
+      map[item.key] = item.activeUrl;
+    });
+
+    return { items, map };
+  },
+
+  /**
+   * Update or upload custom image for a media slot
+   */
+  async updateSiteMediaItem(key, imageUrl, updatedBy = 'admin') {
+    const cleanKey = String(key).trim().toLowerCase();
+    const cleanUrl = String(imageUrl || '').trim();
+
+    const def = DEFAULT_MEDIA_ITEMS.find(d => d.key === cleanKey) || {
+      key: cleanKey,
+      label: cleanKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+      section: 'Custom',
+      description: '',
+      defaultUrl: cleanUrl
+    };
+
+    const updatePayload = {
+      key: cleanKey,
+      label: def.label,
+      section: def.section,
+      description: def.description,
+      defaultUrl: def.defaultUrl,
+      imageUrl: cleanUrl,
+      updatedAt: new Date(),
+      updatedBy: updatedBy || 'admin'
+    };
+
+    // 1. Update in MongoDB Atlas
+    if (isDatabaseConnected()) {
+      try {
+        await SiteMedia.findOneAndUpdate(
+          { key: cleanKey },
+          updatePayload,
+          { upsert: true, new: true }
+        );
+      } catch (err) {
+        console.warn('[Storage] Failed to update media in MongoDB:', err.message);
+      }
+    }
+
+    // 2. Update in local media.json fallback
+    try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+      let existing = {};
+      if (fs.existsSync(MEDIA_FILE)) {
+        try {
+          existing = JSON.parse(fs.readFileSync(MEDIA_FILE, 'utf-8'));
+          if (Array.isArray(existing)) {
+            const temp = {};
+            existing.forEach(i => { if (i.key) temp[i.key] = i; });
+            existing = temp;
+          }
+        } catch (_) {
+          existing = {};
+        }
+      }
+      existing[cleanKey] = updatePayload;
+      fs.writeFileSync(MEDIA_FILE, JSON.stringify(existing, null, 2), 'utf-8');
+    } catch (err) {
+      console.warn('[Storage] Failed to write media.json:', err.message);
+    }
+
+    return {
+      ...updatePayload,
+      activeUrl: cleanUrl || def.defaultUrl,
+      isCustom: Boolean(cleanUrl)
+    };
+  },
+
+  /**
+   * Reset a media slot back to its default asset
+   */
+  async resetSiteMediaItem(key, updatedBy = 'admin') {
+    return this.updateSiteMediaItem(key, '', updatedBy);
   }
 };

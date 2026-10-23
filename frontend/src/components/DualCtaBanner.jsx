@@ -1,8 +1,11 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import './DualCtaBanner.css';
+import { useSiteMedia } from '../context/MediaContext';
 
 export default function DualCtaBanner({ onOpenDemo }) {
+  const { getMedia } = useSiteMedia();
+
   return (
     <section className="psittacus-dual-cta-section">
       <div className="container">
@@ -11,7 +14,7 @@ export default function DualCtaBanner({ onOpenDemo }) {
           <div className="dual-cta-card">
             <div className="dual-cta-visual">
               <img 
-                src="/assets/psittacus/cta-explore.png" 
+                src={getMedia('cta_explore', '/assets/psittacus/cta-explore.png')} 
                 alt="Explore Our Courses" 
                 className="dual-cta-img" 
               />
@@ -32,7 +35,7 @@ export default function DualCtaBanner({ onOpenDemo }) {
           <div className="dual-cta-card">
             <div className="dual-cta-visual">
               <img 
-                src="/assets/psittacus/cta-enroll.png" 
+                src={getMedia('cta_enroll', '/assets/psittacus/cta-enroll.png')} 
                 alt="Book A Free Demo" 
                 className="dual-cta-img" 
               />

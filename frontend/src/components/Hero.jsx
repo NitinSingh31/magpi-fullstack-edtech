@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ThumbsUp } from 'lucide-react';
 import './Hero.css';
+import { useSiteMedia } from '../context/MediaContext';
 
 export default function Hero({ onOpenDemo }) {
+  const { getMedia } = useSiteMedia();
   const boards = ['IB', 'IGCSE', 'SABIS', 'A & AS Level'];
   const [currentBoardIndex, setCurrentBoardIndex] = useState(0);
 
@@ -43,7 +45,7 @@ export default function Hero({ onOpenDemo }) {
         <div className="hero-image-col">
           <div className="hero-image-wrapper">
             <img 
-              src="/assets/psittacus/hero-students.jpg" 
+              src={getMedia('home_hero', '/assets/psittacus/hero-students.jpg')} 
               alt="Personalized Online Tuitions for IB IGCSE SABIS" 
               className="hero-students-img"
             />

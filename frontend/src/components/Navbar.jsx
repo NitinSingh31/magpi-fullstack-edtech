@@ -15,8 +15,10 @@ import {
   MessageCircle
 } from 'lucide-react';
 import './Navbar.css';
+import { useSiteMedia } from '../context/MediaContext';
 
 export default function Navbar({ onOpenDemo }) {
+  const { getMedia } = useSiteMedia();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -85,7 +87,7 @@ export default function Navbar({ onOpenDemo }) {
           {/* Brand Logo - Magπ Logo */}
           <Link to="/" className="brand-logo" aria-label="Magπ Home">
             <img 
-              src="/assets/magpi-logo.png" 
+              src={getMedia('brand_logo', '/assets/magpi-logo.png')} 
               alt="Magπ" 
               className="brand-logo-img" 
             />

@@ -1,7 +1,10 @@
 import React from 'react';
 import './StatsBar.css';
+import { useSiteMedia } from '../context/MediaContext';
 
 export default function StatsBar() {
+  const { getMedia } = useSiteMedia();
+
   return (
     <section className="psittacus-stats-banner">
       <div className="container stats-banner-inner">
@@ -28,7 +31,7 @@ export default function StatsBar() {
 
         <div className="stats-student-visual">
           <img 
-            src="/assets/psittacus/stats-student.png" 
+            src={getMedia('stats_student', '/assets/psittacus/stats-student.png')} 
             alt="Student with laptop" 
             className="stats-student-img" 
           />

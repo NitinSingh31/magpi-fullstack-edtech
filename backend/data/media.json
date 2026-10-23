@@ -1,0 +1,12 @@
+{
+  "brand_logo": {
+    "key": "brand_logo",
+    "label": "Website Brand Logo",
+    "section": "General & Branding",
+    "description": "Header logo, sticky navbar, footer, and admin management portal. Recommended: Transparent PNG (approx. 200x60px).",
+    "defaultUrl": "/assets/magpi-logo.png",
+    "imageUrl": "",
+    "updatedAt": "2026-10-23T15:31:53.303Z",
+    "updatedBy": "admin"
+  }
+}
