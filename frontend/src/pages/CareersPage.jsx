@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Briefcase, 
@@ -15,12 +15,57 @@ import {
   ArrowRight
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import api from '../services/api.js';
 import './PagesCommon.css';
 import './CareersPage.css';
+
+const DEFAULT_ROLES = [
+  {
+    title: "Cambridge IGCSE & A-Level Mathematics Faculty",
+    type: "Part-time / Full-time Remote",
+    location: "Global (Remote)",
+    compensation: "$35 - $65 / hr",
+    boards: "CAIE 0580/0607, Edexcel 4MA1, Pure Math P1-P3, Mechanics",
+    requirements: "Minimum 4+ years verified IGCSE/A-Level teaching experience. Examiner experience preferred."
+  },
+  {
+    title: "IB Diploma Physics & Chemistry Specialist (HL)",
+    type: "Remote Flexible",
+    location: "Global (Remote)",
+    compensation: "$40 - $70 / hr",
+    boards: "IB DP Physics HL & Chemistry HL, IA Mentorship",
+    requirements: "Demonstrated track record of guiding students to 6/7 in IB DP. In-depth familiarity with Internal Assessment rubrics."
+  },
+  {
+    title: "Python, AI & Robotics Mentor for Kids",
+    type: "Remote Flexible",
+    location: "Global (Remote)",
+    compensation: "$30 - $55 / hr",
+    boards: "Scratch, Python, Pygame, Web Dev, OpenCV",
+    requirements: "Passionate CS graduate or developer with exceptional communication skills and enthusiasm for mentoring kids aged 8-16."
+  },
+  {
+    title: "Native French / Spanish Language Educator",
+    type: "Remote Flexible",
+    location: "Global (Remote)",
+    compensation: "$30 - $50 / hr",
+    boards: "CEFR A1-B2, DELF Prim/Junior, DELE, IB French/Spanish B",
+    requirements: "Native fluency in French or Spanish. Prior experience preparing students for official CEFR or board language exams."
+  },
+  {
+    title: "Public Speaking, MUN & Debate Coach",
+    type: "Remote Flexible",
+    location: "Global (Remote)",
+    compensation: "$35 - $60 / hr",
+    boards: "WSDC Parliamentary Debate, Harvard MUN, Oratory",
+    requirements: "Former university competitive debater or MUN Best Delegate winner with coaching credentials for youth."
+  }
+];
 
 export default function CareersPage() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [openRoles, setOpenRoles] = useState(DEFAULT_ROLES);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,48 +78,21 @@ export default function CareersPage() {
     notes: ''
   });
 
-  const openRoles = [
-    {
-      title: "Cambridge IGCSE & A-Level Mathematics Faculty",
-      type: "Part-time / Full-time Remote",
-      location: "Global (Remote)",
-      compensation: "$35 - $65 / hr",
-      boards: "CAIE 0580/0607, Edexcel 4MA1, Pure Math P1-P3, Mechanics",
-      requirements: "Minimum 4+ years verified IGCSE/A-Level teaching experience. Examiner experience preferred."
-    },
-    {
-      title: "IB Diploma Physics & Chemistry Specialist (HL)",
-      type: "Remote Flexible",
-      location: "Global (Remote)",
-      compensation: "$40 - $70 / hr",
-      boards: "IB DP Physics HL & Chemistry HL, IA Mentorship",
-      requirements: "Demonstrated track record of guiding students to 6/7 in IB DP. In-depth familiarity with Internal Assessment rubrics."
-    },
-    {
-      title: "Python, AI & Robotics Mentor for Kids",
-      type: "Remote Flexible",
-      location: "Global (Remote)",
-      compensation: "$30 - $55 / hr",
-      boards: "Scratch, Python, Pygame, Web Dev, OpenCV",
-      requirements: "Passionate CS graduate or developer with exceptional communication skills and enthusiasm for mentoring kids aged 8-16."
-    },
-    {
-      title: "Native French / Spanish Language Educator",
-      type: "Remote Flexible",
-      location: "Global (Remote)",
-      compensation: "$30 - $50 / hr",
-      boards: "CEFR A1-B2, DELF Prim/Junior, DELE, IB French/Spanish B",
-      requirements: "Native fluency in French or Spanish. Prior experience preparing students for official CEFR or board language exams."
-    },
-    {
-      title: "Public Speaking, MUN & Debate Coach",
-      type: "Remote Flexible",
-      location: "Global (Remote)",
-      compensation: "$35 - $60 / hr",
-      boards: "WSDC Parliamentary Debate, Harvard MUN, Oratory",
-      requirements: "Former university competitive debater or MUN Best Delegate winner with coaching credentials for youth."
-    }
-  ];
+  useEffect(() => {
+    let isMounted = true;
+    const fetchOpenRoles = async () => {
+      try {
+        const res = await api.getCareerOpenings({ activeOnly: true });
+        if (isMounted && res?.success && Array.isArray(res.data) && res.data.length > 0) {
+          setOpenRoles(res.data);
+        }
+      } catch (err) {
+        console.warn('Could not load live career openings, showing defaults:', err.message);
+      }
+    };
+    fetchOpenRoles();
+    return () => { isMounted = false; };
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

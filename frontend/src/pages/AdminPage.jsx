@@ -15,7 +15,18 @@ import {
   Unlock, 
   KeyRound, 
   Inbox, 
-  ArrowLeft
+  ArrowLeft,
+  Briefcase,
+  Plus,
+  Edit2,
+  Trash2,
+  Eye,
+  EyeOff,
+  X,
+  MapPin,
+  DollarSign,
+  Layers,
+  Sparkles
 } from 'lucide-react';
 import './AdminPage.css';
 import api from '../services/api.js';
@@ -29,20 +40,36 @@ export default function AdminPage() {
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState(false);
 
-  const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'inquiries'
+  const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'inquiries' | 'careers'
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
   const [bookings, setBookings] = useState([]);
   const [inquiries, setInquiries] = useState([]);
+  const [careers, setCareers] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // Career Modal State
+  const [isJobModalOpen, setIsJobModalOpen] = useState(false);
+  const [editingJob, setEditingJob] = useState(null);
+  const [jobFormData, setJobFormData] = useState({
+    title: '',
+    type: 'Part-time / Full-time Remote',
+    location: 'Global (Remote)',
+    compensation: '$35 - $65 / hr',
+    boards: '',
+    requirements: '',
+    isActive: true
+  });
+  const [savingJob, setSavingJob] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [bookingsRes, inquiriesRes] = await Promise.allSettled([
+      const [bookingsRes, inquiriesRes, careersRes] = await Promise.allSettled([
         api.getBookings(),
-        api.getInquiries()
+        api.getInquiries(),
+        api.getCareerOpenings()
       ]);
 
       if (bookingsRes.status === 'fulfilled' && bookingsRes.value?.success) {
@@ -51,6 +78,10 @@ export default function AdminPage() {
 
       if (inquiriesRes.status === 'fulfilled' && inquiriesRes.value?.success) {
         setInquiries(inquiriesRes.value.data || []);
+      }
+
+      if (careersRes.status === 'fulfilled' && careersRes.value?.success) {
+        setCareers(careersRes.value.data || []);
       }
     } catch (err) {
       console.warn('Backend not reachable:', err);
@@ -93,6 +124,88 @@ export default function AdminPage() {
     }
   };
 
+  // --- Career Openings Actions ---
+  const handleOpenAddJob = () => {
+    setEditingJob(null);
+    setJobFormData({
+      title: '',
+      type: 'Part-time / Full-time Remote',
+      location: 'Global (Remote)',
+      compensation: '$35 - $65 / hr',
+      boards: '',
+      requirements: '',
+      isActive: true
+    });
+    setIsJobModalOpen(true);
+  };
+
+  const handleOpenEditJob = (job) => {
+    setEditingJob(job);
+    setJobFormData({
+      title: job.title || '',
+      type: job.type || 'Part-time / Full-time Remote',
+      location: job.location || 'Global (Remote)',
+      compensation: job.compensation || '$35 - $65 / hr',
+      boards: job.boards || '',
+      requirements: job.requirements || '',
+      isActive: job.isActive !== false
+    });
+    setIsJobModalOpen(true);
+  };
+
+  const handleSaveJob = async (e) => {
+    e.preventDefault();
+    if (!jobFormData.title.trim()) {
+      alert('Please provide a job title.');
+      return;
+    }
+    setSavingJob(true);
+    try {
+      if (editingJob) {
+        const res = await api.updateCareerOpening(editingJob._id, jobFormData);
+        if (res.success && res.data) {
+          setCareers(prev => prev.map(c => c._id === editingJob._id ? res.data : c));
+        }
+      } else {
+        const res = await api.createCareerOpening(jobFormData);
+        if (res.success && res.data) {
+          setCareers(prev => [res.data, ...prev]);
+        }
+      }
+      setIsJobModalOpen(false);
+    } catch (err) {
+      alert('Failed to save opening: ' + (err.message || 'Unknown error'));
+    } finally {
+      setSavingJob(false);
+    }
+  };
+
+  const handleToggleJobStatus = async (job) => {
+    const updatedStatus = !job.isActive;
+    try {
+      const res = await api.updateCareerOpening(job._id, { isActive: updatedStatus });
+      if (res.success) {
+        setCareers(prev => prev.map(c => c._id === job._id ? { ...c, isActive: updatedStatus } : c));
+      }
+    } catch (err) {
+      alert('Failed to update opening status: ' + err.message);
+    }
+  };
+
+  const handleDeleteJob = async (job) => {
+    if (!window.confirm(`Are you sure you want to permanently delete "${job.title}"?`)) {
+      return;
+    }
+    try {
+      const res = await api.deleteCareerOpening(job._id);
+      if (res.success) {
+        setCareers(prev => prev.filter(c => c._id !== job._id));
+      }
+    } catch (err) {
+      alert('Failed to delete opening: ' + err.message);
+    }
+  };
+
   const exportLeadsToCSV = () => {
     let csvContent = "data:text/csv;charset=utf-8,";
     
@@ -101,10 +214,15 @@ export default function AdminPage() {
       bookings.forEach(b => {
         csvContent += `"${b.referenceCode || ''}","${b.parentName || ''}","${b.phone || ''}","${b.email || ''}","${b.curriculum || ''}","${b.grade || ''}","${b.subject || ''}","${b.preferredDate || ''}","${b.preferredTime || ''}","${b.tutorPreference || ''}","${b.status || 'Pending'}","${b.createdAt ? new Date(b.createdAt).toISOString() : ''}"\n`;
       });
-    } else {
+    } else if (activeTab === 'inquiries') {
       csvContent += "Name,Phone,Email,Topic/Course,Message,Type,Date\n";
       inquiries.forEach(i => {
         csvContent += `"${i.name || ''}","${i.phone || ''}","${i.email || ''}","${i.course || ''}","${(i.message || '').replace(/"/g, '""')}","${i.type || 'contact'}","${i.createdAt ? new Date(i.createdAt).toISOString() : ''}"\n`;
+      });
+    } else {
+      csvContent += "Title,Type,Location,Compensation,Boards,Requirements,Status,Date\n";
+      careers.forEach(c => {
+        csvContent += `"${c.title || ''}","${c.type || ''}","${c.location || ''}","${c.compensation || ''}","${c.boards || ''}","${(c.requirements || '').replace(/"/g, '""')}","${c.isActive !== false ? 'Active' : 'Paused'}","${c.createdAt ? new Date(c.createdAt).toISOString() : ''}"\n`;
       });
     }
 
@@ -138,6 +256,15 @@ export default function AdminPage() {
     i.phone?.includes(searchTerm) ||
     i.course?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     i.message?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Filter Careers
+  const filteredCareers = careers.filter(c =>
+    c.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.boards?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.requirements?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -180,7 +307,7 @@ export default function AdminPage() {
               <Shield size={36} />
             </div>
             <h2>Admin Portal Access</h2>
-            <p>Enter the master security passkey to view student bookings, parent leads, and inquiries.</p>
+            <p>Enter the master security passkey to view student bookings, parent leads, and manage career openings.</p>
 
             <form onSubmit={handlePinSubmit} className="admin-pin-form">
               <div className="pin-field-group">
@@ -237,6 +364,14 @@ export default function AdminPage() {
                   <span>Inquiries & Messages</span>
                   <span className="tab-badge">{inquiries.length}</span>
                 </button>
+                <button 
+                  className={`tab-pill-btn ${activeTab === 'careers' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('careers')}
+                >
+                  <Briefcase size={16} />
+                  <span>Career Openings</span>
+                  <span className="tab-badge">{careers.length}</span>
+                </button>
               </div>
 
               {activeTab === 'bookings' && (
@@ -254,20 +389,41 @@ export default function AdminPage() {
               )}
             </div>
 
-            {/* Search Toolbar */}
+            {/* Search Toolbar & Action Strip */}
             <div className="admin-search-strip">
               <div className="admin-search-wrapper">
                 <Search size={16} className="search-icon-svg" />
                 <input 
                   type="text"
-                  placeholder={activeTab === 'bookings' ? "Search parent, subject, curriculum, phone, ref code..." : "Search by name, email, phone, message..."}
+                  placeholder={
+                    activeTab === 'bookings' 
+                      ? "Search parent, subject, curriculum, phone, ref code..." 
+                      : activeTab === 'inquiries' 
+                        ? "Search by name, email, phone, message..." 
+                        : "Search job openings by title, curriculum, location, requirements..."
+                  }
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   className="admin-search-input"
                 />
               </div>
-              <div className="admin-record-counter">
-                Showing: <strong>{activeTab === 'bookings' ? filteredBookings.length : filteredInquiries.length}</strong> records
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div className="admin-record-counter">
+                  Showing: <strong>
+                    {activeTab === 'bookings' 
+                      ? filteredBookings.length 
+                      : activeTab === 'inquiries' 
+                        ? filteredInquiries.length 
+                        : filteredCareers.length}
+                  </strong> records
+                </div>
+
+                {activeTab === 'careers' && (
+                  <button onClick={handleOpenAddJob} className="btn-add-opening">
+                    <Plus size={16} /> <span>Add New Opening</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -276,7 +432,7 @@ export default function AdminPage() {
               {loading ? (
                 <div className="admin-state-view">
                   <RefreshCw size={28} className="spinning-icon" />
-                  <p>Fetching records from MongoDB Atlas...</p>
+                  <p>Fetching records from storage...</p>
                 </div>
               ) : activeTab === 'bookings' ? (
                 filteredBookings.length === 0 ? (
@@ -349,7 +505,7 @@ export default function AdminPage() {
                     ))}
                   </div>
                 )
-              ) : (
+              ) : activeTab === 'inquiries' ? (
                 /* Inquiries Tab */
                 filteredInquiries.length === 0 ? (
                   <div className="admin-state-view">
@@ -397,10 +553,206 @@ export default function AdminPage() {
                     ))}
                   </div>
                 )
+              ) : (
+                /* Career Openings Tab */
+                filteredCareers.length === 0 ? (
+                  <div className="admin-state-view">
+                    <Briefcase size={36} color="#94A3B8" />
+                    <p>No career openings found. Click "+ Add New Opening" above to create one.</p>
+                  </div>
+                ) : (
+                  <div className="career-cards-deck">
+                    {filteredCareers.map((job) => (
+                      <div key={job._id} className={`admin-career-card ${job.isActive === false ? 'paused' : ''}`}>
+                        <div className="career-card-top-row">
+                          <div className="career-title-block">
+                            <div className="career-badges-row">
+                              <span className="career-type-pill">{job.type}</span>
+                              <span className={`career-status-pill ${job.isActive !== false ? 'active' : 'paused'}`}>
+                                {job.isActive !== false ? <Eye size={12} /> : <EyeOff size={12} />}
+                                {job.isActive !== false ? 'Active on Website' : 'Paused / Hidden'}
+                              </span>
+                            </div>
+                            <h3 className="career-title-text">{job.title}</h3>
+                          </div>
+
+                          <div className="career-card-actions">
+                            <button 
+                              onClick={() => handleToggleJobStatus(job)} 
+                              className="btn-career-act"
+                              title={job.isActive !== false ? "Hide from website" : "Show on website"}
+                            >
+                              {job.isActive !== false ? <EyeOff size={14} /> : <Eye size={14} />}
+                              <span>{job.isActive !== false ? 'Pause' : 'Activate'}</span>
+                            </button>
+                            <button 
+                              onClick={() => handleOpenEditJob(job)} 
+                              className="btn-career-act edit-act"
+                              title="Edit role details"
+                            >
+                              <Edit2 size={14} />
+                              <span>Edit</span>
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteJob(job)} 
+                              className="btn-career-act delete-act"
+                              title="Delete opening"
+                            >
+                              <Trash2 size={14} />
+                              <span>Delete</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="career-meta-grid">
+                          <div className="info-tile">
+                            <span className="info-tile-label">Location / Mode</span>
+                            <span className="info-tile-val">📍 {job.location || 'Global (Remote)'}</span>
+                          </div>
+                          <div className="info-tile">
+                            <span className="info-tile-label">Compensation</span>
+                            <span className="info-tile-val" style={{ color: '#0072CE' }}>💰 {job.compensation || 'Flexible'}</span>
+                          </div>
+                          <div className="info-tile">
+                            <span className="info-tile-label">Curriculums & Boards</span>
+                            <span className="info-tile-val">🎯 {job.boards || 'All Boards'}</span>
+                          </div>
+                        </div>
+
+                        {job.requirements && (
+                          <div className="career-requirements-box">
+                            <strong>Requirements:</strong> {job.requirements}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )
               )}
             </div>
           </div>
         </main>
+      )}
+
+      {/* Career Opening Add / Edit Modal */}
+      {isJobModalOpen && (
+        <div className="career-modal-backdrop" onClick={() => setIsJobModalOpen(false)}>
+          <div className="career-modal-dialog" onClick={e => e.stopPropagation()}>
+            <div className="career-modal-header">
+              <h3>{editingJob ? 'Edit Career Opening' : 'Add New Career Opening'}</h3>
+              <button 
+                onClick={() => setIsJobModalOpen(false)} 
+                className="career-modal-close-btn"
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveJob} className="career-form-grid">
+              <div className="form-group">
+                <label>Job Title *</label>
+                <input 
+                  type="text"
+                  required
+                  placeholder="e.g. Cambridge IGCSE & A-Level Mathematics Faculty"
+                  value={jobFormData.title}
+                  onChange={e => setJobFormData({ ...jobFormData, title: e.target.value })}
+                />
+              </div>
+
+              <div className="career-form-row">
+                <div className="form-group">
+                  <label>Employment Type *</label>
+                  <select 
+                    value={jobFormData.type}
+                    onChange={e => setJobFormData({ ...jobFormData, type: e.target.value })}
+                  >
+                    <option value="Part-time / Full-time Remote">Part-time / Full-time Remote</option>
+                    <option value="Remote Flexible">Remote Flexible</option>
+                    <option value="Full-time Remote">Full-time Remote</option>
+                    <option value="Part-time Remote">Part-time Remote</option>
+                    <option value="Contract / Project-based">Contract / Project-based</option>
+                    <option value="On-site / Hybrid">On-site / Hybrid</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Location *</label>
+                  <input 
+                    type="text"
+                    required
+                    placeholder="e.g. Global (Remote) or Ludhiana, India"
+                    value={jobFormData.location}
+                    onChange={e => setJobFormData({ ...jobFormData, location: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="career-form-row">
+                <div className="form-group">
+                  <label>Compensation / Pay Rate</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g. $35 - $65 / hr or ₹6 - ₹10 LPA"
+                    value={jobFormData.compensation}
+                    onChange={e => setJobFormData({ ...jobFormData, compensation: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Display Status on Website</label>
+                  <select 
+                    value={jobFormData.isActive ? 'active' : 'paused'}
+                    onChange={e => setJobFormData({ ...jobFormData, isActive: e.target.value === 'active' })}
+                  >
+                    <option value="active">Active (Visible on Careers Page)</option>
+                    <option value="paused">Paused / Hidden (Draft)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Curriculums & Exam Boards</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. CAIE 0580/0607, Edexcel 4MA1, IB DP Physics HL"
+                  value={jobFormData.boards}
+                  onChange={e => setJobFormData({ ...jobFormData, boards: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Key Requirements & Qualifications *</label>
+                <textarea 
+                  rows="4"
+                  required
+                  placeholder="e.g. Minimum 4+ years verified IGCSE/A-Level teaching experience. Examiner credentials preferred..."
+                  value={jobFormData.requirements}
+                  onChange={e => setJobFormData({ ...jobFormData, requirements: e.target.value })}
+                ></textarea>
+              </div>
+
+              <div className="career-modal-actions">
+                <button 
+                  type="button" 
+                  onClick={() => setIsJobModalOpen(false)}
+                  className="btn-modal-cancel"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn-modal-save"
+                  disabled={savingJob}
+                >
+                  {savingJob ? <RefreshCw size={16} className="spinning-icon" /> : <Sparkles size={16} />}
+                  <span>{editingJob ? 'Update Opening' : 'Save Opening'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

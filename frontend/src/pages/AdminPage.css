@@ -588,6 +588,339 @@
   100% { transform: rotate(360deg); }
 }
 
+/* ==========================================================================
+   Career Openings Admin Tab Styles
+   ========================================================================== */
+.btn-add-opening {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #0072CE, #0A2540);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 114, 206, 0.2);
+}
+
+.btn-add-opening:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 114, 206, 0.3);
+}
+
+.career-cards-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.admin-career-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1.35rem 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+.admin-career-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.admin-career-card.paused {
+  opacity: 0.82;
+  background: #F8FAFC;
+}
+
+.career-card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.career-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.career-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.career-type-pill {
+  background: #EFF6FF;
+  color: #0072CE;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 114, 206, 0.2);
+}
+
+.career-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.career-status-pill.active {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #6EE7B7;
+}
+
+.career-status-pill.paused {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+
+.career-title-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.career-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-career-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: 1.5px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-career-act:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.btn-career-act.edit-act:hover {
+  border-color: #0072CE;
+  color: #0072CE;
+  background: #EFF6FF;
+}
+
+.btn-career-act.delete-act {
+  color: #DC2626;
+  border-color: #FECACA;
+}
+
+.btn-career-act.delete-act:hover {
+  background: #FEF2F2;
+  border-color: #EF4444;
+}
+
+.career-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.career-requirements-box {
+  background: #F8FAFC;
+  border-left: 3px solid #0072CE;
+  border-radius: 8px;
+  padding: 0.85rem 1.15rem;
+  font-size: 0.875rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+/* Modal Overlay & Dialog */
+.career-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 37, 64, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.career-modal-dialog {
+  background: #FFFFFF;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  padding: 2rem 2.25rem;
+  position: relative;
+}
+
+.career-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.career-modal-header h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0A2540;
+  margin: 0;
+}
+
+.career-modal-close-btn {
+  background: #F1F5F9;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.career-modal-close-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.career-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.career-form-grid .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.career-form-grid label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.career-form-grid input,
+.career-form-grid select,
+.career-form-grid textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid #CBD5E1;
+  font-size: 0.9rem;
+  color: #0F172A;
+  background: #F8FAFC;
+  outline: none;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.career-form-grid input:focus,
+.career-form-grid select:focus,
+.career-form-grid textarea:focus {
+  border-color: #0072CE;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(0, 114, 206, 0.12);
+}
+
+.career-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .career-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.career-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.btn-modal-cancel {
+  background: transparent;
+  border: 1.5px solid #CBD5E1;
+  color: #64748B;
+  padding: 0.7rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-modal-cancel:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.btn-modal-save {
+  background: linear-gradient(135deg, #0072CE, #0A2540);
+  border: none;
+  color: #FFFFFF;
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 12px rgba(0, 114, 206, 0.25);
+}
+
+.btn-modal-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 114, 206, 0.35);
+}
+
 @media (max-width: 768px) {
   .admin-page-navbar {
     padding: 1rem;

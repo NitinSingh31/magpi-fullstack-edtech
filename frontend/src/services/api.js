@@ -92,6 +92,43 @@ export const api = {
    */
   async getInquiries() {
     return request('/inquiries');
+  },
+
+  /**
+   * Retrieve career openings (optional { activeOnly: true })
+   */
+  async getCareerOpenings(params = {}) {
+    const query = params.activeOnly ? '?activeOnly=true' : '';
+    return request(`/careers${query}`);
+  },
+
+  /**
+   * Create a new career opening (Admin)
+   */
+  async createCareerOpening(openingData) {
+    return request('/careers', {
+      method: 'POST',
+      body: JSON.stringify(openingData)
+    });
+  },
+
+  /**
+   * Update an existing career opening (Admin)
+   */
+  async updateCareerOpening(id, updateData) {
+    return request(`/careers/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updateData)
+    });
+  },
+
+  /**
+   * Delete a career opening (Admin)
+   */
+  async deleteCareerOpening(id) {
+    return request(`/careers/${id}`, {
+      method: 'DELETE'
+    });
   }
 };
 
