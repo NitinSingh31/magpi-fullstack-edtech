@@ -921,6 +921,58 @@
   box-shadow: 0 8px 20px rgba(0, 114, 206, 0.35);
 }
 
+.btn-download-resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: linear-gradient(135deg, #0072CE, #0A2540);
+  color: #FFFFFF !important;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 114, 206, 0.25);
+}
+
+.btn-download-resume:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(0, 114, 206, 0.35);
+}
+
+.status-dropdown.new {
+  background: #FEF3C7;
+  color: #92400E;
+  border-color: #FCD34D;
+}
+
+.status-dropdown.reviewed {
+  background: #DBEAFE;
+  color: #1E40AF;
+  border-color: #93C5FD;
+}
+
+.status-dropdown.interview-scheduled,
+.status-dropdown.interview_scheduled {
+  background: #E0E7FF;
+  color: #3730A3;
+  border-color: #C7D2FE;
+}
+
+.status-dropdown.hired {
+  background: #D1FAE5;
+  color: #065F46;
+  border-color: #6EE7B7;
+}
+
+.status-dropdown.rejected {
+  background: #FEE2E2;
+  color: #991B1B;
+  border-color: #FCA5A5;
+}
+
+
 @media (max-width: 768px) {
   .admin-page-navbar {
     padding: 1rem;

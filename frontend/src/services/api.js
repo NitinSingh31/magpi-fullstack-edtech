@@ -129,6 +129,33 @@ export const api = {
     return request(`/careers/${id}`, {
       method: 'DELETE'
     });
+  },
+
+  /**
+   * Submit Faculty Application with Resume (Careers Page)
+   */
+  async submitFacultyApplication(applicationData) {
+    return request('/applications', {
+      method: 'POST',
+      body: JSON.stringify(applicationData)
+    });
+  },
+
+  /**
+   * Retrieve all Faculty Applications (Admin)
+   */
+  async getFacultyApplications() {
+    return request('/applications');
+  },
+
+  /**
+   * Update Faculty Application Status (Admin)
+   */
+  async updateFacultyApplicationStatus(id, status) {
+    return request(`/applications/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
   }
 };
 

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { Booking } from '../models/Booking.js';
 import { Inquiry } from '../models/Inquiry.js';
 import { CareerOpening } from '../models/CareerOpening.js';
+import { FacultyApplication } from '../models/FacultyApplication.js';
 import { isDatabaseConnected } from '../config/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,6 +14,7 @@ const DATA_DIR = path.join(__dirname, '..', 'data');
 const BOOKINGS_FILE = path.join(DATA_DIR, 'bookings.json');
 const INQUIRIES_FILE = path.join(DATA_DIR, 'inquiries.json');
 const CAREERS_FILE = path.join(DATA_DIR, 'careers.json');
+const APPLICATIONS_FILE = path.join(DATA_DIR, 'applications.json');
 
 const DEFAULT_CAREERS = [
   {
@@ -247,6 +249,52 @@ export const storageService = {
       list = list.filter(c => c._id !== id);
       writeLocal(CAREERS_FILE, list);
       return list.length < prevLen;
+    }
+  },
+
+  // --- Faculty Applications ---
+  async createFacultyApplication(payload) {
+    if (isDatabaseConnected()) {
+      const doc = new FacultyApplication(payload);
+      return await doc.save();
+    } else {
+      const list = readLocal(APPLICATIONS_FILE);
+      const newEntry = {
+        _id: 'app_' + Date.now(),
+        ...payload,
+        status: payload.status || 'New',
+        createdAt: new Date().toISOString()
+      };
+      list.unshift(newEntry);
+      writeLocal(APPLICATIONS_FILE, list);
+      return newEntry;
+    }
+  },
+
+  async getFacultyApplications() {
+    if (isDatabaseConnected()) {
+      return await FacultyApplication.find().sort({ createdAt: -1 }).lean();
+    } else {
+      return readLocal(APPLICATIONS_FILE);
+    }
+  },
+
+  async updateFacultyApplicationStatus(id, status) {
+    if (isDatabaseConnected() && !id.startsWith('app_')) {
+      return await FacultyApplication.findByIdAndUpdate(
+        id,
+        { $set: { status } },
+        { new: true }
+      ).lean();
+    } else {
+      const list = readLocal(APPLICATIONS_FILE);
+      const idx = list.findIndex(a => a._id === id);
+      if (idx !== -1) {
+        list[idx] = { ...list[idx], status };
+        writeLocal(APPLICATIONS_FILE, list);
+        return list[idx];
+      }
+      return null;
     }
   }
 };

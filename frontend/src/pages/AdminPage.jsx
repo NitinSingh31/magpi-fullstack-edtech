@@ -26,7 +26,9 @@ import {
   MapPin,
   DollarSign,
   Layers,
-  Sparkles
+  Sparkles,
+  Users,
+  FileText
 } from 'lucide-react';
 import './AdminPage.css';
 import api from '../services/api.js';
@@ -40,13 +42,14 @@ export default function AdminPage() {
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState(false);
 
-  const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'inquiries' | 'careers'
+  const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'inquiries' | 'careers' | 'applications'
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
   const [bookings, setBookings] = useState([]);
   const [inquiries, setInquiries] = useState([]);
   const [careers, setCareers] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Career Modal State
@@ -66,10 +69,11 @@ export default function AdminPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [bookingsRes, inquiriesRes, careersRes] = await Promise.allSettled([
+      const [bookingsRes, inquiriesRes, careersRes, applicationsRes] = await Promise.allSettled([
         api.getBookings(),
         api.getInquiries(),
-        api.getCareerOpenings()
+        api.getCareerOpenings(),
+        api.getFacultyApplications()
       ]);
 
       if (bookingsRes.status === 'fulfilled' && bookingsRes.value?.success) {
@@ -82,6 +86,10 @@ export default function AdminPage() {
 
       if (careersRes.status === 'fulfilled' && careersRes.value?.success) {
         setCareers(careersRes.value.data || []);
+      }
+
+      if (applicationsRes.status === 'fulfilled' && applicationsRes.value?.success) {
+        setApplications(applicationsRes.value.data || []);
       }
     } catch (err) {
       console.warn('Backend not reachable:', err);
@@ -121,6 +129,15 @@ export default function AdminPage() {
     } catch (err) {
       console.error('Failed to update booking status:', err);
       alert('Could not update status. Please ensure your backend is reachable.');
+    }
+  };
+
+  const handleApplicationStatusChange = async (id, newStatus) => {
+    try {
+      await api.updateFacultyApplicationStatus(id, newStatus);
+      setApplications(prev => prev.map(a => a._id === id ? { ...a, status: newStatus } : a));
+    } catch (err) {
+      alert('Failed to update application status: ' + err.message);
     }
   };
 
@@ -219,10 +236,15 @@ export default function AdminPage() {
       inquiries.forEach(i => {
         csvContent += `"${i.name || ''}","${i.phone || ''}","${i.email || ''}","${i.course || ''}","${(i.message || '').replace(/"/g, '""')}","${i.type || 'contact'}","${i.createdAt ? new Date(i.createdAt).toISOString() : ''}"\n`;
       });
-    } else {
+    } else if (activeTab === 'careers') {
       csvContent += "Title,Type,Location,Compensation,Boards,Requirements,Status,Date\n";
       careers.forEach(c => {
         csvContent += `"${c.title || ''}","${c.type || ''}","${c.location || ''}","${c.compensation || ''}","${c.boards || ''}","${(c.requirements || '').replace(/"/g, '""')}","${c.isActive !== false ? 'Active' : 'Paused'}","${c.createdAt ? new Date(c.createdAt).toISOString() : ''}"\n`;
+      });
+    } else {
+      csvContent += "Candidate Name,Email,Phone,Role Applied,Experience,Qualification,Subject,LinkedIn,Resume File,Status,Date\n";
+      applications.forEach(a => {
+        csvContent += `"${a.name || ''}","${a.email || ''}","${a.phone || ''}","${a.role || ''}","${a.experience || ''}","${a.qualification || ''}","${a.subject || ''}","${a.linkedin || ''}","${a.resume?.fileName || 'None'}","${a.status || 'New'}","${a.createdAt ? new Date(a.createdAt).toISOString() : ''}"\n`;
       });
     }
 
@@ -267,6 +289,17 @@ export default function AdminPage() {
     c.requirements?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Filter Applications
+  const filteredApplications = applications.filter(a =>
+    a.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.phone?.includes(searchTerm) ||
+    a.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.qualification?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.notes?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="admin-page-container">
       {/* Top Dedicated Admin Navigation Bar */}
@@ -307,7 +340,7 @@ export default function AdminPage() {
               <Shield size={36} />
             </div>
             <h2>Admin Portal Access</h2>
-            <p>Enter the master security passkey to view student bookings, parent leads, and manage career openings.</p>
+            <p>Enter the master security passkey to view student bookings, parent leads, and manage career openings & teacher applications.</p>
 
             <form onSubmit={handlePinSubmit} className="admin-pin-form">
               <div className="pin-field-group">
@@ -372,6 +405,14 @@ export default function AdminPage() {
                   <span>Career Openings</span>
                   <span className="tab-badge">{careers.length}</span>
                 </button>
+                <button 
+                  className={`tab-pill-btn ${activeTab === 'applications' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('applications')}
+                >
+                  <Users size={16} />
+                  <span>Faculty Applications</span>
+                  <span className="tab-badge">{applications.length}</span>
+                </button>
               </div>
 
               {activeTab === 'bookings' && (
@@ -400,7 +441,9 @@ export default function AdminPage() {
                       ? "Search parent, subject, curriculum, phone, ref code..." 
                       : activeTab === 'inquiries' 
                         ? "Search by name, email, phone, message..." 
-                        : "Search job openings by title, curriculum, location, requirements..."
+                        : activeTab === 'careers'
+                          ? "Search job openings by title, curriculum, location..."
+                          : "Search candidate name, email, phone, role, subjects, qualifications..."
                   }
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
@@ -415,7 +458,9 @@ export default function AdminPage() {
                       ? filteredBookings.length 
                       : activeTab === 'inquiries' 
                         ? filteredInquiries.length 
-                        : filteredCareers.length}
+                        : activeTab === 'careers'
+                          ? filteredCareers.length
+                          : filteredApplications.length}
                   </strong> records
                 </div>
 
@@ -553,7 +598,7 @@ export default function AdminPage() {
                     ))}
                   </div>
                 )
-              ) : (
+              ) : activeTab === 'careers' ? (
                 /* Career Openings Tab */
                 filteredCareers.length === 0 ? (
                   <div className="admin-state-view">
@@ -624,6 +669,106 @@ export default function AdminPage() {
                             <strong>Requirements:</strong> {job.requirements}
                           </div>
                         )}
+                      </div>
+                    ))}
+                  </div>
+                )
+              ) : (
+                /* Faculty Applications Tab */
+                filteredApplications.length === 0 ? (
+                  <div className="admin-state-view">
+                    <Users size={36} color="#94A3B8" />
+                    <p>No faculty applications received yet.</p>
+                  </div>
+                ) : (
+                  <div className="lead-cards-deck">
+                    {filteredApplications.map((app) => (
+                      <div key={app._id} className="admin-lead-row-card">
+                        <div className="lead-row-header">
+                          <div className="lead-row-user">
+                            <div className="lead-user-avatar" style={{ background: '#F0FDF4', color: '#16A34A' }}>
+                              <User size={18} />
+                            </div>
+                            <div>
+                              <span className="lead-user-name">{app.name}</span>
+                              <span className="lead-ref-pill" style={{ marginLeft: '0.5rem', background: '#EFF6FF', color: '#1E40AF' }}>
+                                {app.role || 'Teacher'}
+                              </span>
+                            </div>
+                            <span className="lead-date-stamp">
+                              <Clock size={12} /> Applied on {new Date(app.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+
+                          <select 
+                            value={app.status || 'New'} 
+                            onChange={(e) => handleApplicationStatusChange(app._id, e.target.value)}
+                            className={`status-dropdown ${(app.status || 'new').toLowerCase().replace(/\s+/g, '-')}`}
+                          >
+                            <option value="New">New Candidate</option>
+                            <option value="Reviewed">Reviewed</option>
+                            <option value="Interview Scheduled">Interview Scheduled</option>
+                            <option value="Hired">Hired</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                        </div>
+
+                        <div className="lead-info-tiles">
+                          <div className="info-tile">
+                            <span className="info-tile-label">Teaching Experience & Degree</span>
+                            <span className="info-tile-val">{app.experience}</span>
+                            <span className="info-tile-sub">{app.qualification || 'Not provided'}</span>
+                          </div>
+
+                          <div className="info-tile">
+                            <span className="info-tile-label">Subject & Curriculums</span>
+                            <span className="info-tile-val">{app.subject || 'All Subjects'}</span>
+                            {app.linkedin && (
+                              <a href={app.linkedin} target="_blank" rel="noopener noreferrer" className="info-tile-sub" style={{ color: '#0072CE', fontWeight: 600 }}>
+                                🔗 View LinkedIn Profile
+                              </a>
+                            )}
+                          </div>
+
+                          <div className="info-tile">
+                            <span className="info-tile-label">Candidate Contact</span>
+                            <a href={`tel:${app.phone}`} className="contact-action-btn">
+                              <Phone size={13} /> {app.phone}
+                            </a>
+                            <a href={`mailto:${app.email}`} className="contact-action-btn">
+                              <Mail size={13} /> {app.email}
+                            </a>
+                          </div>
+                        </div>
+
+                        {app.notes && (
+                          <div className="lead-message-quote" style={{ marginTop: '0.85rem' }}>
+                            <strong>Teaching Philosophy:</strong> {app.notes}
+                          </div>
+                        )}
+
+                        {/* Resume Box */}
+                        <div style={{ marginTop: '1rem', paddingTop: '0.85rem', borderTop: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#475569', fontSize: '0.85rem' }}>
+                            <FileText size={16} color="#0072CE" />
+                            <span><strong>Resume Document:</strong> {app.resume?.fileName ? app.resume.fileName : 'No file attached'}</span>
+                            {app.resume?.fileSize > 0 && (
+                              <span style={{ color: '#94A3B8' }}>({(app.resume.fileSize / 1024).toFixed(1)} KB)</span>
+                            )}
+                          </div>
+
+                          {app.resume?.fileData ? (
+                            <a 
+                              href={app.resume.fileData} 
+                              download={app.resume.fileName || 'Candidate_Resume.pdf'}
+                              className="btn-download-resume"
+                            >
+                              <Download size={14} /> Download Resume
+                            </a>
+                          ) : (
+                            <span style={{ fontSize: '0.8rem', color: '#94A3B8', fontStyle: 'italic' }}>No resume file attached</span>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
