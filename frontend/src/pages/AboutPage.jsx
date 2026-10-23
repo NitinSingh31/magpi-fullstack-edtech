@@ -284,8 +284,8 @@ export default function AboutPage({ onOpenDemo }) {
         </div>
       </section>
 
-      {/* 6. Why Parents Trust Our Tutors */}
-      <section className="page-section alt-bg">
+      {/* 6. Why Parents Trust Our Tutors & Faculty */}
+      <section className="page-section alt-bg" id="faculty">
         <div className="container">
           <div className="page-section-header">
             <div className="badge-tag brand">Vetted Excellence</div>

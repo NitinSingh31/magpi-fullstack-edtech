@@ -16,7 +16,7 @@ export default function HomePage({ onOpenDemo }) {
       <Hero onOpenDemo={onOpenDemo} />
 
       {/* 2. Achieve Your Goals With Magπ */}
-      <AchieveGoals />
+      <AchieveGoals onOpenDemo={onOpenDemo} />
 
       {/* 3. Global Statistics Counter Bar */}
       <StatsBar />
