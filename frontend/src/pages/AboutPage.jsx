@@ -201,7 +201,7 @@ export default function AboutPage({ onOpenDemo }) {
               </p>
               <div className="inspiration-stats-row">
                 <div className="inspire-stat">
-                  <strong>2020</strong>
+                  <strong>2026</strong>
                   <span>Year Founded</span>
                 </div>
                 <div className="inspire-stat">

@@ -101,7 +101,7 @@ export default function Footer() {
       <div className="psittacus-copyright-bar">
         <div className="container copyright-inner">
           <p className="copyright-text">
-            Copyright © 2025 Magπ Education. All rights reserved.
+            Copyright © 2026 Magπ Education. All rights reserved.
           </p>
 
           {/* Scroll to Top Button */}
