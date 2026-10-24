@@ -33,7 +33,8 @@ import {
   Image,
   UploadCloud,
   Check,
-  RotateCcw
+  RotateCcw,
+  GraduationCap
 } from 'lucide-react';
 import './AdminPage.css';
 import api from '../services/api.js';
@@ -73,6 +74,7 @@ export default function AdminPage() {
   const [inquiries, setInquiries] = useState([]);
   const [careers, setCareers] = useState([]);
   const [applications, setApplications] = useState([]);
+  const [leadership, setLeadership] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Career Modal State
@@ -88,6 +90,21 @@ export default function AdminPage() {
     isActive: true
   });
   const [savingJob, setSavingJob] = useState(false);
+
+  // Academic Leadership Modal State
+  const [isLeaderModalOpen, setIsLeaderModalOpen] = useState(false);
+  const [editingLeader, setEditingLeader] = useState(null);
+  const [leaderFormData, setLeaderFormData] = useState({
+    name: '',
+    role: '',
+    credentials: '',
+    subjects: '',
+    image: '',
+    isActive: true,
+    order: 0
+  });
+  const [savingLeader, setSavingLeader] = useState(false);
+  const [uploadingLeaderImg, setUploadingLeaderImg] = useState(false);
 
   // Change Password Modal State
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -120,11 +137,12 @@ export default function AdminPage() {
 
     setLoading(true);
     try {
-      const [bookingsRes, inquiriesRes, careersRes, applicationsRes] = await Promise.allSettled([
+      const [bookingsRes, inquiriesRes, careersRes, applicationsRes, leadershipRes] = await Promise.allSettled([
         api.getBookings(),
         api.getInquiries(),
         api.getCareerOpenings(),
-        api.getFacultyApplications()
+        api.getFacultyApplications(),
+        api.getLeadership()
       ]);
 
       if (bookingsRes.status === 'fulfilled' && bookingsRes.value?.success) {
@@ -141,6 +159,10 @@ export default function AdminPage() {
 
       if (applicationsRes.status === 'fulfilled' && applicationsRes.value?.success) {
         setApplications(applicationsRes.value.data || []);
+      }
+
+      if (leadershipRes.status === 'fulfilled' && leadershipRes.value?.success) {
+        setLeadership(leadershipRes.value.data || []);
       }
 
       // Refresh dynamic media slots
@@ -390,6 +412,114 @@ export default function AdminPage() {
     }
   };
 
+  // --- Academic Leadership Handlers ---
+  const handleOpenAddLeader = () => {
+    setEditingLeader(null);
+    setLeaderFormData({
+      name: '',
+      role: '',
+      credentials: '',
+      subjects: '',
+      image: '',
+      isActive: true,
+      order: leadership.length + 1
+    });
+    setIsLeaderModalOpen(true);
+  };
+
+  const handleOpenEditLeader = (leader) => {
+    setEditingLeader(leader);
+    setLeaderFormData({
+      name: leader.name || '',
+      role: leader.role || '',
+      credentials: leader.credentials || '',
+      subjects: leader.subjects || '',
+      image: leader.image || '',
+      isActive: leader.isActive !== false,
+      order: leader.order !== undefined ? leader.order : 0
+    });
+    setIsLeaderModalOpen(true);
+  };
+
+  const handleSaveLeader = async (e) => {
+    e.preventDefault();
+    if (!leaderFormData.name.trim()) {
+      alert('Leader name is required.');
+      return;
+    }
+    if (!leaderFormData.role.trim()) {
+      alert('Role / Designation is required.');
+      return;
+    }
+
+    setSavingLeader(true);
+    try {
+      if (editingLeader) {
+        const res = await api.updateLeadership(editingLeader._id, leaderFormData);
+        if (res.success) {
+          setLeadership(prev => prev.map(l => l._id === editingLeader._id ? res.data : l));
+          setIsLeaderModalOpen(false);
+        }
+      } else {
+        const res = await api.createLeadership(leaderFormData);
+        if (res.success) {
+          setLeadership(prev => [...prev, res.data]);
+          setIsLeaderModalOpen(false);
+        }
+      }
+    } catch (err) {
+      alert('Failed to save leader: ' + err.message);
+    } finally {
+      setSavingLeader(false);
+    }
+  };
+
+  const handleToggleLeaderStatus = async (leader) => {
+    const updatedStatus = !leader.isActive;
+    try {
+      const res = await api.updateLeadership(leader._id, { isActive: updatedStatus });
+      if (res.success) {
+        setLeadership(prev => prev.map(l => l._id === leader._id ? { ...l, isActive: updatedStatus } : l));
+      }
+    } catch (err) {
+      alert('Failed to update leader visibility: ' + err.message);
+    }
+  };
+
+  const handleDeleteLeader = async (leader) => {
+    if (!window.confirm(`Are you sure you want to permanently delete "${leader.name}" from Academic Leadership?`)) {
+      return;
+    }
+    try {
+      const res = await api.deleteLeadership(leader._id);
+      if (res.success) {
+        setLeadership(prev => prev.filter(l => l._id !== leader._id));
+      }
+    } catch (err) {
+      alert('Failed to delete leader: ' + err.message);
+    }
+  };
+
+  const handleLeaderImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload a valid image file (PNG, JPG, WebP).');
+      return;
+    }
+    setUploadingLeaderImg(true);
+    compressImage(file)
+      .then(compressedUrl => {
+        setLeaderFormData(prev => ({ ...prev, image: compressedUrl }));
+      })
+      .catch(err => {
+        alert('Failed to process image: ' + err.message);
+      })
+      .finally(() => {
+        setUploadingLeaderImg(false);
+      });
+  };
+
   const exportLeadsToCSV = () => {
     let csvContent = "data:text/csv;charset=utf-8,";
     
@@ -412,6 +542,11 @@ export default function AdminPage() {
       csvContent += "Candidate Name,Email,Phone,Role Applied,Experience,Qualification,Subject,LinkedIn,Resume File,Status,Date\n";
       applications.forEach(a => {
         csvContent += `"${a.name || ''}","${a.email || ''}","${a.phone || ''}","${a.role || ''}","${a.experience || ''}","${a.qualification || ''}","${a.subject || ''}","${a.linkedin || ''}","${a.resume?.fileName || 'None'}","${a.status || 'New'}","${a.createdAt ? new Date(a.createdAt).toISOString() : ''}"\n`;
+      });
+    } else if (activeTab === 'leadership') {
+      csvContent += "Name,Role,Credentials,Subjects,Order,Status,Image URL\n";
+      leadership.forEach(l => {
+        csvContent += `"${l.name || ''}","${l.role || ''}","${(l.credentials || '').replace(/"/g, '""')}","${(l.subjects || '').replace(/"/g, '""')}","${l.order || 0}","${l.isActive !== false ? 'Visible' : 'Hidden'}","${l.image || ''}"\n`;
       });
     } else if (activeTab === 'media') {
       csvContent += "Key,Label,Section,Status,Active URL,Last Updated\n";
@@ -470,6 +605,15 @@ export default function AdminPage() {
     a.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     a.qualification?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     a.notes?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Filter Academic Leadership
+  const filteredLeadership = leadership.filter(l =>
+    !searchTerm.trim() ||
+    l.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    l.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    l.credentials?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    l.subjects?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Filter Media Slots
@@ -847,6 +991,14 @@ export default function AdminPage() {
                       : mediaItems.length}
                   </span>
                 </button>
+                <button 
+                  className={`tab-pill-btn ${activeTab === 'leadership' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('leadership')}
+                >
+                  <GraduationCap size={16} />
+                  <span>Academic Leadership</span>
+                  <span className="tab-badge">{leadership.length}</span>
+                </button>
               </div>
 
               {activeTab === 'bookings' && (
@@ -893,7 +1045,9 @@ export default function AdminPage() {
                           ? "Search job openings by title, curriculum, location..."
                           : activeTab === 'applications'
                             ? "Search candidate name, email, phone, role, subjects, qualifications..."
-                            : "Search media slots by title, section, key..."
+                            : activeTab === 'leadership'
+                              ? "Search leaders by name, designation, credentials, subjects..."
+                              : "Search media slots by title, section, key..."
                   }
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
@@ -912,13 +1066,21 @@ export default function AdminPage() {
                           ? filteredCareers.length
                           : activeTab === 'applications'
                             ? filteredApplications.length
-                            : filteredMedia.length}
+                            : activeTab === 'leadership'
+                              ? filteredLeadership.length
+                              : filteredMedia.length}
                   </strong> records
                 </div>
 
                 {activeTab === 'careers' && (
                   <button onClick={handleOpenAddJob} className="btn-add-opening">
                     <Plus size={16} /> <span>Add New Opening</span>
+                  </button>
+                )}
+
+                {activeTab === 'leadership' && (
+                  <button onClick={handleOpenAddLeader} className="btn-add-opening">
+                    <Plus size={16} /> <span>Add New Leader</span>
                   </button>
                 )}
               </div>
@@ -1225,7 +1387,7 @@ export default function AdminPage() {
                     ))}
                   </div>
                 )
-              ) : (
+              ) : activeTab === 'media' ? (
                 /* MEDIA & BANNERS MANAGER TAB */
                 <div className="admin-media-manager-wrap">
                   <div className="admin-media-intro-banner">
@@ -1346,6 +1508,94 @@ export default function AdminPage() {
                     </div>
                   )}
                 </div>
+              ) : (
+                /* ACADEMIC LEADERSHIP TAB */
+                filteredLeadership.length === 0 ? (
+                  <div className="admin-state-view">
+                    <GraduationCap size={36} color="#94A3B8" />
+                    <p>No academic leadership profiles found matching your search.</p>
+                    <button onClick={handleOpenAddLeader} className="btn-add-opening" style={{ marginTop: '0.75rem' }}>
+                      <Plus size={16} /> <span>Add New Leader</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="lead-cards-deck">
+                    {filteredLeadership.map((leader) => (
+                      <div key={leader._id} className="admin-lead-row-card">
+                        <div className="lead-row-header">
+                          <div className="lead-row-user">
+                            <img 
+                              src={leader.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'} 
+                              alt={leader.name} 
+                              className="leader-avatar-img"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80';
+                              }}
+                            />
+                            <div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                <span className="lead-user-name">{leader.name}</span>
+                                <span className={`lead-ref-pill ${leader.isActive !== false ? 'active-pill' : 'paused-pill'}`}>
+                                  {leader.isActive !== false ? '● Visible on Website' : '○ Hidden'}
+                                </span>
+                                {leader.order !== undefined && (
+                                  <span className="lead-date-stamp" style={{ marginLeft: 0 }}>
+                                    Order #{leader.order}
+                                  </span>
+                                )}
+                              </div>
+                              <span className="leader-role-text">{leader.role}</span>
+                            </div>
+                          </div>
+
+                          <div className="job-card-actions">
+                            <button 
+                              onClick={() => handleToggleLeaderStatus(leader)}
+                              className={`btn-action-icon ${leader.isActive !== false ? 'btn-active' : 'btn-paused'}`}
+                              title={leader.isActive !== false ? 'Hide from public site' : 'Make visible on public site'}
+                            >
+                              {leader.isActive !== false ? <Eye size={15} /> : <EyeOff size={15} />}
+                            </button>
+                            <button 
+                              onClick={() => handleOpenEditLeader(leader)}
+                              className="btn-action-icon btn-edit"
+                              title="Edit Leader"
+                            >
+                              <Edit2 size={15} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteLeader(leader)}
+                              className="btn-action-icon btn-delete"
+                              title="Delete Leader"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="lead-info-tiles">
+                          <div className="info-tile">
+                            <span className="info-tile-label">Academic Credentials & Degrees</span>
+                            <span className="info-tile-val">{leader.credentials || 'Not specified'}</span>
+                          </div>
+                          <div className="info-tile">
+                            <span className="info-tile-label">Specialization & Curriculums</span>
+                            <span className="info-tile-val" style={{ color: '#0072CE' }}>
+                              {leader.subjects || 'General Curriculum'}
+                            </span>
+                          </div>
+                          <div className="info-tile">
+                            <span className="info-tile-label">Public Profile Photo</span>
+                            <a href={leader.image} target="_blank" rel="noopener noreferrer" className="contact-action-btn">
+                              <Image size={13} /> View Photo Link
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )
               )}
             </div>
           </div>
@@ -1465,6 +1715,150 @@ export default function AdminPage() {
                 >
                   {savingJob ? <RefreshCw size={16} className="spinning-icon" /> : <Sparkles size={16} />}
                   <span>{editingJob ? 'Update Opening' : 'Save Opening'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Academic Leadership Add / Edit Modal */}
+      {isLeaderModalOpen && (
+        <div className="career-modal-backdrop" onClick={() => setIsLeaderModalOpen(false)}>
+          <div className="career-modal-dialog" onClick={e => e.stopPropagation()}>
+            <div className="career-modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <GraduationCap size={20} color="#0072CE" />
+                <h3>{editingLeader ? 'Edit Academic Leader' : 'Add New Academic Leader'}</h3>
+              </div>
+              <button 
+                onClick={() => setIsLeaderModalOpen(false)} 
+                className="career-modal-close-btn"
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveLeader} className="career-form-grid">
+              <div className="career-form-row">
+                <div className="form-group">
+                  <label>Full Name & Title *</label>
+                  <input 
+                    type="text"
+                    required
+                    placeholder="e.g. Dr. Elena Vance"
+                    value={leaderFormData.name}
+                    onChange={e => setLeaderFormData({ ...leaderFormData, name: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Role / Designation *</label>
+                  <input 
+                    type="text"
+                    required
+                    placeholder="e.g. Head of Sciences & IB DP Advisor"
+                    value={leaderFormData.role}
+                    onChange={e => setLeaderFormData({ ...leaderFormData, role: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Academic Credentials & Background</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. Ph.D. Oxford, 14+ Years CAIE & IB Examiner"
+                  value={leaderFormData.credentials}
+                  onChange={e => setLeaderFormData({ ...leaderFormData, credentials: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Specialization & Curriculums</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. Physics HL & Chemistry SL/HL"
+                  value={leaderFormData.subjects}
+                  onChange={e => setLeaderFormData({ ...leaderFormData, subjects: e.target.value })}
+                />
+              </div>
+
+              {/* Profile Photo File Upload or URL */}
+              <div className="form-group">
+                <label>Profile Picture</label>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                  <img 
+                    src={leaderFormData.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'} 
+                    alt="Preview" 
+                    style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #0072CE' }} 
+                  />
+                  <div style={{ flex: 1, minWidth: '220px' }}>
+                    <label style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#0F172A', color: '#fff', padding: '0.5rem 1rem', borderRadius: '6px', fontSize: '0.82rem', fontWeight: 600 }}>
+                      <UploadCloud size={16} />
+                      <span>{uploadingLeaderImg ? 'Processing...' : 'Upload Image File'}</span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleLeaderImageUpload} 
+                        style={{ display: 'none' }} 
+                        disabled={uploadingLeaderImg}
+                      />
+                    </label>
+                    <p style={{ margin: '0.35rem 0 0', fontSize: '0.75rem', color: '#64748B' }}>
+                      Or paste a direct photo web link below:
+                    </p>
+                  </div>
+                </div>
+                <input 
+                  type="url"
+                  placeholder="https://images.unsplash.com/photo-..."
+                  value={leaderFormData.image}
+                  onChange={e => setLeaderFormData({ ...leaderFormData, image: e.target.value })}
+                />
+              </div>
+
+              <div className="career-form-row">
+                <div className="form-group">
+                  <label>Display Order Priority</label>
+                  <input 
+                    type="number"
+                    min="1"
+                    max="99"
+                    value={leaderFormData.order}
+                    onChange={e => setLeaderFormData({ ...leaderFormData, order: parseInt(e.target.value, 10) || 0 })}
+                  />
+                  <span style={{ fontSize: '0.74rem', color: '#94A3B8' }}>1 appears first, 2 appears second, etc.</span>
+                </div>
+
+                <div className="form-group">
+                  <label>Website Visibility</label>
+                  <select 
+                    value={leaderFormData.isActive ? 'active' : 'hidden'}
+                    onChange={e => setLeaderFormData({ ...leaderFormData, isActive: e.target.value === 'active' })}
+                  >
+                    <option value="active">Active (Visible on About Page)</option>
+                    <option value="hidden">Hidden / Draft</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="career-modal-actions">
+                <button 
+                  type="button" 
+                  onClick={() => setIsLeaderModalOpen(false)}
+                  className="btn-modal-cancel"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn-modal-save"
+                  disabled={savingLeader || uploadingLeaderImg}
+                >
+                  {savingLeader ? <RefreshCw size={16} className="spinning-icon" /> : <Sparkles size={16} />}
+                  <span>{editingLeader ? 'Update Leader' : 'Save Leader'}</span>
                 </button>
               </div>
             </form>

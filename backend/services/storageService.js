@@ -7,6 +7,7 @@ import { CareerOpening } from '../models/CareerOpening.js';
 import { FacultyApplication } from '../models/FacultyApplication.js';
 import { AdminCredential } from '../models/AdminCredential.js';
 import { SiteMedia } from '../models/SiteMedia.js';
+import { Leadership } from '../models/Leadership.js';
 import { isDatabaseConnected } from '../config/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,6 +20,7 @@ const CAREERS_FILE = path.join(DATA_DIR, 'careers.json');
 const APPLICATIONS_FILE = path.join(DATA_DIR, 'applications.json');
 const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
 const MEDIA_FILE = path.join(DATA_DIR, 'media.json');
+const LEADERSHIP_FILE = path.join(DATA_DIR, 'leadership.json');
 
 export const DEFAULT_MEDIA_ITEMS = [
   {
@@ -90,6 +92,45 @@ export const DEFAULT_MEDIA_ITEMS = [
     section: 'Skill Courses',
     description: 'Banner for Mental Math, Olympiads, and Critical Thinking.',
     defaultUrl: '/assets/psittacus/course-reasoning.jpg'
+  }
+];
+
+export const DEFAULT_LEADERSHIP = [
+  {
+    name: "Dr. Elena Vance",
+    role: "Head of Sciences & IB DP Advisor",
+    credentials: "Ph.D. Oxford, 14+ Years CAIE & IB Examiner",
+    subjects: "Physics HL & Chemistry SL/HL",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
+    order: 1,
+    isActive: true
+  },
+  {
+    name: "Prof. Marcus Thorne",
+    role: "Lead Faculty – Mathematics & AP Prep",
+    credentials: "M.Sc. Imperial College London, 11+ Years",
+    subjects: "Pure Math, AP Calculus BC & Math AA",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+    order: 2,
+    isActive: true
+  },
+  {
+    name: "Dr. Sunita Rao",
+    role: "Director of Pedagogy & Olympiad Aptitude",
+    credentials: "M.Ed. Harvard GSE, IMO National Coach",
+    subjects: "Olympiad Math, Vedic Computation & STEP",
+    image: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=600&q=80",
+    order: 3,
+    isActive: true
+  },
+  {
+    name: "Liam Chen",
+    role: "Head of Tech & Future Skills Lab",
+    credentials: "B.S. CS UC Berkeley, Former Tech Lead",
+    subjects: "Python, AI / Machine Learning & Web Dev",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
+    order: 4,
+    isActive: true
   }
 ];
 
@@ -579,5 +620,96 @@ export const storageService = {
    */
   async resetSiteMediaItem(key, updatedBy = 'admin') {
     return this.updateSiteMediaItem(key, '', updatedBy);
+  },
+
+  // --- Academic Leadership ---
+  async getLeadership({ activeOnly = false } = {}) {
+    if (isDatabaseConnected()) {
+      const count = await Leadership.countDocuments();
+      if (count === 0) {
+        // Auto-seed default leadership
+        await Leadership.insertMany(DEFAULT_LEADERSHIP);
+      }
+      const query = activeOnly ? { isActive: true } : {};
+      return await Leadership.find(query).sort({ order: 1, createdAt: 1 }).lean();
+    } else {
+      let list = readLocal(LEADERSHIP_FILE);
+      if (!list || list.length === 0) {
+        list = DEFAULT_LEADERSHIP.map((m, i) => ({
+          _id: 'ldr_' + (Date.now() + i),
+          ...m,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }));
+        writeLocal(LEADERSHIP_FILE, list);
+      }
+      if (activeOnly) {
+        return list.filter(item => item.isActive !== false);
+      }
+      return list.sort((a, b) => (a.order || 0) - (b.order || 0));
+    }
+  },
+
+  async createLeadership(payload) {
+    if (isDatabaseConnected()) {
+      const doc = new Leadership({
+        ...payload,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+      return await doc.save();
+    } else {
+      const list = readLocal(LEADERSHIP_FILE);
+      const newEntry = {
+        _id: 'ldr_' + Date.now(),
+        ...payload,
+        isActive: payload.isActive !== undefined ? Boolean(payload.isActive) : true,
+        order: payload.order !== undefined ? Number(payload.order) : list.length + 1,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      list.push(newEntry);
+      writeLocal(LEADERSHIP_FILE, list);
+      return newEntry;
+    }
+  },
+
+  async updateLeadership(id, updateData) {
+    if (isDatabaseConnected() && !id.startsWith('ldr_')) {
+      return await Leadership.findByIdAndUpdate(
+        id,
+        { $set: { ...updateData, updatedAt: new Date() } },
+        { new: true }
+      ).lean();
+    } else {
+      const list = readLocal(LEADERSHIP_FILE);
+      const idx = list.findIndex(m => m._id === id);
+      if (idx !== -1) {
+        list[idx] = {
+          ...list[idx],
+          ...updateData,
+          updatedAt: new Date().toISOString()
+        };
+        writeLocal(LEADERSHIP_FILE, list);
+        return list[idx];
+      }
+      return null;
+    }
+  },
+
+  async deleteLeadership(id) {
+    if (isDatabaseConnected() && !id.startsWith('ldr_')) {
+      return await Leadership.findByIdAndDelete(id).lean();
+    } else {
+      let list = readLocal(LEADERSHIP_FILE);
+      const exists = list.some(m => m._id === id);
+      if (exists) {
+        list = list.filter(m => m._id !== id);
+        writeLocal(LEADERSHIP_FILE, list);
+        return { _id: id };
+      }
+      return null;
+    }
   }
 };
+

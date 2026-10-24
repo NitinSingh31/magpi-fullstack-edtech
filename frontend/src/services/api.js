@@ -229,6 +229,43 @@ export const api = {
     return request(`/media/${encodeURIComponent(key)}/reset`, {
       method: 'POST'
     });
+  },
+
+  /**
+   * Retrieve academic leadership members (optional { activeOnly: true })
+   */
+  async getLeadership(params = {}) {
+    const query = params.activeOnly ? '?activeOnly=true' : '';
+    return request(`/leadership${query}`);
+  },
+
+  /**
+   * Create a new leadership member (Admin)
+   */
+  async createLeadership(leaderData) {
+    return request('/leadership', {
+      method: 'POST',
+      body: JSON.stringify(leaderData)
+    });
+  },
+
+  /**
+   * Update an existing leadership member (Admin)
+   */
+  async updateLeadership(id, updateData) {
+    return request(`/leadership/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updateData)
+    });
+  },
+
+  /**
+   * Delete a leadership member (Admin)
+   */
+  async deleteLeadership(id) {
+    return request(`/leadership/${id}`, {
+      method: 'DELETE'
+    });
   }
 };
 

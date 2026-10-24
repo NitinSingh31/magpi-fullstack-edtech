@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Sparkles, 
@@ -18,8 +18,55 @@ import {
 } from 'lucide-react';
 import './PagesCommon.css';
 import './AboutPage.css';
+import api from '../services/api.js';
+
+const DEFAULT_FACULTY = [
+  {
+    name: "Dr. Elena Vance",
+    role: "Head of Sciences & IB DP Advisor",
+    credentials: "Ph.D. Oxford, 14+ Years CAIE & IB Examiner",
+    subjects: "Physics HL & Chemistry SL/HL",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    name: "Prof. Marcus Thorne",
+    role: "Lead Faculty – Mathematics & AP Prep",
+    credentials: "M.Sc. Imperial College London, 11+ Years",
+    subjects: "Pure Math, AP Calculus BC & IB Math AA",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    name: "Dr. Sunita Rao",
+    role: "Director of Pedagogy & Olympiad Aptitude",
+    credentials: "M.Ed. Harvard GSE, IMO National Coach",
+    subjects: "Olympiad Math, Vedic Calculation & STEM",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    name: "Liam Chen",
+    role: "Head of Tech & Future Skills Lab",
+    credentials: "B.S. CS UC Berkeley, Former Tech Lead",
+    subjects: "Python, AI / Machine Learning & Web Dev",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
+  }
+];
 
 export default function AboutPage({ onOpenDemo }) {
+  const [facultyMembers, setFacultyMembers] = useState(DEFAULT_FACULTY);
+
+  useEffect(() => {
+    let isMounted = true;
+    api.getLeadership({ activeOnly: true })
+      .then(res => {
+        if (isMounted && res?.success && Array.isArray(res.data) && res.data.length > 0) {
+          setFacultyMembers(res.data);
+        }
+      })
+      .catch(err => {
+        console.warn('[AboutPage] Could not load dynamic leadership, using defaults:', err.message);
+      });
+    return () => { isMounted = false; };
+  }, []);
   const coreValues = [
     {
       icon: <Users size={28} />,
@@ -83,37 +130,6 @@ export default function AboutPage({ onOpenDemo }) {
       icon: "💬",
       title: "Mentorship Beyond Exams",
       desc: "Nurturing self-confidence, stress management during exam seasons, and guidance for college applications."
-    }
-  ];
-
-  const facultyMembers = [
-    {
-      name: "Dr. Elena Vance",
-      role: "Head of Sciences & IB DP Advisor",
-      credentials: "Ph.D. Oxford, 14+ Years CAIE & IB Examiner",
-      subjects: "Physics HL & Chemistry SL/HL",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-      name: "Prof. Marcus Thorne",
-      role: "Lead Faculty – Mathematics & AP Prep",
-      credentials: "M.Sc. Imperial College London, 11+ Years",
-      subjects: "Pure Math, AP Calculus BC & IB Math AA",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-      name: "Dr. Sunita Rao",
-      role: "Director of Pedagogy & Olympiad Aptitude",
-      credentials: "M.Ed. Harvard GSE, IMO National Coach",
-      subjects: "Olympiad Math, Vedic Calculation & STEM",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-      name: "Liam Chen",
-      role: "Head of Tech & Future Skills Lab",
-      credentials: "B.S. CS UC Berkeley, Former Tech Lead",
-      subjects: "Python, AI / Machine Learning & Web Dev",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
     }
   ];
 
