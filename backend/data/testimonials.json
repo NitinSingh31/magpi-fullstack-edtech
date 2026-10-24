@@ -1,0 +1,35 @@
+[
+  {
+    "_id": "rev_1792828195620",
+    "quote": "My child developed real, useful skills in a fun and interactive way. Always something new to learn here!",
+    "author": "Ayaz Ahmed Khan",
+    "role": "Parent of Ibrahim Khan",
+    "rating": 5,
+    "order": 1,
+    "isActive": true,
+    "createdAt": "2026-10-24T07:49:55.620Z",
+    "updatedAt": "2026-10-24T07:49:55.622Z"
+  },
+  {
+    "_id": "rev_1792828195623",
+    "quote": "The structure helped my child think quickly and organize ideas clearly. The sessions built confidence under pressure.",
+    "author": "Nishat Anjum",
+    "role": "Parent of Sarah Javed",
+    "rating": 5,
+    "order": 2,
+    "isActive": true,
+    "createdAt": "2026-10-24T07:49:55.622Z",
+    "updatedAt": "2026-10-24T07:49:55.622Z"
+  },
+  {
+    "_id": "rev_1792828195624",
+    "quote": "Thank you for creating such engaging learning opportunities! The sessions made complex topics easy and enjoyable to understand.",
+    "author": "Thomas",
+    "role": "Parent of Davian & Cristabel Thomas",
+    "rating": 5,
+    "order": 3,
+    "isActive": true,
+    "createdAt": "2026-10-24T07:49:55.622Z",
+    "updatedAt": "2026-10-24T07:49:55.622Z"
+  }
+]

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Testimonials.css';
+import api from '../services/api.js';
 
-const REVIEWS = [
+const DEFAULT_REVIEWS = [
   {
     quote: 'My child developed real, useful skills in a fun and interactive way. Always something new to learn here!',
     author: 'Ayaz Ahmed Khan',
@@ -20,6 +21,22 @@ const REVIEWS = [
 ];
 
 export default function Testimonials() {
+  const [reviews, setReviews] = useState(DEFAULT_REVIEWS);
+
+  useEffect(() => {
+    let isMounted = true;
+    api.getTestimonials({ activeOnly: true })
+      .then(res => {
+        if (isMounted && res?.success && Array.isArray(res.data) && res.data.length > 0) {
+          setReviews(res.data);
+        }
+      })
+      .catch(err => {
+        console.warn('[Testimonials] Could not load dynamic testimonials, using defaults:', err.message);
+      });
+    return () => { isMounted = false; };
+  }, []);
+
   return (
     <section className="psittacus-testimonials-section" id="testimonials">
       {/* Top Angled Dark Accent Strip */}
@@ -31,8 +48,8 @@ export default function Testimonials() {
         </div>
 
         <div className="testimonials-cards-row">
-          {REVIEWS.map((rev, index) => (
-            <div key={index} className="psittacus-review-card">
+          {reviews.map((rev, index) => (
+            <div key={rev._id || index} className="psittacus-review-card">
               <p className="review-text">"{rev.quote}"</p>
               <div className="review-author-box">
                 <h3 className="review-author-name">{rev.author}</h3>
@@ -45,3 +62,4 @@ export default function Testimonials() {
     </section>
   );
 }
+

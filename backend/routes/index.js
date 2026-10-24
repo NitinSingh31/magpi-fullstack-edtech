@@ -7,6 +7,7 @@ import careerRoutes from './careerRoutes.js';
 import applicationRoutes from './applicationRoutes.js';
 import mediaRoutes from './mediaRoutes.js';
 import leadershipRoutes from './leadershipRoutes.js';
+import testimonialRoutes from './testimonialRoutes.js';
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use('/careers', careerRoutes);
 router.use('/applications', applicationRoutes);
 router.use('/media', mediaRoutes);
 router.use('/leadership', leadershipRoutes);
+router.use('/testimonials', testimonialRoutes);
 
 export default router;

@@ -34,7 +34,9 @@ import {
   UploadCloud,
   Check,
   RotateCcw,
-  GraduationCap
+  GraduationCap,
+  MessageSquareQuote,
+  Star
 } from 'lucide-react';
 import './AdminPage.css';
 import api from '../services/api.js';
@@ -75,6 +77,7 @@ export default function AdminPage() {
   const [careers, setCareers] = useState([]);
   const [applications, setApplications] = useState([]);
   const [leadership, setLeadership] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Career Modal State
@@ -105,6 +108,19 @@ export default function AdminPage() {
   });
   const [savingLeader, setSavingLeader] = useState(false);
   const [uploadingLeaderImg, setUploadingLeaderImg] = useState(false);
+
+  // Testimonials / Reviews Modal State
+  const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
+  const [editingTestimonial, setEditingTestimonial] = useState(null);
+  const [testimonialFormData, setTestimonialFormData] = useState({
+    author: '',
+    role: '',
+    quote: '',
+    rating: 5,
+    isActive: true,
+    order: 0
+  });
+  const [savingTestimonial, setSavingTestimonial] = useState(false);
 
   // Change Password Modal State
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -137,12 +153,13 @@ export default function AdminPage() {
 
     setLoading(true);
     try {
-      const [bookingsRes, inquiriesRes, careersRes, applicationsRes, leadershipRes] = await Promise.allSettled([
+      const [bookingsRes, inquiriesRes, careersRes, applicationsRes, leadershipRes, testimonialsRes] = await Promise.allSettled([
         api.getBookings(),
         api.getInquiries(),
         api.getCareerOpenings(),
         api.getFacultyApplications(),
-        api.getLeadership()
+        api.getLeadership(),
+        api.getTestimonials()
       ]);
 
       if (bookingsRes.status === 'fulfilled' && bookingsRes.value?.success) {
@@ -163,6 +180,10 @@ export default function AdminPage() {
 
       if (leadershipRes.status === 'fulfilled' && leadershipRes.value?.success) {
         setLeadership(leadershipRes.value.data || []);
+      }
+
+      if (testimonialsRes.status === 'fulfilled' && testimonialsRes.value?.success) {
+        setTestimonials(testimonialsRes.value.data || []);
       }
 
       // Refresh dynamic media slots
@@ -500,6 +521,96 @@ export default function AdminPage() {
     }
   };
 
+  // --- Testimonials / Reviews Handlers ---
+  const handleOpenAddTestimonial = () => {
+    setEditingTestimonial(null);
+    setTestimonialFormData({
+      author: '',
+      role: '',
+      quote: '',
+      rating: 5,
+      isActive: true,
+      order: testimonials.length + 1
+    });
+    setIsTestimonialModalOpen(true);
+  };
+
+  const handleOpenEditTestimonial = (testimonial) => {
+    setEditingTestimonial(testimonial);
+    setTestimonialFormData({
+      author: testimonial.author || '',
+      role: testimonial.role || '',
+      quote: testimonial.quote || '',
+      rating: testimonial.rating !== undefined ? testimonial.rating : 5,
+      isActive: testimonial.isActive !== false,
+      order: testimonial.order !== undefined ? testimonial.order : 0
+    });
+    setIsTestimonialModalOpen(true);
+  };
+
+  const handleSaveTestimonial = async (e) => {
+    e.preventDefault();
+    if (!testimonialFormData.author.trim()) {
+      alert('Author name is required.');
+      return;
+    }
+    if (!testimonialFormData.role.trim()) {
+      alert('Role or parent description is required (e.g. Parent of Sarah Javed).');
+      return;
+    }
+    if (!testimonialFormData.quote.trim()) {
+      alert('Review quote text is required.');
+      return;
+    }
+
+    setSavingTestimonial(true);
+    try {
+      if (editingTestimonial) {
+        const res = await api.updateTestimonial(editingTestimonial._id, testimonialFormData);
+        if (res.success) {
+          setTestimonials(prev => prev.map(t => t._id === editingTestimonial._id ? res.data : t));
+          setIsTestimonialModalOpen(false);
+        }
+      } else {
+        const res = await api.createTestimonial(testimonialFormData);
+        if (res.success) {
+          setTestimonials(prev => [...prev, res.data]);
+          setIsTestimonialModalOpen(false);
+        }
+      }
+    } catch (err) {
+      alert('Failed to save testimonial: ' + err.message);
+    } finally {
+      setSavingTestimonial(false);
+    }
+  };
+
+  const handleToggleTestimonialStatus = async (testimonial) => {
+    const updatedStatus = !testimonial.isActive;
+    try {
+      const res = await api.updateTestimonial(testimonial._id, { isActive: updatedStatus });
+      if (res.success) {
+        setTestimonials(prev => prev.map(t => t._id === testimonial._id ? { ...t, isActive: updatedStatus } : t));
+      }
+    } catch (err) {
+      alert('Failed to update review visibility: ' + err.message);
+    }
+  };
+
+  const handleDeleteTestimonial = async (testimonial) => {
+    if (!window.confirm(`Are you sure you want to delete review from "${testimonial.author}"?`)) {
+      return;
+    }
+    try {
+      const res = await api.deleteTestimonial(testimonial._id);
+      if (res.success) {
+        setTestimonials(prev => prev.filter(t => t._id !== testimonial._id));
+      }
+    } catch (err) {
+      alert('Failed to delete review: ' + err.message);
+    }
+  };
+
   const handleLeaderImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -547,6 +658,11 @@ export default function AdminPage() {
       csvContent += "Name,Role,Credentials,Subjects,Order,Status,Image URL\n";
       leadership.forEach(l => {
         csvContent += `"${l.name || ''}","${l.role || ''}","${(l.credentials || '').replace(/"/g, '""')}","${(l.subjects || '').replace(/"/g, '""')}","${l.order || 0}","${l.isActive !== false ? 'Visible' : 'Hidden'}","${l.image || ''}"\n`;
+      });
+    } else if (activeTab === 'testimonials') {
+      csvContent += "Author,Role/Relationship,Quote,Rating,Order,Status,Date\n";
+      testimonials.forEach(t => {
+        csvContent += `"${t.author || ''}","${t.role || ''}","${(t.quote || '').replace(/"/g, '""')}","${t.rating || 5}","${t.order || 0}","${t.isActive !== false ? 'Visible' : 'Hidden'}","${t.createdAt ? new Date(t.createdAt).toISOString() : ''}"\n`;
       });
     } else if (activeTab === 'media') {
       csvContent += "Key,Label,Section,Status,Active URL,Last Updated\n";
@@ -614,6 +730,14 @@ export default function AdminPage() {
     l.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     l.credentials?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     l.subjects?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Filter Testimonials / Reviews
+  const filteredTestimonials = testimonials.filter(t =>
+    !searchTerm.trim() ||
+    t.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    t.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    t.quote?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Filter Media Slots
@@ -999,6 +1123,14 @@ export default function AdminPage() {
                   <span>Academic Leadership</span>
                   <span className="tab-badge">{leadership.length}</span>
                 </button>
+                <button 
+                  className={`tab-pill-btn ${activeTab === 'testimonials' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('testimonials')}
+                >
+                  <MessageSquareQuote size={16} />
+                  <span>Parent Reviews</span>
+                  <span className="tab-badge">{testimonials.length}</span>
+                </button>
               </div>
 
               {activeTab === 'bookings' && (
@@ -1047,7 +1179,9 @@ export default function AdminPage() {
                             ? "Search candidate name, email, phone, role, subjects, qualifications..."
                             : activeTab === 'leadership'
                               ? "Search leaders by name, designation, credentials, subjects..."
-                              : "Search media slots by title, section, key..."
+                              : activeTab === 'testimonials'
+                                ? "Search reviews by parent name, role, quote content..."
+                                : "Search media slots by title, section, key..."
                   }
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
@@ -1068,7 +1202,9 @@ export default function AdminPage() {
                             ? filteredApplications.length
                             : activeTab === 'leadership'
                               ? filteredLeadership.length
-                              : filteredMedia.length}
+                              : activeTab === 'testimonials'
+                                ? filteredTestimonials.length
+                                : filteredMedia.length}
                   </strong> records
                 </div>
 
@@ -1081,6 +1217,12 @@ export default function AdminPage() {
                 {activeTab === 'leadership' && (
                   <button onClick={handleOpenAddLeader} className="btn-add-opening">
                     <Plus size={16} /> <span>Add New Leader</span>
+                  </button>
+                )}
+
+                {activeTab === 'testimonials' && (
+                  <button onClick={handleOpenAddTestimonial} className="btn-add-opening">
+                    <Plus size={16} /> <span>Add New Review</span>
                   </button>
                 )}
               </div>
@@ -1508,7 +1650,7 @@ export default function AdminPage() {
                     </div>
                   )}
                 </div>
-              ) : (
+              ) : activeTab === 'leadership' ? (
                 /* ACADEMIC LEADERSHIP TAB */
                 filteredLeadership.length === 0 ? (
                   <div className="admin-state-view">
@@ -1591,6 +1733,78 @@ export default function AdminPage() {
                               <Image size={13} /> View Photo Link
                             </a>
                           </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )
+              ) : (
+                /* PARENT REVIEWS / TESTIMONIALS TAB */
+                filteredTestimonials.length === 0 ? (
+                  <div className="admin-state-view">
+                    <MessageSquareQuote size={36} color="#94A3B8" />
+                    <p>No parent reviews found matching your search.</p>
+                    <button onClick={handleOpenAddTestimonial} className="btn-add-opening" style={{ marginTop: '0.75rem' }}>
+                      <Plus size={16} /> <span>Add First Review</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="lead-cards-deck">
+                    {filteredTestimonials.map((t) => (
+                      <div key={t._id} className="admin-lead-row-card">
+                        <div className="lead-row-header">
+                          <div className="lead-row-user">
+                            <div className="lead-user-avatar" style={{ background: '#FEF3C7', color: '#B45309' }}>
+                              <MessageSquareQuote size={18} />
+                            </div>
+                            <div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                <span className="lead-user-name">{t.author}</span>
+                                <span className={`lead-ref-pill ${t.isActive !== false ? 'active-pill' : 'paused-pill'}`}>
+                                  {t.isActive !== false ? '● Visible on Website' : '○ Hidden'}
+                                </span>
+                                {t.order !== undefined && (
+                                  <span className="lead-date-stamp" style={{ marginLeft: 0 }}>
+                                    Order #{t.order}
+                                  </span>
+                                )}
+                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', color: '#D97706', fontSize: '0.82rem', fontWeight: 700 }}>
+                                  {'★'.repeat(t.rating || 5)}
+                                </span>
+                              </div>
+                              <span style={{ fontSize: '0.85rem', color: '#0072CE', fontWeight: 600 }}>
+                                {t.role}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="job-card-actions">
+                            <button 
+                              onClick={() => handleToggleTestimonialStatus(t)}
+                              className={`btn-action-icon ${t.isActive !== false ? 'btn-active' : 'btn-paused'}`}
+                              title={t.isActive !== false ? 'Hide from public site' : 'Make visible on public site'}
+                            >
+                              {t.isActive !== false ? <Eye size={15} /> : <EyeOff size={15} />}
+                            </button>
+                            <button 
+                              onClick={() => handleOpenEditTestimonial(t)}
+                              className="btn-action-icon btn-edit"
+                              title="Edit Review"
+                            >
+                              <Edit2 size={15} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteTestimonial(t)}
+                              className="btn-action-icon btn-delete"
+                              title="Delete Review"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="lead-message-quote" style={{ marginTop: '0.75rem', fontStyle: 'italic', fontSize: '0.92rem', color: '#334155', background: '#F8FAFC', padding: '0.85rem 1rem', borderRadius: '8px', borderLeft: '3.5px solid #0072CE', lineHeight: 1.55 }}>
+                          "{t.quote}"
                         </div>
                       </div>
                     ))}
@@ -1859,6 +2073,119 @@ export default function AdminPage() {
                 >
                   {savingLeader ? <RefreshCw size={16} className="spinning-icon" /> : <Sparkles size={16} />}
                   <span>{editingLeader ? 'Update Leader' : 'Save Leader'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Testimonials / Reviews Add / Edit Modal */}
+      {isTestimonialModalOpen && (
+        <div className="career-modal-backdrop" onClick={() => setIsTestimonialModalOpen(false)}>
+          <div className="career-modal-dialog" onClick={e => e.stopPropagation()}>
+            <div className="career-modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <MessageSquareQuote size={20} color="#0072CE" />
+                <h3>{editingTestimonial ? 'Edit Parent Review' : 'Add New Parent Review'}</h3>
+              </div>
+              <button 
+                onClick={() => setIsTestimonialModalOpen(false)} 
+                className="career-modal-close-btn"
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveTestimonial} className="career-form-grid">
+              <div className="career-form-row">
+                <div className="form-group">
+                  <label>Parent / Student Full Name *</label>
+                  <input 
+                    type="text"
+                    required
+                    placeholder="e.g. Ayaz Ahmed Khan"
+                    value={testimonialFormData.author}
+                    onChange={e => setTestimonialFormData({ ...testimonialFormData, author: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Role / Student Description *</label>
+                  <input 
+                    type="text"
+                    required
+                    placeholder="e.g. Parent of Ibrahim Khan"
+                    value={testimonialFormData.role}
+                    onChange={e => setTestimonialFormData({ ...testimonialFormData, role: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Review Quote / Feedback *</label>
+                <textarea 
+                  rows="4"
+                  required
+                  placeholder="e.g. My child developed real, useful skills in a fun and interactive way. Always something new to learn here!"
+                  value={testimonialFormData.quote}
+                  onChange={e => setTestimonialFormData({ ...testimonialFormData, quote: e.target.value })}
+                ></textarea>
+              </div>
+
+              <div className="career-form-row">
+                <div className="form-group">
+                  <label>Star Rating</label>
+                  <select 
+                    value={testimonialFormData.rating}
+                    onChange={e => setTestimonialFormData({ ...testimonialFormData, rating: parseInt(e.target.value, 10) || 5 })}
+                  >
+                    <option value={5}>★★★★★ (5 Stars - Exceptional)</option>
+                    <option value={4}>★★★★☆ (4 Stars - Great)</option>
+                    <option value={3}>★★★☆☆ (3 Stars - Good)</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Display Priority Order</label>
+                  <input 
+                    type="number"
+                    min="1"
+                    max="99"
+                    value={testimonialFormData.order}
+                    onChange={e => setTestimonialFormData({ ...testimonialFormData, order: parseInt(e.target.value, 10) || 0 })}
+                  />
+                  <span style={{ fontSize: '0.74rem', color: '#94A3B8' }}>1 appears first on Home Page</span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Website Visibility</label>
+                <select 
+                  value={testimonialFormData.isActive ? 'active' : 'hidden'}
+                  onChange={e => setTestimonialFormData({ ...testimonialFormData, isActive: e.target.value === 'active' })}
+                >
+                  <option value="active">Active (Visible on Home Page)</option>
+                  <option value="hidden">Hidden / Draft</option>
+                </select>
+              </div>
+
+              <div className="career-modal-actions">
+                <button 
+                  type="button" 
+                  onClick={() => setIsTestimonialModalOpen(false)}
+                  className="btn-modal-cancel"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn-modal-save"
+                  disabled={savingTestimonial}
+                >
+                  {savingTestimonial ? <RefreshCw size={16} className="spinning-icon" /> : <Sparkles size={16} />}
+                  <span>{editingTestimonial ? 'Update Review' : 'Save Review'}</span>
                 </button>
               </div>
             </form>

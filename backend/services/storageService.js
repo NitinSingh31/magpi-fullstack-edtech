@@ -8,6 +8,7 @@ import { FacultyApplication } from '../models/FacultyApplication.js';
 import { AdminCredential } from '../models/AdminCredential.js';
 import { SiteMedia } from '../models/SiteMedia.js';
 import { Leadership } from '../models/Leadership.js';
+import { Testimonial } from '../models/Testimonial.js';
 import { isDatabaseConnected } from '../config/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +22,7 @@ const APPLICATIONS_FILE = path.join(DATA_DIR, 'applications.json');
 const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
 const MEDIA_FILE = path.join(DATA_DIR, 'media.json');
 const LEADERSHIP_FILE = path.join(DATA_DIR, 'leadership.json');
+const TESTIMONIALS_FILE = path.join(DATA_DIR, 'testimonials.json');
 
 export const DEFAULT_MEDIA_ITEMS = [
   {
@@ -130,6 +132,33 @@ export const DEFAULT_LEADERSHIP = [
     subjects: "Python, AI / Machine Learning & Web Dev",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
     order: 4,
+    isActive: true
+  }
+];
+
+export const DEFAULT_TESTIMONIALS = [
+  {
+    quote: "My child developed real, useful skills in a fun and interactive way. Always something new to learn here!",
+    author: "Ayaz Ahmed Khan",
+    role: "Parent of Ibrahim Khan",
+    rating: 5,
+    order: 1,
+    isActive: true
+  },
+  {
+    quote: "The structure helped my child think quickly and organize ideas clearly. The sessions built confidence under pressure.",
+    author: "Nishat Anjum",
+    role: "Parent of Sarah Javed",
+    rating: 5,
+    order: 2,
+    isActive: true
+  },
+  {
+    quote: "Thank you for creating such engaging learning opportunities! The sessions made complex topics easy and enjoyable to understand.",
+    author: "Thomas",
+    role: "Parent of Davian & Cristabel Thomas",
+    rating: 5,
+    order: 3,
     isActive: true
   }
 ];
@@ -710,6 +739,98 @@ export const storageService = {
       }
       return null;
     }
+  },
+
+  // --- Testimonials / Reviews ---
+  async getTestimonials({ activeOnly = false } = {}) {
+    if (isDatabaseConnected()) {
+      const count = await Testimonial.countDocuments();
+      if (count === 0) {
+        // Auto-seed default testimonials
+        await Testimonial.insertMany(DEFAULT_TESTIMONIALS);
+      }
+      const query = activeOnly ? { isActive: true } : {};
+      return await Testimonial.find(query).sort({ order: 1, createdAt: 1 }).lean();
+    } else {
+      let list = readLocal(TESTIMONIALS_FILE);
+      if (!list || list.length === 0) {
+        list = DEFAULT_TESTIMONIALS.map((t, i) => ({
+          _id: 'rev_' + (Date.now() + i),
+          ...t,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }));
+        writeLocal(TESTIMONIALS_FILE, list);
+      }
+      if (activeOnly) {
+        return list.filter(item => item.isActive !== false);
+      }
+      return list.sort((a, b) => (a.order || 0) - (b.order || 0));
+    }
+  },
+
+  async createTestimonial(payload) {
+    if (isDatabaseConnected()) {
+      const doc = new Testimonial({
+        ...payload,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+      return await doc.save();
+    } else {
+      const list = readLocal(TESTIMONIALS_FILE);
+      const newEntry = {
+        _id: 'rev_' + Date.now(),
+        ...payload,
+        rating: payload.rating !== undefined ? Number(payload.rating) : 5,
+        isActive: payload.isActive !== undefined ? Boolean(payload.isActive) : true,
+        order: payload.order !== undefined ? Number(payload.order) : list.length + 1,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      list.push(newEntry);
+      writeLocal(TESTIMONIALS_FILE, list);
+      return newEntry;
+    }
+  },
+
+  async updateTestimonial(id, updateData) {
+    if (isDatabaseConnected() && !id.startsWith('rev_')) {
+      return await Testimonial.findByIdAndUpdate(
+        id,
+        { $set: { ...updateData, updatedAt: new Date() } },
+        { new: true }
+      ).lean();
+    } else {
+      const list = readLocal(TESTIMONIALS_FILE);
+      const idx = list.findIndex(t => t._id === id);
+      if (idx !== -1) {
+        list[idx] = {
+          ...list[idx],
+          ...updateData,
+          updatedAt: new Date().toISOString()
+        };
+        writeLocal(TESTIMONIALS_FILE, list);
+        return list[idx];
+      }
+      return null;
+    }
+  },
+
+  async deleteTestimonial(id) {
+    if (isDatabaseConnected() && !id.startsWith('rev_')) {
+      return await Testimonial.findByIdAndDelete(id).lean();
+    } else {
+      let list = readLocal(TESTIMONIALS_FILE);
+      const exists = list.some(t => t._id === id);
+      if (exists) {
+        list = list.filter(t => t._id !== id);
+        writeLocal(TESTIMONIALS_FILE, list);
+        return { _id: id };
+      }
+      return null;
+    }
   }
 };
+
 

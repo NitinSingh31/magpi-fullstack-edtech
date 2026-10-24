@@ -266,6 +266,43 @@ export const api = {
     return request(`/leadership/${id}`, {
       method: 'DELETE'
     });
+  },
+
+  /**
+   * Retrieve testimonials (optional { activeOnly: true })
+   */
+  async getTestimonials(params = {}) {
+    const query = params.activeOnly ? '?activeOnly=true' : '';
+    return request(`/testimonials${query}`);
+  },
+
+  /**
+   * Create a new testimonial (Admin)
+   */
+  async createTestimonial(testimonialData) {
+    return request('/testimonials', {
+      method: 'POST',
+      body: JSON.stringify(testimonialData)
+    });
+  },
+
+  /**
+   * Update an existing testimonial (Admin)
+   */
+  async updateTestimonial(id, updateData) {
+    return request(`/testimonials/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updateData)
+    });
+  },
+
+  /**
+   * Delete a testimonial (Admin)
+   */
+  async deleteTestimonial(id) {
+    return request(`/testimonials/${id}`, {
+      method: 'DELETE'
+    });
   }
 };
 
