@@ -8,16 +8,14 @@
   background-color: var(--bg-page);
 }
 
-/* Angled separator banner on top */
+/* Separator banner on top */
 .angled-divider-top {
   position: absolute;
-  top: -24px;
+  top: 0;
   left: 0;
   right: 0;
   height: 28px;
   background-color: var(--dark-slate);
-  transform: skewY(-1.2deg);
-  transform-origin: top left;
   z-index: 1;
 }
 
